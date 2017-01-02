@@ -33,7 +33,16 @@ package classes
 			[ "Rope", customRope, false, "Despite outward appearances, you're actually something of a neuter, with shark-like teeth, an androgynous face, and a complete lack of genitalia." ],
 			[ "Sora", customSora, false, "As a Kitsune, you always got weird looks, but none could doubt your affinity for magic..." ],
 			
+
+			
 			[ "With pre-defined history:", null, false, "" ],
+			
+			[ "ArchadraOld", customArchadra, true, "A megalomaniacal biomancer created you as a prototype for his master race. You're a drider, with the upper body of a succubus and the head and arms of a dragon. Your species has a lot of potential if you can avoid its being twisted by the dangers of Mareth." ],
+			[ "Bovina", customBovina, true, "With how slutty and airheaded you are, you would have no chance of surviving Mareth if it weren't for your milk's soporific properties." ],
+			[ "Ruby", customRuby, true, "A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're a blazingly fast corrupted manticore-hellhound-morph." ],
+			[ "Yang", customYang, true, "A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're an incredibly strong corrupted dragon-naga." ],
+			[ "Archadra", customArchadraNew, true, "A new version of Archadra, using the modified arachne and demon templates." ],
+			
 			[ "Annetta", customAnnetta, true, "You're a rather well-endowed hermaphrodite that sports a thick, dog-knotted cock, an unused pussy, and a nice, stretchy butt-hole.  You've also got horns and demonic high-heels on your feet.  It makes you wonder why you would ever get chosen to be champion!" ],
 			[ "Ceveo", customCeveo, true, "As a wandering mage you had found your way into no small amount of trouble in the search for knowledge." ],
 			[ "Charlie", customCharlie, true, "You're strong, smart, fast, and tough.  It also helps that you've got four dongs well beyond what others have lurking in their trousers.  With your wings, bow, weapon, and tough armor, you're a natural for protecting the town." ],
@@ -427,6 +436,435 @@ package classes
 			outputText("You've got large breasts prone to lactation.  You aren't sure WHY you got chosen as a champion, but with your considerable strength, you're sure you'll do a good job protecting Ingnam.");
 		}
 		
+		private function customArchadra():void {
+			//		
+			//Other:
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+
+			while (player.breastRows.length < 2)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 5;
+			player.nippleLength = 0.5;
+			player.breastRows[1].breastRating = 5;
+			player.nippleLength = 0.5;
+			player.vaginaType(VAGINA_TYPE_SUCCUBUS)
+			player.clitLength = .5;
+			if (!player.hasCock()) player.createCock();
+			player.cocks[0].cockType = CockTypesEnum.LIZARD;
+			player.cocks[0].cockLength = 7;
+			player.cocks[0].cockThickness = 3;
+			
+			player.lowerBody = LOWER_BODY_TYPE_DRIDER_LOWER_BODY;
+			player.legCount = 8;
+			player.tailType = TAIL_TYPE_SPIDER_ADBOMEN;
+			player.tongueType = TONGUE_DRACONIC;
+			player.earType = EARS_LIZARD;
+			player.eyeType = EYES_BASILISK;
+			player.wingType = WING_TYPE_BAT_LIKE_LARGE;
+			player.skinType = SKIN_TYPE_PLAIN;
+			player.faceType = FACE_HUMAN;
+			player.hornType = HORNS_DRACONIC_X4_12_INCH_LONG;
+			player.horns = 4;
+			player.armType = ARM_TYPE_SALAMANDER;
+			player.antennae = ANTENNAE_BEE;
+			player.hairLength = 5;
+			player.hairColor = "black and yellow";
+
+			player.femininity = 90;
+			// Height: 5'4
+			player.tallness = 64;
+	
+			//Perks: Feeder, Strong Back, Strong Back 2, dragonfire, spider ovipositor
+			player.createStatusEffect(StatusEffects.Feeder,0,0,0,0);
+			player.createPerk(PerkLib.Feeder, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.StrongBack, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack2, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.SpiderOvipositor, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Dragonfire, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Lustzerker, 0, 0, 0, 1);
+			player.createPerk(PerkLib.HistoryScholar,0,0,0,0);
+
+			
+			flags[kFLAGS.BENOIT_EGGS] = 12;
+
+			//Equipment: mage gear
+			player.setWeapon(weapons.W_STAFF);
+			player.setArmor(armors.M_ROBES);
+	
+			//Stats: (if possible)
+			//Strength: 90
+			//Fertility: 100
+			player.fertility = 100;
+			player.cor = 51;
+			//Inventory: Lactaid, GroPlus, BimboLq
+			player.itemSlot4.unlocked = true;
+			player.itemSlot5.unlocked = true;
+			outputText("A megalomaniacal biomancer created you as a prototype for his master race. You're a drider, with the upper body of a succubus and the head and arms of a dragon. Your species has a lot of potential if you can avoid its being twisted by the dangers of Mareth.");
+		
+			dynStats("str", 999, "tou", 999, "spe", 999, "int", 999); //still capped by max stats.
+
+		}
+		
+		
+		private function customArchadraNew():void {
+			//		
+			//Other:
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+
+			while (player.breastRows.length < 2)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 5;
+			player.nippleLength = 0.5;
+			player.breastRows[1].breastRating = 5;
+			player.nippleLength = 0.5;
+			player.vaginaType(VAGINA_TYPE_SUCCUBUS)
+			player.vaginas[0].vaginalWetness = 5;
+			player.clitLength = .5;
+			if (!player.hasCock()) player.createCock();
+			player.cocks[0].cockType = CockTypesEnum.DEMON;
+			player.cocks[0].cockLength = 7;
+			player.cocks[0].cockThickness = 3;
+			
+			player.lowerBody = LOWER_BODY_TYPE_DRIDER_LOWER_BODY;
+			player.legCount = 8;
+			player.tailType = TAIL_TYPE_SPIDER_ADBOMEN;
+			player.tongueType = TONGUE_DEMONIC;
+			player.earType = EARS_ELFIN;
+			player.eyeType = EYES_FOUR_SPIDER_EYES;
+			player.wingType = WING_TYPE_BAT_LIKE_LARGE;
+			player.skinType = SKIN_TYPE_PLAIN;
+			player.faceType = FACE_SPIDER_FANGS;
+			player.hornType = HORNS_DEMON;
+			player.horns = 6;
+			player.armType = ARM_TYPE_SPIDER;
+			player.clawType = CLAW_TYPE_DEMON;
+			player.hairLength = 18;
+
+			player.femininity = 90;
+			// Height: 5'4
+			player.tallness = 64;
+	
+			//Perks: Feeder, Strong Back, Strong Back 2, dragonfire, spider ovipositor
+			player.createStatusEffect(StatusEffects.Feeder,0,0,0,0);
+			player.createPerk(PerkLib.Feeder, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.StrongBack, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack2, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.SpiderOvipositor, 0, 0, 0, 0);
+			player.createPerk(PerkLib.HistoryScholar, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Smart, 0, 0, 0, 0);
+			
+			player.createPerk(PerkLib.FerasBoonMilkingTwat, 0, 0, 0, 0);
+			player.createPerk(PerkLib.FerasBoonBreedingBitch, 0, 0, 0, 0);
+			player.createPerk(PerkLib.FerasBoonAlpha, 0, 0, 0, 0);
+			player.createPerk(PerkLib.FerasBoonSeeder, 0, 0, 0, 0);
+			player.createPerk(PerkLib.MaraesGiftButtslut, 0, 0, 0, 0);
+			player.createPerk(PerkLib.MaraesGiftFertility, 0, 0, 0, 0);
+			player.createPerk(PerkLib.MaraesGiftProfractory, 0, 0, 0, 0);
+			player.createPerk(PerkLib.MaraesGiftStud, 0, 0, 0, 0);
+			player.createPerk(PerkLib.PilgrimsBounty, 0, 0, 0, 0);
+			player.createPerk(PerkLib.AChristmasCarol, 0, 0, 0, 0);
+			
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC] = 17;
+
+			//Equipment: mage gear
+			player.setWeapon(weapons.W_STAFF);
+			player.setArmor(armors.M_ROBES);
+	
+			//Stats: (if possible)
+			//Strength: 90
+			//Fertility: 100
+			player.fertility = 100;
+			player.cor = 100;
+			player.lib = 51;
+			//Inventory: Lactaid, GroPlus, BimboLq
+			player.itemSlot4.unlocked = true;
+			player.itemSlot5.unlocked = true;
+			outputText("A megalomaniacal biomancer created you as a prototype for his master race. You're a demonic drider.");
+		
+			//dynStats("str", 999, "tou", 999, "spe", 999, "int", 999); //still capped by max stats.
+
+		}
+
+		private function customRuby():void {
+			//Has species boosts for cat, dog, manticore, hellhound, and demon:
+			//+20 str, +35 spe, +15 tou, -5 int, +20 max lust, ~+75 total
+			//based off of the corrupted manticore Ruby from Depraving the Huntresses by Piddleyfangs
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+
+			while (player.breastRows.length < 3)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 2;
+			player.nippleLength = 0.5;
+			player.breastRows[1].breastRating = 2;
+			player.nippleLength = 0.5;
+			player.breastRows[2].breastRating = 2;
+			player.nippleLength = 0.5;
+
+			player.clitLength = .5;
+			while (player.cocks.length < 2)
+				player.createCock();
+			player.cocks[0].cockType = CockTypesEnum.DOG;
+			player.cocks[0].cockLength = 7;
+			player.cocks[0].cockThickness = 3;
+			player.cocks[0].knotMultiplier = 1.5;
+			player.cocks[1].cockType = CockTypesEnum.DOG;
+			player.cocks[1].cockLength = 7;
+			player.cocks[1].cockThickness = 3;
+			player.cocks[1].knotMultiplier = 1.5;
+			
+			player.lowerBody = LOWER_BODY_TYPE_CAT;
+			player.tailType = TAIL_TYPE_SCORPION;
+			player.tongueType = TONGUE_CAT;
+			player.earType = EARS_CAT;
+			//player.eyeType = EYES_BASILISK;
+			player.wingType = WING_TYPE_BAT_LIKE_LARGE;
+			player.skinType = SKIN_TYPE_FUR;
+			player.faceType = FACE_HUMAN;
+			player.hornType = HORNS_DEMON;
+			player.horns = 6;
+			player.hairLength = 5;
+			player.hairColor = "black and red";
+
+			player.femininity = 70;
+			// Height: 5'4
+			player.tallness = 64;
+	
+			//Perks: hellfire, 
+			player.createPerk(PerkLib.Hellfire, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.Fast, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Evade, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Runner, 0, 0, 0, 0);
+			player.createPerk(PerkLib.DoubleAttack, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Precision, 0, 0, 0, 0);
+			player.createPerk(PerkLib.SpeedyRecovery, 0, 0, 0, 0);
+			player.createPerk(PerkLib.LungingAttacks, 0, 0, 0, 0);
+			player.createPerk(PerkLib.LightningStrikes, 0, 0, 0, 0);
+	
+
+			player.createPerk(PerkLib.HistoryFighter,0,0,0,0);
+
+			//Equipment: mage gear
+			player.setWeapon(weapons.CSCYTHE);	//Crescent rose scales better with speed
+			player.setArmor(armors.LTHRROB);
+	
+			//Stats: (if possible)
+			kGAMECLASS.dynStats("spe", 200);
+			player.fertility = 100;
+			player.cor = 50;
+			outputText("A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're a blazingly fast corrupted manticore-hellhound-morph.");
+		}
+
+		private function customYang():void {
+			//Has species boosts for dragon, ++dragon, and ryu:
+			//+10 str, +10 spe, +25 tou, +20 int, ~+75 total
+			//based off of the corrupted ryu Yang from Depraving the Huntresses by Piddleyfangs
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+
+			while (player.breastRows.length < 1)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 5;
+			player.nippleLength = 0.5;
+
+			player.clitLength = .5;
+			while (player.cocks.length < 1)
+				player.createCock();
+			player.cocks[0].cockType = CockTypesEnum.DRAGON;
+			player.cocks[0].cockLength = 10;
+			player.cocks[0].cockThickness = 3;
+
+			player.armType = ARM_TYPE_PREDATOR;
+			player.clawType = CLAW_TYPE_DRAGON;
+			player.lowerBody = LOWER_BODY_TYPE_NAGA;
+			player.tailType = TAIL_TYPE_DRACONIC;
+			player.tongueType = TONGUE_DRACONIC;
+			player.earType = EARS_DRAGON;
+			player.eyeType = EYES_DRAGON;
+			player.wingType = WING_TYPE_DRACONIC_LARGE;
+			player.skinType = SKIN_TYPE_SCALES;
+			player.skinTone = "yellow";
+			player.faceType = FACE_HUMAN;
+			player.hornType = HORNS_DRACONIC_X4_12_INCH_LONG;
+			player.horns = 4;
+			player.hairLength = 24;
+			player.hairColor = "blonde";
+
+			player.femininity = 90;
+			// Height: 6'0
+			player.tallness = 72;
+	
+			//Perks: hellfire, 
+			player.createPerk(PerkLib.Dragonfire, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.Strong, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack2, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Tank, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Tank2, 0, 0, 0, 0);
+			player.createPerk(PerkLib.ThunderousStrikes, 0, 0, 0, 0);
+			player.createPerk(PerkLib.BrutalBlows, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Berzerker, 0, 0, 0, 0);
+	
+
+			player.createPerk(PerkLib.HistoryFighter,0,0,0,0);
+
+			//Equipment: mage gear
+			player.setWeapon(weapons.A_GAUNT);	//Ember Cecelia gets half the bonus of being large, and gauntlets now get half of the bonus of being fists.
+			player.setArmor(armors.LTHRROB);
+	
+			//Stats: (if possible)
+			kGAMECLASS.dynStats("str", 200);
+			kGAMECLASS.dynStats("tou", 80);
+			player.fertility = 100;
+			player.cor = 50;
+			player.itemSlot4.unlocked = true;
+			player.itemSlot5.unlocked = true;
+			outputText("A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're an incredibly strong corrupted dragon-naga.");
+		}
+
+		private function customPyrrha():void {
+			//Has species boosts for minotaur, cow, lacta bovine, medusa, lizard, and basilisk:
+			//+10 str, +10 spe, +25 tou, +20 int, ~+75 total
+			//based off of the corrupted medusa minotaur Pyrrha from Depraving the Huntresses by Piddleyfangs
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+
+			while (player.breastRows.length < 1)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 5;
+			player.nippleLength = 0.5;
+
+			player.clitLength = .5;
+			while (player.cocks.length < 2)
+				player.createCock();
+			player.cocks[0].cockType = CockTypesEnum.HORSE;
+			player.cocks[0].cockLength = 18;
+			player.cocks[0].cockThickness = 5;
+			player.cocks[1].cockType = CockTypesEnum.HORSE;
+			player.cocks[1].cockLength = 18;
+			player.cocks[1].cockThickness = 5;
+
+			player.armType = ARM_TYPE_PREDATOR;
+			player.clawType = CLAW_TYPE_LIZARD;
+			player.lowerBody = LOWER_BODY_TYPE_HOOFED;
+			player.tailType = TAIL_TYPE_COW;
+			player.tongueType = TONGUE_SNAKE;
+			player.earType = EARS_LIZARD;
+			player.eyeType = EYES_BASILISK;
+			//player.wingType = WING_TYPE_DRACONIC_LARGE;
+			player.skinType = SKIN_TYPE_PLAIN;
+			//player.skinTone = "yellow";
+			player.faceType = FACE_SNAKE_FANGS;
+			player.hornType = HORNS_COW_MINOTAUR;
+			player.horns = 4;
+			player.hairType = HAIR_GORGON;
+			player.hairLength = 24;
+			player.hairColor = "red";
+
+			player.femininity = 80;
+			// Height: 7'0
+			player.tallness = 84;
+	
+			//Perks: hellfire, 
+			player.createPerk(PerkLib.Dragonfire, 0, 0, 0, 0);
+	
+			player.createPerk(PerkLib.Strong, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack, 0, 0, 0, 0);
+			player.createPerk(PerkLib.StrongBack2, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Tank, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Tank2, 0, 0, 0, 0);
+			player.createPerk(PerkLib.ThunderousStrikes, 0, 0, 0, 0);
+			player.createPerk(PerkLib.BrutalBlows, 0, 0, 0, 0);
+			player.createPerk(PerkLib.Berzerker, 0, 0, 0, 0);
+	
+
+			player.createPerk(PerkLib.HistoryFighter,0,0,0,0);
+
+			//Equipment: mage gear
+			player.setWeapon(weapons.A_GAUNT);	//Ember Cecelia gets half the bonus of being large, and gauntlets now get half of the bonus of being fists.
+			player.setArmor(armors.LTHRROB);
+	
+			//Stats: (if possible)
+			kGAMECLASS.dynStats("str", 200);
+			kGAMECLASS.dynStats("tou", 80);
+			player.fertility = 100;
+			player.cor = 50;
+			player.itemSlot4.unlocked = true;
+			player.itemSlot5.unlocked = true;
+			outputText("A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're an incredibly strong corrupted dragon-naga.");
+		}
+		
+		private function customBovina():void {
+			//"super-milky cow-slut
+			if (!player.hasVagina()) {
+				player.createVagina();
+				if (player.clitLength == 0) player.clitLength = 0.25;
+			}
+			kGAMECLASS.genderCheck();
+			//Hair length: Very long
+			player.hairLength = 22;
+			//Breast size: HH
+			while (player.breastRows.length < 2)
+				player.createBreastRow();
+			player.breastRows[0].breastRating = 21;
+			player.breastRows[0].nipplesPerBreast = 4;
+			player.breastRows[0].lactationMultiplier = 40;
+			player.breastRows[1].breastRating = 21;
+			player.breastRows[1].nipplesPerBreast = 4;
+			player.breastRows[1].lactationMultiplier = 40;
+			player.nippleLength = 1.5;
+			//Femininity/Beauty: Very high
+			player.femininity = 90;
+			// Height: 6'8"
+			player.tallness = 80;
+			
+			player.lowerBody = 1;
+			player.tailType = 4;
+			player.tongueType = 0;
+			player.earType = 3;
+			player.eyeType = 0;
+			player.wingType = -1;
+			player.skinType = 0;
+			player.faceType = 3;
+			player.hornType = 2;
+			player.horns = 4;
+			player.armType = 0;
+			player.hairLength = 21;
+			player.hairColor = "black and white";
+
+			player.createPerk(PerkLib.MilkMaid, 0, 0, 0, 0);
+			//Needs a pure feeder perk, and a perk for a milk squirt combat tease.
+			player.createStatusEffect(StatusEffects.Feeder,0,0,0,0);
+			player.createPerk(PerkLib.Feeder, 0, 0, 0, 0);
+
+			player.fertility = 0;
+			player.cor = 20;
+			outputText("You've got large breasts prone to lactation.  You aren't sure WHY you got chosen as a champion, but with your considerable strength, you're sure you'll do a good job protecting Ingnam.");
+		}
+
 		private function customGundam():void {
 			outputText("You're fabulously rich, thanks to a rather well-placed bet on who would be the champion.  Hopefully you can buy yourself out of any trouble you might get in.");
 			player.gems = 1500 + rand(1000);

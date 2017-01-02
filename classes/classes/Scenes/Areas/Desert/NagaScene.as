@@ -961,6 +961,7 @@ private function eggUpANagaSpiderLike():void {
 	
 	outputText("\n\nA while later, you awaken alone in the desert sand.  Getting your shaky legs under you and stifling a yawn, you head back to camp.  You should come to the desert more often.");
 	player.dumpEggs();
+	flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 	player.orgasm();
 	combat.cleanupAfterCombat();
 }

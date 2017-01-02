@@ -308,7 +308,11 @@ package classes
 			//not bald
 			else 
 			{
-				if (player.earType == EARS_HUMAN) 
+				if (player.hairType == HAIR_GORGON && player.earType == EARS_HUMAN)
+					outputText("  Your head is covered with writhing snakes, and when they part you can occasionally catch a glimpse of your humanoid ears.",false);
+				else if (player.hairType == HAIR_GORGON && player.earType == EARS_LIZARD)
+					outputText("  Your head is covered with writhing snakes, which make it completely impossible to see the small, rounded openings that are your ears.",false);
+				else if (player.earType == EARS_HUMAN) 
 					outputText("  Your " + player.hairDescript() + " looks good on you, accentuating your features well.", false);
 				else if (player.earType == EARS_FERRET) 
 					outputText("  A pair of small, rounded ferret ears burst through the top of your " + player.hairDescript() + ".", false);

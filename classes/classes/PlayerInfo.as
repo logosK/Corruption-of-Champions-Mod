@@ -498,6 +498,12 @@ package classes
 			for (var i:int = 0; i < player.perks.length; i++) {
 				outputText("<b>" + player.perks[i].perkName + "</b> - " + player.perks[i].perkDesc + "\n", false);
 			}
+			outputText("Maximum Attributes\n", false);
+			outputText("<b> Max Strength:</b>\t" + player.getMaxStats("str") + "\n", false);
+			outputText("<b> Max Toughness:</b>\t"+player.getMaxStats("tou")+"\n",false);
+			outputText("<b> Max Speed:</b>\t"+player.getMaxStats("spe")+"\n",false);
+			outputText("<b> Max Intelligence:</b>\t"+player.getMaxStats("int")+"\n",false);
+
 			menu();
 			var button:int = 0;
 			addButton(button++, "Next", playerMenu);

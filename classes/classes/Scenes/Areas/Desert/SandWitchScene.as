@@ -892,6 +892,7 @@ private function laySomeEggsInThatWitchFinally():void {
 			pregnancy.knockUpForce(PregnancyStore.PREGNANCY_BEE_EGGS, 192);
 		else
 			pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 192);
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++
 	}
 	player.dumpEggs();
 	player.orgasm();

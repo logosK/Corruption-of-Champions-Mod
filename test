@@ -1,0 +1,20 @@
+#!/usr/bin/as3shebang
+
+// Use AS3 to write some shell scripts :)
+
+trace( "hello world" );
+
+import shell.Program;
+import shell.Runtime;
+
+
+
+trace( "    Program.type = " + Program.type );
+trace( "Program.filename = " + Program.filename );
+trace( "startupDirectory = " + Program.startupDirectory );
+trace( "    Program args = " + Program.argv );
+trace( "" );
+trace( "Redtamarin v" + Runtime.version + " " + (Runtime.is64bit() ? "64-bit": "32-bit" ) );
+
+import classes.CoC
+CoC()

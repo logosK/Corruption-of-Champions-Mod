@@ -714,6 +714,7 @@ public function ovipositBunnyEaster():void {
 	outputText("\n\nYou climb off as your ovipositor retracts into its slot.  The emptiness is a blessed change from the constant, needy weight of an unlaid brood.  As you gather your wits, you realize that the bunny-girl is still orgasming.  Her dick finally popped out of her mouth, and you're treated to the sight of her bukkaking herself with thick, clear sex-juice.  A huge bulge distends her urethra as it's forced through her shaft, erupting out into a bright pink egg.  It bounces off her drugged, dopey cheek as her nerveless lips try to moan, followed shortly after by a second.  In the wake of the two surprises, a wave of jism splatters across her head, plastering her ears back into her hair.");
 	outputText("\n\nThe hare goes limp after that, her eyes drifting shut as her tongue idly licks her spent seed from her face.  It looks like she got more eggs than she reckoned for.");
 	//ITS OVER
+	if (player.canOvipositSpider()) flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 	player.dumpEggs();
 	player.orgasm();
 	dynStats("sen", -2);

@@ -683,6 +683,7 @@ package classes.Scenes.Areas.Desert
 					outputText("\n\nYou comfort her while telling her that you have a few more on the way; something that causes Phylla to beam with pride at the thought of being filled with so much new life that she will eventually birth.  Egg after egg slides into Phylla, causing her stomach to bulge bigger and bigger with your brood as you stuff more into her.  At last, the final egg is laid inside of Phylla, and with a loud pop, you  retract your ovipositor from her love hole;  you know it'll recover in time.  Phylla rubs her belly and gleams with delight, filled with her lover's future children that will help the colony to grow strong.");
 					player.dumpEggs();
 					if (!pregnancy.isPregnant) pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 8 * 24); //Supposed to be eight days, not eight hours
+					flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 				}
 				// (End Drider Continuation)
 			}
@@ -2532,6 +2533,7 @@ package classes.Scenes.Areas.Desert
 			player.dumpEggs();
 			//set phylla drider preggo timer
 			if (!pregnancy.isPregnant) pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 8 * 24); //Supposed to be eight days, not eight hours
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 			doNext(camp.returnToCampUseOneHour);
 		}
 
@@ -2746,6 +2748,7 @@ package classes.Scenes.Areas.Desert
 				//PC Drider eggs will take 8 days regardless of where she houses them to hatch. (3
 				//through 8 children per pregnancy)
 				if (!pregnancy.isPregnant) pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 8 * 24); //Supposed to be eight days, not eight hours
+				flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 				flags[kFLAGS.TIMES_EGG_IMPREGNATING_PHYLLA]++;
 				player.orgasm();
 				player.dumpEggs();

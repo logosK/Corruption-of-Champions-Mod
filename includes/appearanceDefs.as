@@ -27,6 +27,7 @@ public static const HAIR_ANEMONE:int                                            
 public static const HAIR_QUILL:int                                                 =     5;
 public static const HAIR_BASILISK_SPINES:int                                       =     6;
 public static const HAIR_BASILISK_PLUME:int                                        =     7;
+public static const HAIR_GORGON:int                                                =     8;
 
 // beardType
 public static const BEARD_NORMAL:int                                               =     0;
@@ -59,6 +60,8 @@ public static const FACE_BOAR:int                                               
 public static const FACE_RHINO:int                                                  =   21;
 public static const FACE_ECHIDNA:int                                                =   22;
 public static const FACE_DEER:int                                                   =   23;
+public static const FACE_EREDAR:int                                                 =   24;
+
 
 // tongueType
 public static const TONGUE_HUMAN:int                                                =   0;
@@ -66,6 +69,7 @@ public static const TONGUE_SNAKE:int                                            
 public static const TONGUE_DEMONIC:int                                              =   2;
 public static const TONGUE_DRACONIC:int                                             =   3;
 public static const TONGUE_ECHIDNA:int                                              =   4;
+public static const TONGUE_CAT:int                                                  =   5;
 
 // eyeType
 public static const EYES_HUMAN:int                                                  =   0;
@@ -74,6 +78,7 @@ public static const EYES_BLACK_EYES_SAND_TRAP:int                               
 public static const EYES_LIZARD:int                                                 =   3;
 public static const EYES_DRAGON:int                                                 =   4; // Slightly different description/TF and *maybe* in the future(!) grant different perks/combat abilities
 public static const EYES_BASILISK:int                                               =   5;
+public static const EYES_BURNING:int 												=   6;
 
 // earType
 public static const EARS_HUMAN:int                                                  =   0;
@@ -131,6 +136,7 @@ public static const CLAW_TYPE_CAT:int                                           
 public static const CLAW_TYPE_DOG:int                                               =   5; // NYI! Placeholder for now!! (See http://tiny.cc/coc-revamp-claws)
 public static const CLAW_TYPE_RAPTOR:int                                            =   6; // NYI! Placeholder for now!! (See http://tiny.cc/coc-revamp-claws) Giev teh Rapturs :-)
 public static const CLAW_TYPE_MANTIS:int                                            =   7; // NYI! Placeholder for Xianxia mod (See http://tiny.cc/coc-xianxia-mod)
+public static const CLAW_TYPE_DEMON:int                                             =   8;
 
 // tailType
 public static const TAIL_TYPE_NONE:int                                              =   0;
@@ -213,6 +219,7 @@ public static const PIERCING_TYPE_CHAIN:int                                     
 // vaginatypesNOPEDISABLED
 public static const VAGINA_TYPE_HUMAN:int                                           =   0;
 public static const VAGINA_TYPE_EQUINE:int                                          =   1;
+public static const VAGINA_TYPE_SUCCUBUS:int                                        =   2;
 public static const VAGINA_TYPE_BLACK_SAND_TRAP:int                                 =   5;
 
 // vaginalWetness

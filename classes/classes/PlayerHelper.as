@@ -107,5 +107,15 @@ package classes
 		{
 			return (gender & GENDER_FEMALE) != 0;
 		}
+
+		public function getLargestKnotSize():int
+		{
+			if (!hasCock()) return 0;
+			var largest:int =0;
+			for (var cock_index:int = 0; cock_index < cocks.length; cock_index++) {
+				largest = Math.max(largest, cocks[cock_index].knotMultiplier);
+			}
+			return largest;
+		}
 	}
 }

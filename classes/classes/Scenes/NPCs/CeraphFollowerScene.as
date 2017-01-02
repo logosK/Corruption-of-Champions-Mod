@@ -1757,6 +1757,7 @@ package classes.Scenes.NPCs
 
 			outputText("\n\nHumming a happy tune to yourself as you walk around Ceraph's twitching form, you grab a handful of her hair and pull her up off the ground.  Her face is crusted with dirt and her sparkling, gem-like eyes stare senselessly at you.  You rub your ovipositor over her head, carefully wiping your mingled lubes off on her hair before retracting the organ back into its holding sleeve.  \"<i>That will be all,</i>\" you tell her, and she smiles dreamily at you.  You turn around to gather your things, and don't bother to look back.");
 			player.dumpEggs();
+			if (player.isDrider()) flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 			player.orgasm();
 			doNext(camp.returnToCampUseOneHour);
 		}

@@ -1013,6 +1013,7 @@ private function layEggsInAMinotaurSpiderLike():void {
 	else outputText("\n\nChuckling at the thought of the fun the other mountain denizens will have with your well-trussed side of beef, you grab his snout and force him to look you in the eyes.");
 	outputText("\n\n\"<i>We'll have to do this again.  In fact, every time you cross my path, we will do this again, my little cow-poke.</i>\"");
 	player.dumpEggs();
+	flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 	player.orgasm();
 	combat.cleanupAfterCombat();
 	//satisfy mino cum addiction if addicted

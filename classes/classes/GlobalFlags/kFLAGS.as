@@ -2355,7 +2355,7 @@ public static const UNKNOWN_FLAG_NUMBER_02346:int                               
 public static const UNKNOWN_FLAG_NUMBER_02347:int                                   = 2347;
 public static const UNKNOWN_FLAG_NUMBER_02348:int                                   = 2348;
 public static const UNKNOWN_FLAG_NUMBER_02349:int                                   = 2349;
-public static const UNKNOWN_FLAG_NUMBER_02350:int                                   = 2350;
+public static const TIMES_DRIDER_OVIPOSITED_NPC:int                                 = 2350;
 public static const UNKNOWN_FLAG_NUMBER_02351:int                                   = 2351;
 public static const UNKNOWN_FLAG_NUMBER_02352:int                                   = 2352;
 public static const UNKNOWN_FLAG_NUMBER_02353:int                                   = 2353;

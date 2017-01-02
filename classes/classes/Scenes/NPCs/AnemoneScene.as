@@ -1045,6 +1045,7 @@ package classes.Scenes.NPCs
 			}
 			//ponytailed anemone with Lisa Loeb glasses WHEN
 			player.dumpEggs();
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 			player.orgasm();
 			combat.cleanupAfterCombat();
 		}

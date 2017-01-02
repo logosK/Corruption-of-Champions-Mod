@@ -998,7 +998,7 @@ package classes.Scenes.Combat
 					}
 				}
 				//Weapon Procs!
-				if (player.weaponName == "huge warhammer" || player.weaponName == "spiked gauntlet" || player.weaponName == "hooked gauntlets") {
+				if (player.weaponName == "huge warhammer" || player.weaponName.indexOf("auntlet") > 0) {
 					//10% chance
 					if (rand(10) == 0 && monster.findPerk(PerkLib.Resolute) < 0) {
 						outputText("\n" + monster.capitalA + monster.short + " reels from the brutal blow, stunned.", false);

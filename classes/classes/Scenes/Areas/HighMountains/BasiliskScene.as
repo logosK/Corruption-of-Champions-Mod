@@ -671,6 +671,7 @@ package classes.Scenes.Areas.HighMountains
 			if (player.cor >= 50) outputText(" before heading off towards your camp. The harpies will probably free him from your webs... eventually.");
 			else outputText(". You reach up and slice him free from the webbing, carefully placing him on the ground below. The blindfold stays, though. You're kind, not stupid. With your good deed for the day complete, you gather yourself up and head back to camp.");
 			player.dumpEggs();
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 			player.orgasm();
 			combat.cleanupAfterCombat();
 		}

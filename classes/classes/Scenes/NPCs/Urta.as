@@ -3632,6 +3632,7 @@ public function giveTheFoxSomeEggs():void {
 		pregnancy.knockUpForce(PregnancyStore.PREGNANCY_BEE_EGGS, 72);
 	else
 		pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 72);
+		flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 	flags[kFLAGS.URTA_FLATBELLY_NOTICE] = 0;
 	//First time, tag for triggering freakout!
 	if (flags[kFLAGS.URTA_EGG_FORCE_EVENT] == 0) flags[kFLAGS.URTA_EGG_FORCE_EVENT] = 48;

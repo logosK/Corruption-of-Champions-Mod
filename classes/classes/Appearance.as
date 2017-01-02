@@ -1458,6 +1458,19 @@
 					"jet black"];
 				description += randomChoice(options);
 			}
+			
+			if (i_creature.vaginaType() == 2 && (forceDesc || Math.floor(Math.random() * 2) == 0)) { //new, for succubus vagina
+				if (description != "") description += ", ";
+				options = ["succubus",
+					"soul-hungry",
+					"soul-stealing",
+					"demonic",
+					"demonic",
+					"demonic",
+					"profane",
+					"unholy"];
+				description += randomChoice(options);
+			}
 
 			if (description != "")
 				description += " ";

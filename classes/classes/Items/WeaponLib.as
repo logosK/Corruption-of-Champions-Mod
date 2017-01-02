@@ -45,6 +45,9 @@ package classes.Items
 		public const W_STAFF:WizardsStaff = new WizardsStaff();
 		public const WARHAMR:HugeWarhammer = new HugeWarhammer();
 		public const WHIP   :Weapon = new Weapon("Whip   ","Whip","coiled whip","a coiled whip","whip-crack",5,500,"A coiled length of leather designed to lash your foes into submission.  There's a chance the bondage inclined might enjoy it!");
+		public const CSCYTHE:Weapon = new Weapon("CScythe","Crescent Rose","Crescent Rose","an advanced scythe","blindingly fast slash",25,5000,"A masterwork scythe that enhances the speed of the user.  An incredibly impractical weapon for those without the necessary skill, but potentially incredibly lethal.","fast");
+		public const A_GAUNT:Weapon = new Weapon("A.Gaunt","Ember Cecelia","Ember Cecelia","advanced spiked gauntlets","powerful spiked punch",15,5000,"These masterwork gauntlets have the knuckles tipped with metal spikes, and internal springs can add power to blows.  While gauntlets are generally limited in power. these combine impressive power and strength.","fastrong");
+
 
 		/*
 		private static function mk(id:String,shortName:String,name:String,longName:String,verb:String,attack:Number,value:Number,description:String,perk:String=""):Weapon {
