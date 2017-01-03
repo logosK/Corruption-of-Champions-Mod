@@ -2356,9 +2356,9 @@ public static const UNKNOWN_FLAG_NUMBER_02347:int                               
 public static const UNKNOWN_FLAG_NUMBER_02348:int                                   = 2348;
 public static const UNKNOWN_FLAG_NUMBER_02349:int                                   = 2349;
 public static const TIMES_DRIDER_OVIPOSITED_NPC:int                                 = 2350;
-public static const UNKNOWN_FLAG_NUMBER_02351:int                                   = 2351;
-public static const UNKNOWN_FLAG_NUMBER_02352:int                                   = 2352;
-public static const UNKNOWN_FLAG_NUMBER_02353:int                                   = 2353;
+public static const TIMES_TAMANI_IMPREGNATED_YOU:int                                = 2351;
+public static const TAMANI_GENDER:int                                  			 	= 2352;
+public static const FUTA_CONVERSION:int                                   = 2353;
 public static const UNKNOWN_FLAG_NUMBER_02354:int                                   = 2354;
 public static const UNKNOWN_FLAG_NUMBER_02355:int                                   = 2355;
 public static const UNKNOWN_FLAG_NUMBER_02356:int                                   = 2356;

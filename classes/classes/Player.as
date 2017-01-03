@@ -3418,6 +3418,10 @@ use namespace kGAMECLASS;
 				return false;
 			}
 			
+			if (findPerk(PerkLib.AlchemicalFertility)) {
+				intensity *= (1 + perkv3(PerkLib.AlchemicalFertility));
+			}
+			
 			//Already in heat, intensify further.
 			if (inHeat) {
 				if (output) {
@@ -3432,7 +3436,7 @@ use namespace kGAMECLASS;
 			//Go into heat.  Heats v1 is bonus fertility, v2 is bonus libido, v3 is hours till it's gone
 			else {
 				if (output) {
-					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a male overwhelm you as <b>you realize you have gone into heat!</b>", false);
+					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a cock overwhelm you as <b>you realize you have gone into heat!</b>", false);
 				}
 				createStatusEffect(StatusEffects.Heat, 10 * intensity, 15 * intensity, 48 * intensity, 0);
 				game.dynStats("lib", 15 * intensity, "resisted", false, "noBimbo", true);

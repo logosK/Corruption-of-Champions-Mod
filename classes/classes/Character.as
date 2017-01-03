@@ -481,9 +481,20 @@ import classes.GlobalFlags.kFLAGS;
 		}
 
 		public function pregnancyAdvance():Boolean {
-			if (_pregnancyIncubation > 0) _pregnancyIncubation--;
+			var preg:Number = 1;
+			if (findPerk(PerkLib.Diapause) >= 0)
+				preg=0;
+			else {
+				if (findPerk(PerkLib.MaraesGiftFertility) >= 0) preg++;
+				if (findPerk(PerkLib.BroodMother) >= 0) preg++;
+				if (findPerk(PerkLib.FerasBoonBreedingBitch) >= 0) preg++;
+				if (findPerk(PerkLib.AlchemicalFertility) >= 0) preg+=perkv1(PerkLib.AlchemicalFertility);
+				if (findPerk(PerkLib.MagicalFertility) >= 0) preg++;
+				if (findPerk(PerkLib.FerasBoonWideOpen) >= 0 || findPerk(PerkLib.FerasBoonMilkingTwat) >= 0) preg++;
+			}
+			if (_pregnancyIncubation > 0) _pregnancyIncubation-=preg;
 			if (_pregnancyIncubation < 0) _pregnancyIncubation = 0;
-			if (_buttPregnancyIncubation > 0) _buttPregnancyIncubation--;
+			if (_buttPregnancyIncubation > 0) _buttPregnancyIncubation-=preg;
 			if (_buttPregnancyIncubation < 0) _buttPregnancyIncubation = 0;
 			return pregnancyUpdate();
 		}
@@ -804,7 +815,7 @@ import classes.GlobalFlags.kFLAGS;
 			if (findPerk(PerkLib.OmnibusGift) >= 0) max += 15;
 			if (findPerk(PerkLib.AscensionDesires) >= 0) max += perkv1(PerkLib.AscensionDesires) * 5;
 			if (max > 999) max = 999;
-			return max;
+			return int(max);
 		}
 		
 		public function maxFatigue():Number

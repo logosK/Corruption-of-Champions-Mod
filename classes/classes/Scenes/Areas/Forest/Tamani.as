@@ -77,6 +77,34 @@ package classes.Scenes.Areas.Forest
 			combatRoundOver();
 		}
 
+		public function tamaniEjaculate():void {
+			this.lustVuln += 1;
+			this.sens += 15;
+			this.lust = 30;
+			outputText("Tamani strokes her dick a few times, and cums almost instantly. Her aim is impeccable- or perhaps you did not move as much as you could have- and her cum splatters all over you.");
+			outputText("The alchemical modifications she's made to both her cum and you start reacting with each other, and your cunt starts dripping even harder as it cries for something to fill it.");
+			//if (player.statusEffectv2(StatusEffects.TemporaryHeat) > 0 {
+			//	player.addStatusValue(StatusEffects.TemporaryHeat, 2, 0.5);
+			//} else {player.createStatusEffect(StatusEffects.TemporaryHeat, 0.0.5, 0.0); }
+			//if (player.inHeat) {
+			player.goIntoHeat(true,0.3);
+			game.dynStats("lus+", 8 + (player.lib / 10) + (player.sens / 10));
+			outputText("Tamani's cock seems a bit softer after her ejaculation, but you bet she'll be easier to arouse again now that she's getting into it- and she'll be more sensitive.");
+		}
+		
+		override protected function performCombatAction():void {
+			if (flags[kFLAGS.TAMANI_GENDER] != 2) return super.performCombatAction();
+			
+			if (100 - this.lust < 20 * lustVuln) tamaniEjaculate();
+			if (player.inte > (player.str + player.spe) / 2) {
+				
+			} else {
+				
+			}
+			
+			return super.performCombatAction();
+		}
+		
 		override public function defeated(hpVictory:Boolean):void
 		{
 			clearOutput();
@@ -90,6 +118,7 @@ package classes.Scenes.Areas.Forest
 
 		override public function won(hpVictory:Boolean, pcCameWorms:Boolean):void
 		{
+			if (flags[kFLAGS.TAMANI_GENDER] == 2) return game.forest.tamaniScene.tamaniBreedsThatSluttyCuntYouWhore();
 			if (hpVictory){
 				if (player.totalCocks() > 0) {
 					if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
@@ -102,9 +131,9 @@ package classes.Scenes.Areas.Forest
 				if (player.totalCocks() > 0) {
 				//hypnoslut loss scene
 				if (game.flags[kFLAGS.TAMANI_TIMES_HYPNOTISED] > 19 && rand(2) == 0) {
-					game.forest.tamaniScene.getRapedByTamaniYouHypnoSlut();
-				} else if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
-				else game.forest.tamaniScene.tamaniSexLetHer();
+						game.forest.tamaniScene.getRapedByTamaniYouHypnoSlut();
+					} else if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
+					else game.forest.tamaniScene.tamaniSexLetHer();
 				} else {
 					outputText("You give into your lusts and masturbate, but Tamani doesn't seem to care.  She kicks and punches you over and over, screaming, \"<i>You dummy, why'd you get rid of the fun parts?</i>\"", true);
 					game.player.takeDamage(9999);
@@ -124,6 +153,17 @@ package classes.Scenes.Areas.Forest
 			this.createVagina(false, VAGINA_WETNESS_DROOLING, VAGINA_LOOSENESS_NORMAL);
 			this.createStatusEffect(StatusEffects.BonusVCapacity, 55, 0, 0, 0);
 			createBreastRow(Appearance.breastCupInverse("E"));
+			
+			if (flags[kFLAGS.TAMANI_GENDER] == 2) {
+				this.createCock(18, 4, CockTypesEnum.DOG);
+				this.cocks[0].knotMultiplier = 2;
+				this.balls = 2;
+				this.ballSize = 2 + flags[kFLAGS.TIMES_TAMANI_IMPREGNATED_YOU];
+				this.cumMultiplier = 5;
+				this.hoursSinceCum = ballSize * 10;
+				this.long += " She has a massive, constantly drooling cock sprouting from just above her vagina, with "+String(this.ballDescript())+" hanging underneath, blocking her lady parts from sight.. With her small stature, her dick looks comical, but you know how vicious she is with it.";
+			}
+			
 			this.ass.analLooseness = ANAL_LOOSENESS_TIGHT;
 			this.ass.analWetness = ANAL_WETNESS_DRY;
 			this.createStatusEffect(StatusEffects.BonusACapacity,40,0,0,0);

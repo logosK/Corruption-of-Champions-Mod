@@ -223,6 +223,7 @@ package classes
 				if (player.findPerk(PerkLib.MaraesGiftFertility) >= 0) preg++;
 				if (player.findPerk(PerkLib.BroodMother) >= 0) preg++;
 				if (player.findPerk(PerkLib.FerasBoonBreedingBitch) >= 0) preg++;
+				if (player.findPerk(PerkLib.AlchemicalFertility) >= 0) preg+=player.perkv1(PerkLib.AlchemicalFertility);
 				if (player.findPerk(PerkLib.MagicalFertility) >= 0) preg++;
 				if (player.findPerk(PerkLib.FerasBoonWideOpen) >= 0 || player.findPerk(PerkLib.FerasBoonMilkingTwat) >= 0) preg++;
 				bodyStats += preg + "\n";
