@@ -7697,6 +7697,7 @@ package classes.Scenes.NPCs
 			if (player.fertilizedEggs() > 0) {
 				if (player.canOvipositSpider()) {
 					pregnancy.buttKnockUp(PregnancyStore.PREGNANCY_DRIDER_EGGS, PregnancyStore.INCUBATION_DRIDER - 304); //(96)
+					flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 				}
 				else if (player.canOvipositBee()) {
 					pregnancy.buttKnockUp(PregnancyStore.PREGNANCY_BEE_EGGS, PregnancyStore.INCUBATION_BEE + 48); //(96)

@@ -730,6 +730,7 @@ package classes.Scenes.Monsters
 			outputText("\n\nLaying her down in the shade, you put your clothes back on, glad to be free of the extra weight and ready to continue your adventure.");
 			player.dumpEggs();
 			player.orgasm();
+			flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 			combat.cleanupAfterCombat();
 		}
 	}

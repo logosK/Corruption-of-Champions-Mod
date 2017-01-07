@@ -916,6 +916,7 @@ internal function tamaniBeaten():void {
 	flags[kFLAGS.TIMES_OVIPOSITED_TAMANI]++;
 	//Don't encounter Tamani for 3 days if fertilized
 	if (player.fertilizedEggs() == 0) pregnancy.knockUpForce(PregnancyStore.PREGNANCY_DRIDER_EGGS, 72);
+	flags[kFLAGS.TIMES_DRIDER_OVIPOSITED_NPC]++;
 	player.dumpEggs();
 	player.orgasm();
 	combat.cleanupAfterCombat();
