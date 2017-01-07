@@ -101,6 +101,7 @@ use namespace kGAMECLASS;
 		private var _weapon:Weapon = WeaponLib.FISTS;
 		private var _armor:Armor = ArmorLib.COMFORTABLE_UNDERCLOTHES;
 		private var _jewelry:Jewelry = JewelryLib.NOTHING;
+		//private var _jewelry2:Jewelry = JewelryLib.NOTHING;
 		private var _shield:Shield = ShieldLib.NOTHING;
 		private var _upperGarment:Undergarment = UndergarmentLib.NOTHING;
 		private var _lowerGarment:Undergarment = UndergarmentLib.NOTHING;
@@ -265,9 +266,9 @@ use namespace kGAMECLASS;
 				armorDef += 2;
 			}
 			//Stacks on top of Thick Skin perk.
-			if (skinType == SKIN_TYPE_FUR) armorDef += 1;
-			if (hasScales()) armorDef += 3;
-			//if (skinType == SKIN_TYPE_DRACONIC) armorDef += 3; // maybe later
+			if (hasFur()) armorDef += 1;
+			if (hasReptileScales()) armorDef += 3;
+			//if (hasDragonScales()) armorDef += 3; // maybe later
 			//'Thick' dermis descriptor adds 1!
 			if (skinAdj == "smooth") armorDef += 1;
 			//Bonus defense
@@ -795,14 +796,14 @@ use namespace kGAMECLASS;
 			{
 				if (isTaur() && lowerBody == LOWER_BODY_TYPE_FOX)
 					race = "fox-taur";
-				else if (skinType == 1)
+				else if (hasFur())
 					race = "fox-morph";
 				else
 					race = "fox-" + mf("morph", "girl");
 			}
 			if (ferretScore() >= 4)
 			{
-				if (skinType == 1)
+				if (hasFur())
 					race = "ferret-morph";
 				else
 					race = "ferret-" + mf("morph", "girl");
@@ -919,7 +920,7 @@ use namespace kGAMECLASS;
 						race = "dragonne-" + mf("man", "girl");
 				}
 			}
-			if (manticoreScore() >= 5)
+			if (manticoreScore() >= 6)
 			{
 				race = "manticore-morph"
 				if (faceType == 0)
@@ -1164,7 +1165,7 @@ use namespace kGAMECLASS;
 			if (earType == EARS_FERRET) counter++;
 			if (tailType == TAIL_TYPE_FERRET) counter++;
 			if (lowerBody == LOWER_BODY_TYPE_FERRET) counter++;
-			if (skinType == SKIN_TYPE_FUR && counter > 0) counter++;
+			if (hasFur() && counter > 0) counter++;
 			return counter;
 		}
 		//Determine Dog Rating
@@ -1188,7 +1189,7 @@ use namespace kGAMECLASS;
 			if (breastRows.length > 3)
 				dogCounter--;
 			//Fur only counts if some canine features are present
-			if (skinType == 1 && dogCounter > 0)
+			if (hasFur() && dogCounter > 0)
 				dogCounter++;
 			return dogCounter;
 		}
@@ -1206,7 +1207,7 @@ use namespace kGAMECLASS;
 			if (faceType == 16)
 				coonCounter += 2;
 			//Fur only counts if some canine features are present
-			if (skinType == 1 && coonCounter > 0)
+			if (hasFur() && coonCounter > 0)
 				coonCounter++;
 
 			if (tallness < 55 && coonCounter > 0)
@@ -1232,7 +1233,7 @@ use namespace kGAMECLASS;
 			if (coonCounter > 0 && balls > 0)
 				coonCounter++;
 			//Fur only counts if some canine features are present
-			if (skinType == 1 && coonCounter > 0)
+			if (hasFur() && coonCounter > 0)
 				coonCounter++;
 			return coonCounter;
 		}
@@ -1258,7 +1259,7 @@ use namespace kGAMECLASS;
 			if (breastRows.length == 4 && foxCounter > 0)
 				foxCounter++;
 			//Fur only counts if some canine features are present
-			if (skinType == 1 && foxCounter > 0)
+			if (hasFur() && foxCounter > 0)
 				foxCounter++;
 			return foxCounter;
 		}
@@ -1284,7 +1285,7 @@ use namespace kGAMECLASS;
 			if (breastRows.length > 3)
 				catCounter -= 2;
 			//Fur only counts if some canine features are present
-			if (skinType == 1 && catCounter > 0)
+			if (hasFur() && catCounter > 0)
 				catCounter++;
 			return catCounter;
 		}
@@ -1311,7 +1312,7 @@ use namespace kGAMECLASS;
 				lizardCounter++;
 			if (armType == ARM_TYPE_PREDATOR && clawType == CLAW_TYPE_LIZARD)
 				lizardCounter++;
-			if (hasScales())
+			if (hasReptileScales())
 				lizardCounter++;
 			if (eyeType == EYES_LIZARD)
 				lizardCounter++;
@@ -1355,7 +1356,7 @@ use namespace kGAMECLASS;
 			if (lowerBody == LOWER_BODY_TYPE_HOOFED || lowerBody == LOWER_BODY_TYPE_CENTAUR)
 				horseCounter++;
 			//Fur only counts if some equine features are present
-			if (skinType == SKIN_TYPE_FUR && horseCounter > 0)
+			if (hasFur() && horseCounter > 0)
 				horseCounter++;
 			return horseCounter;
 		}
@@ -1390,11 +1391,11 @@ use namespace kGAMECLASS;
 			if (kitsuneCounter > 0 && femininity >= 40)
 				kitsuneCounter++;
 			//If the character has fur, scales, or gooey skin, -1
-			if (skinType == SKIN_TYPE_FUR && !InCollection(furColor, KitsuneScene.basicKitsuneFur) && !InCollection(furColor, KitsuneScene.elderKitsuneColors))
+			if (hasFur() && !InCollection(furColor, KitsuneScene.basicKitsuneFur) && !InCollection(furColor, KitsuneScene.elderKitsuneColors))
 				kitsuneCounter--;
 			if (hasScales())
 				kitsuneCounter -= 2;
-			if (skinType == SKIN_TYPE_GOO)
+			if (hasGooSkin())
 				kitsuneCounter -= 3;
 			//If the character has abnormal legs, -1
 			if (lowerBody != LOWER_BODY_TYPE_HUMAN && lowerBody != LOWER_BODY_TYPE_FOX)
@@ -1431,7 +1432,7 @@ use namespace kGAMECLASS;
 				dragonCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_DRAGON)
 				dragonCounter++;
-			if (skinType == SKIN_TYPE_DRACONIC && dragonCounter > 0)
+			if (hasDragonScales() && dragonCounter > 0)
 				dragonCounter++;
 			if (hasDragonHorns())
 				dragonCounter++;
@@ -1544,7 +1545,7 @@ use namespace kGAMECLASS;
 			if (balls > 2 && bunnyCounter > 0)
 				bunnyCounter--;
 			//Human skin on bunmorph adds
-			if (skinType == 0 && bunnyCounter > 1)
+			if (hasPlainSkin() && bunnyCounter > 1)
 				bunnyCounter++;
 			//No wings and antennae a plus
 			if (bunnyCounter > 0 && antennae == 0)
@@ -1589,7 +1590,7 @@ use namespace kGAMECLASS;
 				kanga++;
 			if (faceType == 9)
 				kanga++;
-			if (kanga >= 2 && skinType == 1)
+			if (kanga >= 2 && hasFur())
 				kanga++;
 			return kanga;
 		}
@@ -1607,7 +1608,7 @@ use namespace kGAMECLASS;
 			if (gillType == GILLS_FISH)
 				sharkCounter ++;
 			//skin counting only if PC got any other shark traits
-			if (skinType == SKIN_TYPE_PLAIN && sharkCounter > 0)
+			if (hasPlainSkin() && sharkCounter > 0)
 				sharkCounter++;
 			return sharkCounter;
 		}
@@ -1618,7 +1619,7 @@ use namespace kGAMECLASS;
 			var mutantCounter:Number = 0;
 			if (faceType > 0)
 				mutantCounter++;
-			if (skinType != SKIN_TYPE_PLAIN)
+			if (hasPlainSkin())
 				mutantCounter++;
 			if (tailType > 0)
 				mutantCounter++;
@@ -1632,14 +1633,14 @@ use namespace kGAMECLASS;
 				mutantCounter++;
 			if (faceType == 1)
 			{
-				if (skinType == 1)
+				if (hasFur())
 					mutantCounter--;
 				if (tailType == 1)
 					mutantCounter--;
 			}
 			if (faceType == 2)
 			{
-				if (skinType == 1)
+				if (hasFur())
 					mutantCounter--;
 				if (tailType == 2)
 					mutantCounter--;
@@ -1752,7 +1753,7 @@ use namespace kGAMECLASS;
 				echidnaCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_ECHIDNA)
 				echidnaCounter++;
-			if (echidnaCounter >= 2 && skinType == SKIN_TYPE_FUR)
+			if (echidnaCounter >= 2 && hasFur())
 				echidnaCounter++;
 			if (echidnaCounter >= 2 && countCocksOfType(CockTypesEnum.ECHIDNA) > 0)
 				echidnaCounter++;
@@ -1772,7 +1773,7 @@ use namespace kGAMECLASS;
 				deerCounter++;
 			if (hornType == HORNS_ANTLERS && horns >= 4)
 				deerCounter++;
-			if (deerCounter >= 2 && skinType == SKIN_TYPE_FUR)
+			if (deerCounter >= 2 && hasFur())
 				deerCounter++;
 			if (deerCounter >= 3 && countCocksOfType(CockTypesEnum.HORSE) > 0)
 				deerCounter++;
@@ -1795,7 +1796,7 @@ use namespace kGAMECLASS;
 				dragonneCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_CAT)
 				dragonneCounter++;
-			if (hasScales() && dragonneCounter > 0)
+			if (hasReptileScales() && dragonneCounter > 0)
 				dragonneCounter++;
 			return dragonneCounter;
 		}
@@ -1803,7 +1804,7 @@ use namespace kGAMECLASS;
 		//Manticore
 		public function manticoreScore():Number
 		{
-			var catCounter:Number = 0;
+			var catCounter:Number = -2;
 			if (faceType == FACE_CAT)
 				catCounter++;
 			if (earType == EARS_CAT)
@@ -1818,9 +1819,8 @@ use namespace kGAMECLASS;
 				catCounter++;
 			if (hasLeatheryWings(true))
 				catCounter++;
-			catCounter -= 2;	// before this change, pure cats had manticorescore 4
 			//Fur only counts if some canine features are present
-			if (skinType == SKIN_TYPE_FUR && catCounter >= 6)
+			if (hasFur() && catCounter >= 6)
 				catCounter++;
 			return catCounter;
 		}
@@ -2098,15 +2098,7 @@ use namespace kGAMECLASS;
 			if (flags[kFLAGS.MEANINGLESS_CORRUPTION] > 0) temp += 100;
 			return temp;
 		}
-		
-		public function newGamePlusMod():int {
-			var temp:int = flags[kFLAGS.NEW_GAME_PLUS_LEVEL];
-			//Constrains value between 0 and 4.
-			if (temp < 0) temp = 0;
-			if (temp > 4) temp = 4;
-			return temp;
-		}
-		
+
 		public function buttChangeDisplay():void
 		{	//Allows the test for stretching and the text output to be separated
 			if (ass.analLooseness == 5) outputText("<b>Your " + Appearance.assholeDescript(this) + " is stretched even wider, capable of taking even the largest of demons and beasts.</b>");
@@ -2126,15 +2118,15 @@ use namespace kGAMECLASS;
 				}
 			}
 			if (findPerk(PerkLib.Diapause) >= 0) {
-				flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00228] += 3 + rand(3);
-				flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00229] = 1;
+				flags[kFLAGS.DIAPAUSE_FLUID_AMOUNT] += 3 + rand(3);
+				flags[kFLAGS.DIAPAUSE_NEEDS_DISPLAYING] = 1;
 			}
 
 		}
 
 		public function minoCumAddiction(raw:Number = 10):void {
 			//Increment minotaur cum intake count
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00340]++;
+			flags[kFLAGS.MINOTAUR_CUM_INTAKE_COUNT]++;
 			//Fix if variables go out of range.
 			if (flags[kFLAGS.MINOTAUR_CUM_ADDICTION_TRACKER] < 0) flags[kFLAGS.MINOTAUR_CUM_ADDICTION_TRACKER] = 0;
 			if (flags[kFLAGS.MINOTAUR_CUM_ADDICTION_STATE] < 0) flags[kFLAGS.MINOTAUR_CUM_ADDICTION_STATE] = 0;
@@ -2866,10 +2858,10 @@ use namespace kGAMECLASS;
 			if (isNaga()) maxSpe += 10;
 			if (isTaur() || isDrider()) maxSpe += 20;
 			//Apply New Game+
-			maxStr += 25 * newGamePlusMod();
-			maxTou += 25 * newGamePlusMod();
-			maxSpe += 25 * newGamePlusMod();
-			maxInt += 25 * newGamePlusMod();
+			maxStr += ascensionFactor();
+			maxTou += ascensionFactor();
+			maxSpe += ascensionFactor();
+			maxInt += ascensionFactor();
 			//Might
 			if (findStatusEffect(StatusEffects.Might) >= 0) {
 				maxStr += statusEffectv1(StatusEffects.Might);
@@ -3480,7 +3472,7 @@ use namespace kGAMECLASS;
 		}
 		
 		public function setFurColor(colorArray:Array, ignoreSkinType:Boolean = false):void {
-			if (!ignoreSkinType && skinType != SKIN_TYPE_FUR) return;
+			if (!ignoreSkinType && !hasFur()) return;
 			furColor = colorArray[rand(colorArray.length)];
 		}
 	}

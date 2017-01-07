@@ -315,7 +315,7 @@ import classes.GlobalFlags.kFLAGS;
 				skinzilla += skinTone + " ";
 			//Fur handled a little differently since it uses
 			//haircolor
-			if (skinType == 1)
+			if (hasFur())
 				skinzilla += "skin";
 			else
 				skinzilla += skinDesc;
@@ -782,7 +782,7 @@ import classes.GlobalFlags.kFLAGS;
 			if (findPerk(PerkLib.Tank) >= 0) max += 50;
 			if (findPerk(PerkLib.Tank2) >= 0) max += Math.round(tou);
 			if (findPerk(PerkLib.ChiReflowDefense) >= 0) max += UmasShop.NEEDLEWORK_DEFENSE_EXTRA_HP;
-			if (flags[kFLAGS.KAIZO_MODE] >= 1)
+			if (flags[kFLAGS.GRIMDARK_MODE] >= 1)
 				max += level * 5;
 			else
 				max += level * 15;
