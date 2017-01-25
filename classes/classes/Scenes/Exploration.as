@@ -299,7 +299,8 @@ package classes.Scenes
 					break;
 				default:
 					if (rand(100) < 98) {
-						genericGobImpEncounters(true); //Monster - 50/50 imp/gob split.
+						if (flags[kFLAGS.TAMANI_GENDER] == 2 && rand(2) == 0) {kGAMECLASS.forest.tamaniScene.encounterTamani();}
+						else {genericGobImpEncounters(true);} //Monster - 50/50 imp/gob split.
 					} else { //Easter egg!
 						outputText("You wander around, fruitlessly searching for new places.");
 						doNext(camp.returnToCampUseOneHour);

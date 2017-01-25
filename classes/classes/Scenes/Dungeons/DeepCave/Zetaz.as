@@ -67,7 +67,7 @@ package classes.Scenes.Dungeons.DeepCave
 					else {
 						outputText("You try to avoid it, but the fragile glass shatters against you, coating you in sticky red liquid.  It seeps into your " + player.skinDesc + " and leaves a pleasant, residual tingle in its wake.  Oh no...", false);
 						//[Applies: "Temporary Heat" status]
-						if (player.findStatusEffect(StatusEffects.TemporaryHeat) < 0) player.createStatusEffect(StatusEffects.TemporaryHeat,0,0,0,0);
+						if (player.findStatusEffect(StatusEffects.TemporaryHeat) < 0) player.createStatusEffect(StatusEffects.TemporaryHeat,0,1,0,0);
 					}
 				}
 				else if (attackChoice == 1) {

@@ -4,9 +4,9 @@
 	import classes.internals.*;
 	import classes.GlobalFlags.*;
 
-	public class GoblinAssassin extends Monster
+	public class GoblinAssassin extends Goblin
 	{
-		protected function goblinDrugAttack():void {
+		/*protected function goblinDrugAttack():void {
 			var temp2:Number = rand(5);
 			var color:String = "";
 			if (temp2 == 0) color = "red";
@@ -35,12 +35,12 @@
 			//Temporary heat
 			if (color == "red") {
 				outputText("\nThe red fluids hit you and instantly soak into your skin, disappearing.  Your skin flushes and you feel warm.  Oh no...\n", false);
-				if (player.findStatusEffect(StatusEffects.TemporaryHeat) < 0) player.createStatusEffect(StatusEffects.TemporaryHeat,0,0,0,0);
+				if (player.findStatusEffect(StatusEffects.TemporaryHeat) < 0) player.createStatusEffect(StatusEffects.TemporaryHeat,0,1.2,0,0);
 			}
 			//Green poison
 			if (color == "green") {
 				outputText("\nThe greenish fluids splash over you, making you feel slimy and gross.  Nausea plagues you immediately - you have been poisoned!\n", false);
-				if (player.findStatusEffect(StatusEffects.Poison) < 0) player.createStatusEffect(StatusEffects.Poison,0,0,0,0);
+				if (player.findStatusEffect(StatusEffects.Poison) < 0) player.createStatusEffect(StatusEffects.Poison,0,1.2,0,0);
 			}
 			//sticky flee prevention
 			if (color == "white") {
@@ -50,11 +50,11 @@
 			//Increase fatigue
 			if (color == "black") {
 				outputText("\nThe black fluid splashes all over you and wicks into your skin near-instantly.  It makes you feel tired and drowsy.\n", false);
-				player.changeFatigue(10 + rand(25));
+				player.changeFatigue(10 + rand(25) * 1.2);
 			}
 			combatRoundOver();
 			return;
-		}
+		}*/
 		//Lust Needle
 		protected function lustNeedle():void {
 			outputText("With a swift step, the assassin vanishes, her movements too quick for you to follow. You take a sharp breath as you feel her ample thighs clench your head in between them, her slick cunt in full view as you take in her scent.");
