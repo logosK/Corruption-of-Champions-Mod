@@ -14,7 +14,10 @@ Corruption-of-Champions.as3proj
 .idea/copyright/profiles_settings.xml
 *.sol
 *.swc
+CoC+_*
 /out
 /tmp
 CoC-AIR-app.xml
 CoC-AIR.airi
+
+.gitignore
