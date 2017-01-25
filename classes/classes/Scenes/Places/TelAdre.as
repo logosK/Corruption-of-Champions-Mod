@@ -208,7 +208,7 @@ public function telAdreMenu():void {
 		kGAMECLASS.urtaPregs.urtaSpecialDeliveries();
 		return;
 	}
-	if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00242] == -1) {
+	if (flags[kFLAGS.MADDIE_STATUS] == -1) {
 		maddie.runAwayMaddieFollowup();
 		return;
 	}
@@ -242,10 +242,10 @@ public function telAdreMenuShow():void { //Just displays the normal Tel'Adre men
 	addButton(6, "Pawn", oswaldPawn);
 	addButton(7, "Tower", library.visitZeMagesTower);
 	addButton(14, "Leave", camp.returnToCampUseOneHour);
-	if (flags[kFLAGS.KAIZO_MODE] > 0) addButton(14, "Leave", leaveTelAdreKaizo);
+	if (flags[kFLAGS.GRIMDARK_MODE] > 0) addButton(14, "Leave", leaveTelAdreGrimdark);
 }
 
-		public function leaveTelAdreKaizo():void {
+		public function leaveTelAdreGrimdark():void {
 			inRoomedDungeonResume = getGame().dungeons.resumeFromFight;
 			getGame().dungeons._currentRoom = "desert";
 			getGame().dungeons.move(getGame().dungeons._currentRoom);
@@ -1142,7 +1142,7 @@ public function barTelAdre():void {
 		button = anotherButton(button,"Ask4Amily",kGAMECLASS.followerInteractions.askAboutAmily);
 	}
 	//DOMINIKA
-	if (model.time.hours > 17 && model.time.hours < 20 && flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00150] != -1) {
+	if (model.time.hours > 17 && model.time.hours < 20 && flags[kFLAGS.DOMINIKA_STAGE] != -1) {
 		button = anotherButton(button,"Dominika",dominika.fellatrixBarApproach);
 	}
 	//EDRYN!
@@ -1202,7 +1202,7 @@ public function barTelAdre():void {
 	//NANCY
 	if (auntNancy.auntNancy(false)) {
 		auntNancy.auntNancy(true);
-		if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00263] > 0) button = anotherButton(button,"Nancy",auntNancy.interactWithAuntNancy);
+		if (flags[kFLAGS.NANCY_MET] > 0) button = anotherButton(button,"Nancy",auntNancy.interactWithAuntNancy);
 		else button = anotherButton(button,"Barkeep",auntNancy.interactWithAuntNancy);
 	}
 	else outputText("\n\nIt doesn't look like there's a bartender working at the moment.", false);
@@ -1270,7 +1270,7 @@ public function barTelAdre():void {
 		}
 		//Urta X Scylla threesome
 		if (scylla.action == Scylla.SCYLLA_ACTION_FUCKING_URTA) {
-			if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] == 0)
+			if (flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] == 0)
 				outputText("\n\n<b>Though Urta would normally be here getting sloshed, her usual spot is completely vacant.  You ask around but all you get are shrugs and giggles.  Something isn't quite right here.  You see an empty bottle of one of her favorite brands of whiskey still rolling on her table, so she can't have been gone long.  Maybe she had guard business, or had to head to the back rooms for something?</b>");
 			else
 				outputText("\n\nUrta's usual place is vacant, though her table still holds a half-drank mug of something potent and alcoholic.  If it's anything like the last time this happened, she's snuck into a back room with Scylla to relieve some pressure.  It might not hurt to join in...");
@@ -1411,12 +1411,12 @@ private function oldbarTelAdre():void {
 	if (!kGAMECLASS.urtaQuest.urtaBusy() && flags[kFLAGS.AMILY_VISITING_URTA] != 1 && model.time.hours < 15) {
 		//Scylla + Urta sitting in a tree
 		// SOME COMFORT     FUCKED URTA      NOT PISSED      DRUNK TIME    SCYLLA TO LV4    RANDOM CHANCE  HAS THIS HAPPENED BEFORE? SCYLLA REQS ->
-		if (flags[kFLAGS.URTA_TIME_SINCE_LAST_CAME] == 0 && flags[kFLAGS.URTA_COMFORTABLE_WITH_OWN_BODY] > 2 && flags[kFLAGS.TIMES_FUCKED_URTA] > 0 && flags[kFLAGS.URTA_ANGRY_AT_PC_COUNTDOWN] < 1 && (kGAMECLASS.urta.urtaDrunk() || flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] > 0) && flags[kFLAGS.NUMBER_OF_TIMES_MET_SCYLLA] >= 3 && rand(3) == 0 && (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] == 0 || (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00147] == 0 && flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00145] > 0)) && ((flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] > 0 && !kGAMECLASS.urta.urtaDrunk()) || player.balls > 0) && player.totalCocks() > 0 && misc1Name != "Scylla") {
-			if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] > 0) {
+		if (flags[kFLAGS.URTA_TIME_SINCE_LAST_CAME] == 0 && flags[kFLAGS.URTA_COMFORTABLE_WITH_OWN_BODY] > 2 && flags[kFLAGS.TIMES_FUCKED_URTA] > 0 && flags[kFLAGS.URTA_ANGRY_AT_PC_COUNTDOWN] < 1 && (kGAMECLASS.urta.urtaDrunk() || flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] > 0) && flags[kFLAGS.NUMBER_OF_TIMES_MET_SCYLLA] >= 3 && rand(3) == 0 && (flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] == 0 || (flags[kFLAGS.URTA_BANNED_FROM_SCYLLA] == 0 && flags[kFLAGS.URTA_CONFRONTED_SCYLLA] > 0)) && ((flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] > 0 && !kGAMECLASS.urta.urtaDrunk()) || player.balls > 0) && player.totalCocks() > 0 && misc1Name != "Scylla") {
+			if (flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] > 0) {
 				outputText("\n\nUrta's usual place is vacant, though her table still holds a half-drank glass of water.  If it's anything like the last time this happened, she's snuck into a back room with Scylla to relieve some pressure.  It might not hurt to join in...", false);
 			}
 			else {
-				if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00143] == 0) {
+				if (flags[kFLAGS.TIMES_CAUGHT_URTA_WITH_SCYLLA] == 0) {
 					outputText("\n\n<b>Though Urta would normally be here getting sloshed, her usual spot is completely vacant.  You ask around but all you get are shrugs and giggles.  Something isn't quite right here.  You see an empty bottle of one of her favorite brands of whiskey still rolling on her table, so she can't have been gone long.  Maybe she had guard business, or had to head to the back rooms for something?</b>", false);
 				}
 				else {
@@ -1444,7 +1444,7 @@ private function oldbarTelAdre():void {
 		backroomT = "Ask4Amily";
 	}
 	var dominika2:Number = 0;
-	if (model.time.hours > 17 && model.time.hours < 20 && flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00150] != -1) {
+	if (model.time.hours > 17 && model.time.hours < 20 && flags[kFLAGS.DOMINIKA_STAGE] != -1) {
 		dominika2 = 2739;
 		dominika.fellatrixBarAppearance();
 	}
@@ -1453,7 +1453,7 @@ private function oldbarTelAdre():void {
 	var nancyText:String = "Barkeep";
 	if (auntNancy.auntNancy(false)) {
 		auntNancy.auntNancy(true);
-		if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00263] > 0) nancyText = "Nancy";
+		if (flags[kFLAGS.NANCY_MET] > 0) nancyText = "Nancy";
 		nancy = auntNancy.interactWithAuntNancy;
 	}
 	else outputText("\n\nIt doesn't look like there's a bartender working at the moment.", false);
@@ -1701,6 +1701,7 @@ private function forgeScarredBladeEnd():void {
 	outputText("Closer examination reveals the veracity of his claim: all the numerous scratches and flaws on the blade have their origins right above the tang, from the smith's abortive attempts at decoration.  Yet though several ugly gashes stop just short of the edge, none of them actually break the perfect arc, as if cutting were all the blade cared about.\n\n")
 	outputText("\"<i>Damnedest thing,</i>\" he repeats, breaking your train of thought.  \"<i>Every time the blade slipped, it would twist toward my hands.  It's as if it's alive and eager to find flesh.  Truth be told... I was debating whether to turn it over to the Covenant and tell you the crystal couldn't be used.  But you're here, so take it and go.\"  Giving you barely enough time to sheathe the blade again, he places a strong hand against your back and all-but-pushes you out to the street.\n\n")
 	inventory.takeItem(weapons.SCARBLD, weaponShop);
+	flags[kFLAGS.SHEILA_LETHICITE_FORGE_DAY] = -1;
 }
 
 //-----------------
@@ -1719,38 +1720,69 @@ public function jewelShopInside():void {
 	outputText("<i>So what will it be?</i>", false);
 	menu();
 	addButton(0, "Normal rings", jewelShopPageI);
-	addButton(1, "Enchanted rings", jewelShopPageII);
-	addButton(4, "Jewelry box", jewelShopBuyBox);
+	addButton(1, "Special rings", jewelShopPageII);
+	addButton(2, "Tier 1 rings", jewelShopPageTier1);
+	if (player.level >= 10 || model.time.days >= 100) addButton(3, "Tier 2 rings", jewelShopPageTier2);
+	if (player.level >= 20 || model.time.days >= 200) addButton(4, "Tier 3 rings", jewelShopPageTier3);
+	addButton(5, "Jewelry box", jewelShopBuyBox);
 	addButton(14, "Leave", telAdreMenu);
 }
 
 public function jewelShopPageI():void {
-	choices(jewelries.SILVRNG.shortName, createCallBackFunction(jewelBuy, jewelries.SILVRNG),
-			jewelries.GOLDRNG.shortName, createCallBackFunction(jewelBuy, jewelries.GOLDRNG),
-			jewelries.PLATRNG.shortName, createCallBackFunction(jewelBuy, jewelries.PLATRNG),
-			jewelries.DIAMRNG.shortName, createCallBackFunction(jewelBuy, jewelries.DIAMRNG),
-			jewelries.LTHCRNG.shortName, createCallBackFunction(jewelBuy, jewelries.LTHCRNG),
-			"", null,
-			"", null,
-			"", null,
-			"", null,
-			"", null);
+	menu();
+	var button:int = 0;
+	addButton(button++, jewelries.SILVRNG.shortName, jewelBuy, jewelries.SILVRNG);
+	addButton(button++, jewelries.GOLDRNG.shortName, jewelBuy, jewelries.GOLDRNG);
+	addButton(button++, jewelries.PLATRNG.shortName, jewelBuy, jewelries.PLATRNG);
+	addButton(button++, jewelries.DIAMRNG.shortName, jewelBuy, jewelries.DIAMRNG);
 	addButton(14, "Back", jewelShopInside);
-}	
+}
 public function jewelShopPageII():void {
-	choices(jewelries.CRIMRNG.shortName, createCallBackFunction(jewelBuy, jewelries.CRIMRNG),
-			jewelries.ICE_RNG.shortName, createCallBackFunction(jewelBuy, jewelries.ICE_RNG),
-			jewelries.FERTRNG.shortName, createCallBackFunction(jewelBuy, jewelries.FERTRNG),
-			jewelries.LIFERNG.shortName, createCallBackFunction(jewelBuy, jewelries.LIFERNG),
-			jewelries.POWRRNG.shortName, createCallBackFunction(jewelBuy, jewelries.POWRRNG),
-			jewelries.PURERNG.shortName, createCallBackFunction(jewelBuy, jewelries.PURERNG),
-			jewelries.MYSTRNG.shortName, createCallBackFunction(jewelBuy, jewelries.MYSTRNG),
-			"", null,
-			"", null,
-			"", null);
+	menu();
+	var button:int = 0;
+	addButton(button++, jewelries.LTHCRNG.shortName, jewelBuy, jewelries.LTHCRNG);
+	addButton(button++, jewelries.PURERNG.shortName, jewelBuy, jewelries.PURERNG);
 	addButton(14, "Back", jewelShopInside);
-}	
-
+}
+public function jewelShopPageTier1():void {
+	menu();
+	var button:int = 0;
+	addButton(button++, jewelries.CRIMRN1.shortName, jewelBuy, jewelries.CRIMRN1);
+	addButton(button++, jewelries.FERTRN1.shortName, jewelBuy, jewelries.FERTRN1);
+	addButton(button++, jewelries.ICE_RN1.shortName, jewelBuy, jewelries.ICE_RN1);
+	addButton(button++, jewelries.CRITRN1.shortName, jewelBuy, jewelries.CRITRN1);
+	addButton(button++, jewelries.REGNRN1.shortName, jewelBuy, jewelries.REGNRN1);
+	addButton(button++, jewelries.LIFERN1.shortName, jewelBuy, jewelries.LIFERN1);
+	addButton(button++, jewelries.MYSTRN1.shortName, jewelBuy, jewelries.MYSTRN1);
+	addButton(button++, jewelries.POWRRN1.shortName, jewelBuy, jewelries.POWRRN1);
+	addButton(14, "Back", jewelShopInside);
+}
+public function jewelShopPageTier2():void {
+	menu();
+	var button:int = 0;
+	addButton(button++, jewelries.CRIMRN2.shortName, jewelBuy, jewelries.CRIMRN2);
+	addButton(button++, jewelries.FERTRN2.shortName, jewelBuy, jewelries.FERTRN2);
+	addButton(button++, jewelries.ICE_RN2.shortName, jewelBuy, jewelries.ICE_RN2);
+	addButton(button++, jewelries.CRITRN2.shortName, jewelBuy, jewelries.CRITRN2);
+	addButton(button++, jewelries.REGNRN2.shortName, jewelBuy, jewelries.REGNRN2);
+	addButton(button++, jewelries.LIFERN2.shortName, jewelBuy, jewelries.LIFERN2);
+	addButton(button++, jewelries.MYSTRN2.shortName, jewelBuy, jewelries.MYSTRN2);
+	addButton(button++, jewelries.POWRRN2.shortName, jewelBuy, jewelries.POWRRN2);
+	addButton(14, "Back", jewelShopInside);
+}
+public function jewelShopPageTier3():void {
+	menu();
+	var button:int = 0;
+	addButton(button++, jewelries.CRIMRN3.shortName, jewelBuy, jewelries.CRIMRN3);
+	addButton(button++, jewelries.FERTRN3.shortName, jewelBuy, jewelries.FERTRN3);
+	addButton(button++, jewelries.ICE_RN3.shortName, jewelBuy, jewelries.ICE_RN3);
+	addButton(button++, jewelries.CRITRN3.shortName, jewelBuy, jewelries.CRITRN3);
+	addButton(button++, jewelries.REGNRN3.shortName, jewelBuy, jewelries.REGNRN3);
+	addButton(button++, jewelries.LIFERN3.shortName, jewelBuy, jewelries.LIFERN3);
+	addButton(button++, jewelries.MYSTRN3.shortName, jewelBuy, jewelries.MYSTRN3);
+	addButton(button++, jewelries.POWRRN3.shortName, jewelBuy, jewelries.POWRRN3);
+	addButton(14, "Back", jewelShopInside);
+}
 public function jewelShopBuyBox():void {
 	clearOutput();
 	if (player.hasKeyItem("Equipment Storage - Jewelry Box") >= 0)
@@ -2232,7 +2264,7 @@ private function gymMenu():void {
 	var lottie2:Function = lottie.lottieAppearance(false);
 	var lottieB:String = "Pig-Lady";
 	var loppe2:Function =null;
-	if (flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00281] > 0)
+	if (flags[kFLAGS.LOTTIE_ENCOUNTER_COUNTER] > 0)
 		lottieB = "Lottie";
 	if (ifris.ifrisIntro())
 		ifris2 = ifris.approachIfris;

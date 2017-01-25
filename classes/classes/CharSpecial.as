@@ -861,7 +861,7 @@ package classes
 			player.createPerk(PerkLib.Feeder, 0, 0, 0, 0);
 
 			player.fertility = 0;
-			player.cor = 30;
+      player.cor = 30;
 			outputText("You've got large breasts prone to lactation.  You aren't sure WHY you got chosen as a champion, but with your considerable strength, you're sure you'll do a good job protecting Ingnam.");
 		}
 
@@ -1776,9 +1776,9 @@ package classes
 			inventory.createStorage();
 			player.createKeyItem("Camp - Chest",0,0,0,0);
 			player.createKeyItem("Equipment Rack - Weapons",0,0,0,0);
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00254] = 1;
+			flags[kFLAGS.TAKEN_WEAPON_RACK_DEPRECATED] = 1;
 			player.createKeyItem("Equipment Rack - Armor",0,0,0,0);
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00255] = 1;
+			flags[kFLAGS.TAKEN_ARMOUR_RACK_DEPRECATED] = 1;
 			player.createKeyItem("Equipment Storage - Jewelry Box",0,0,0,0);
 			player.createStatusEffect(StatusEffects.KnowsWhitefire, 0, 0, 0, 0);
 			
@@ -1822,7 +1822,7 @@ package classes
 			//player.createStatusEffect(StatusEffects.MetWhitney, 2, 0, 0, 0);
 			
 			// Izma
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00238] = 1;
+			flags[kFLAGS.IZMA_FOLLOWER_STATUS] = 1;
 			
 			// Vapula
 			flags[kFLAGS.VAPULA_FOLLOWER] = 1;
@@ -1834,7 +1834,7 @@ package classes
 			//flags[kFLAGS.JOJO_STATUS] = 5;
 			
 			// Bimbo Sophie
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00282] = 1;
+			flags[kFLAGS.SOPHIE_BIMBO] = 1;
 			
 			// Isabella
 			flags[kFLAGS.ISABELLA_FOLLOWER_ACCEPTED] = 1;
@@ -1847,7 +1847,7 @@ package classes
 			flags[kFLAGS.GOO_OBEDIENCE] = 100;
 			
 			// Ceraph
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00286] = 1;
+			flags[kFLAGS.CERAPH_BELLYBUTTON_PIERCING] = 1;
 			
 			// Holli
 			flags[kFLAGS.FUCK_FLOWER_LEVEL] = 4;
@@ -2007,9 +2007,9 @@ package classes
 			inventory.createStorage();
 			player.createKeyItem("Camp - Chest",0,0,0,0);
 			player.createKeyItem("Equipment Rack - Weapons",0,0,0,0);
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00254] = 1;
+			flags[kFLAGS.TAKEN_WEAPON_RACK_DEPRECATED] = 1;
 			player.createKeyItem("Equipment Rack - Armor",0,0,0,0);
-			flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00255] = 1;
+			flags[kFLAGS.TAKEN_ARMOUR_RACK_DEPRECATED] = 1;
 			//(Flexibility), (Incorporeality), History: Religious, Dragonfire, Brood Mother, Magical Fertility, Wet Pussy, Tough, Strong, Fast, Smart, History: Scholar, History: Slacker, Strong Back, Strong Back 2: Stronger Harder
 			player.createPerk(PerkLib.Flexibility, 0, 0, 0, 0);
 			player.createPerk(PerkLib.HistoryReligious, 0, 0, 0, 0);
@@ -2127,8 +2127,8 @@ package classes
 			if (player.hasKeyItem("Camp - Chest") < 0) { player.createKeyItem("Camp - Chest", 0, 0, 0, 0); for (i = 0; i < 6; i++) inventory.createStorage(); }			
 			if (player.hasKeyItem("Camp - Murky Chest") < 0) { player.createKeyItem("Camp - Murky Chest", 0, 0, 0, 0); for (i = 0; i < 4; i++) inventory.createStorage(); }			
 			if (player.hasKeyItem("Camp - Ornate Chest") < 0) { player.createKeyItem("Camp - Ornate Chest", 0, 0, 0, 0); for (i = 0; i < 4; i++) inventory.createStorage(); }			
-			if (player.hasKeyItem("Equipment Rack - Weapons") < 0) { player.createKeyItem("Equipment Rack - Weapons", 0, 0, 0, 0); flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00254] = 1; }			
-			if (player.hasKeyItem("Equipment Rack - Armor") < 0) { player.createKeyItem("Equipment Rack - Armor", 0, 0, 0, 0); flags[kFLAGS.UNKNOWN_FLAG_NUMBER_00255] = 1; }			
+			if (player.hasKeyItem("Equipment Rack - Weapons") < 0) { player.createKeyItem("Equipment Rack - Weapons", 0, 0, 0, 0); flags[kFLAGS.TAKEN_WEAPON_RACK_DEPRECATED] = 1; }			
+			if (player.hasKeyItem("Equipment Rack - Armor") < 0) { player.createKeyItem("Equipment Rack - Armor", 0, 0, 0, 0); flags[kFLAGS.TAKEN_ARMOUR_RACK_DEPRECATED] = 1; }			
 			
 			// have lots of different traits
 			if (player.findPerk(PerkLib.HistoryReligious) < 0) player.createPerk(PerkLib.HistoryReligious, 0, 0, 0, 0); // abandoned religion after obtaining nine tails and being disappointed in achieved enlightment
@@ -2301,7 +2301,7 @@ package classes
 				player.skinType = SKIN_TYPE_FUR; // fur, 30%
 				player.skinDesc = "fur";}
 			else if (skin < 95){
-				player.skinType = SKIN_TYPE_SCALES; // scales, 15%
+				player.skinType = SKIN_TYPE_LIZARD_SCALES; // scales, 15%
 				player.skinDesc = "scales";}
 			else{
 				player.skinType = SKIN_TYPE_GOO; // goo, 5%
