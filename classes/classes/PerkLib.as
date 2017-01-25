@@ -479,6 +479,8 @@ package classes
 		public static const Whispered:PerkType = mk("Whispered", "Whispered",
 				"Akbal's blessings grant limited telepathy that can induce fear.");
 				
+		public static const AlchemicalFertility:PerkType = new AlchemicalFertilityPerk();
+				
 		public static const ControlledBreath:ControlledBreathPerk = new ControlledBreathPerk();
 		public static const CleansingPalm:CleansingPalmPerk = new CleansingPalmPerk();
 		public static const Enlightened:EnlightenedPerk = new EnlightenedPerk();

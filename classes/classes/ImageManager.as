@@ -75,11 +75,11 @@
 			}
 			for (var imgPath:String in _allImagePaths)
 			{
-				// trace(_allImagePaths[imgPath], " : ", imgPath)
+				trace(_allImagePaths[imgPath], " : ", imgPath);
 				this.loadImageAtPath(imgPath);
 			}
 
-			//trace("Loading imagelist", imgLoader, req, _imgListXML)
+			trace("Loaded imagelist")
 		}
 
 		private function loadImageAtPath(imPath:String):void
@@ -156,7 +156,7 @@
 				trace("Error in image loading. Tried to load image that was not tried to load? Wat.")
 			}
 
-			//trace("Loaded file", e)
+			trace("Loaded file", e, imPath);
 		}
 
 		private function fileNotFound(e:IOErrorEvent):void

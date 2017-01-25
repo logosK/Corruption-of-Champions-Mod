@@ -2244,7 +2244,7 @@ package classes
 			}
 			if (vaginas.length == 0)
 			{
-				//trace("ERROR: removeVagina called but cocks do not exist.");
+				//trace("ERROR: removeVagina called but vaginas do not exist.");
 			}
 			else
 			{
@@ -2406,6 +2406,7 @@ package classes
 			if (findPerk(PerkLib.MagicalFertility) >= 0)
 				counter += 10 + (perkv1(PerkLib.MagicalFertility) * 5);
 			counter += perkv2(PerkLib.ElvenBounty);
+			counter += perkv2(PerkLib.AlchemicalFertility);
 			counter += perkv1(PerkLib.PiercedFertite);
 			if (jewelryEffectId == JewelryLib.MODIFIER_FERTILITY)
 				counter += jewelryEffectMagnitude;

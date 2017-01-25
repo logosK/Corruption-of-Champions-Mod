@@ -223,6 +223,7 @@ package classes
 				if (player.findPerk(PerkLib.MaraesGiftFertility) >= 0) preg++;
 				if (player.findPerk(PerkLib.BroodMother) >= 0) preg++;
 				if (player.findPerk(PerkLib.FerasBoonBreedingBitch) >= 0) preg++;
+				if (player.findPerk(PerkLib.AlchemicalFertility) >= 0) preg+=player.perkv1(PerkLib.AlchemicalFertility);
 				if (player.findPerk(PerkLib.MagicalFertility) >= 0) preg++;
 				if (player.findPerk(PerkLib.FerasBoonWideOpen) >= 0 || player.findPerk(PerkLib.FerasBoonMilkingTwat) >= 0) preg++;
 				bodyStats += preg + "\n";
@@ -234,9 +235,9 @@ package classes
 				var totalCockLength:Number = 0;
 				var totalCockGirth:Number = 0;
 				
-				for (var i:Number = 0; i < player.cocks.length; i++) {
-						totalCockLength += player.cocks[i].cockLength;
-						totalCockGirth += player.cocks[i].cockThickness
+				for (var j:Number = 0; j < player.cocks.length; j++) {
+						totalCockLength += player.cocks[j].cockLength;
+						totalCockGirth += player.cocks[j].cockThickness
 				}
 						
 				bodyStats += "<b>Total Cock Length:</b> " + Math.round(totalCockLength) + " inches\n";
@@ -480,6 +481,23 @@ package classes
 
 			if (statEffects != "")
 				outputText("\n<b><u>Ongoing Status Effects</u></b>\n" + statEffects, false);
+				
+			outputText("\n<b><u>Species</u></b>\n", false);
+				
+			var speciesNames:Array = new Array("demon", "human", "mino", "cow", "lactaBovine", "lactaSlut", "sandTrap", "bee", "ferret", "dog", "mouse", "raccoon", "fox", "cat", "lizard", "spider", "horse", "kitsune",
+			"dragon", "goblin", "goo", "elderSlime", "naga", "bunny", "harpy", "kanga", "shark", "mutant", "salamander", "siren", "pig", "satyr", "rhino", "echidna", "deer", "dragonne", "manticore", "alicorn",
+			"sleipnir","hellHound","ryu","medusa","arachne","eredar","anihilan","tigerShark");
+ 
+			for (var i:int = 0; i < speciesNames.length; i++) {
+				var score:int = player[speciesNames[i] + "Score"]();
+				if (score >= 4) {
+					outputText("\t"+speciesNames[i]+"Score: \t"+String(score)+"\n");
+				}
+			}
+				
+				
+				
+				
 			// End Ongoing Stat Effects
 			menu();
 			if (player.statPoints > 0) {
