@@ -814,7 +814,7 @@ package classes
 			player.cor = 50;
 			player.itemSlot4.unlocked = true;
 			player.itemSlot5.unlocked = true;
-			outputText("A promising up-and-coming Huntresses until you became corrupted, the village wants you gone but still hopes you can do some good. You're an incredibly strong corrupted dragon-naga.");
+			outputText("A promising up-and-coming Huntress until you became corrupted, the village wants you gone but still hopes you can do some good. You're an incredibly strong corrupted dragon-naga.");
 		}
 		
 		private function customBovina():void {
@@ -829,12 +829,12 @@ package classes
 			//Breast size: HH
 			while (player.breastRows.length < 2)
 				player.createBreastRow();
-			player.breastRows[0].breastRating = 21;
+			player.breastRows[0].breastRating = 5;
 			player.breastRows[0].nipplesPerBreast = 4;
-			player.breastRows[0].lactationMultiplier = 40;
-			player.breastRows[1].breastRating = 21;
+			player.breastRows[0].lactationMultiplier = 5;
+			player.breastRows[1].breastRating = 5;
 			player.breastRows[1].nipplesPerBreast = 4;
-			player.breastRows[1].lactationMultiplier = 40;
+			player.breastRows[1].lactationMultiplier = 5;
 			player.nippleLength = 1.5;
 			//Femininity/Beauty: Very high
 			player.femininity = 90;
@@ -861,7 +861,7 @@ package classes
 			player.createPerk(PerkLib.Feeder, 0, 0, 0, 0);
 
 			player.fertility = 0;
-			player.cor = 20;
+			player.cor = 30;
 			outputText("You've got large breasts prone to lactation.  You aren't sure WHY you got chosen as a champion, but with your considerable strength, you're sure you'll do a good job protecting Ingnam.");
 		}
 
