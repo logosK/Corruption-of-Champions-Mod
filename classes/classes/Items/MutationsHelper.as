@@ -73,7 +73,7 @@ package classes.Items
 
 							case SKIN_TYPE_PLAIN:
 							case SKIN_TYPE_FUR:
-							case SKIN_TYPE_SCALES:
+							case SKIN_TYPE_LIZARD_SCALES:
 								message += "\n\nYou feel a sudden tingle in your [claws] and then you realize,"
 								          +" that they have become normal human fingernails again.";
 								break;
@@ -380,9 +380,9 @@ package classes.Items
 
 			if (changes >= changeLimit) return 0;
 
-			// Note, that we don't do the score checks anymore. That was just an unly workaround and we don't want to do that again!
+			// Note, that we don't do the score checks anymore. That was just an ugly workaround and we don't want to do that again!
 			switch(tfSource) {
-				case "emberTFs":
+				case "EmberTFs":
 				case "snakeOil":
 				case "goldenSeed-HarpyWomb":
 				//case "catTransformation-dragonne": // Keep it? Maybe later.
@@ -392,6 +392,7 @@ package classes.Items
 					return 0; // Don't change it. So we're done, yay!
 
 				case "reptilum":
+				case "echidnaTFs":
 					if (player.findPerk(PerkLib.Oviposition) >= 0) return 0;
 					outputText("\n\nDeep inside yourself there is a change.  It makes you feel a little woozy, but passes quickly."
 					          +"  Beyond that, you aren't sure exactly what just happened, but you are sure it originated from your womb.\n");
@@ -509,7 +510,7 @@ package classes.Items
 			var tsParts:Array = tfSource.split("-");
 			var race:String;
 
-			if (tsParts[0] == "emberTFs")
+			if (tsParts[0] == "EmberTFs")
 				race = "dragon";
 			else if (tsParts[0] == "reptilum" && tsParts.length > 1)
 				race = tsParts[1];
@@ -551,13 +552,13 @@ package classes.Items
 			else {
 				if (player.hornType == HORNS_DRACONIC_X2) {
 					if (player.horns < 12) {
-						if (rand(2) == 0) {
+						if (rand(3) == 0) {
 							outputText("\n\nYou get a headache as an inch of fresh horn escapes from your pounding skull.");
 							player.horns += 1;
 						}
 						else {
 							outputText("\n\nYour head aches as your horns grow a few inches longer.  They get even thicker about the base, giving you a menacing appearance.");
-							player.horns += 2 + rand(4);
+							player.horns += 3 + rand(3);
 						}
 						if (player.horns >= 12) outputText("  <b>Your horns settle down quickly, as if they're reached their full size.</b>");
 						changes++;

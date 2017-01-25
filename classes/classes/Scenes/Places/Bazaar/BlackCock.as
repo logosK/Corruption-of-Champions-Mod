@@ -1482,7 +1482,7 @@ package classes.Scenes.Places.Bazaar
 			}
 			if (rand(4) == 0 && changes < changeLimit && !player.hasScales() && player.earType != EARS_ELFIN) {
 				outputText("\n\nYou feel an odd shifting sensation on the side of your head and, reaching up to inspect it, find a <b>pair of fleshy pointed ears</b>. "); 
-				if (player.skinType == SKIN_TYPE_FUR) ("As you examine your new elvish ears you feel fur grow around them, matching the rest of you.");
+				if (player.hasFur()) ("As you examine your new elvish ears you feel fur grow around them, matching the rest of you.");
 				player.earType = EARS_ELFIN;
 				changes++;
 			}
@@ -1602,7 +1602,7 @@ package classes.Scenes.Places.Bazaar
 				changes++;
 			}
 			//Fur/scales fall out
-			if (rand(4) == 0 && changes < changeLimit && (player.skinType != SKIN_TYPE_PLAIN || player.skinTone != "gray" || player.skinAdj != "tough")) {
+			if (rand(4) == 0 && changes < changeLimit && (!player.hasPlainSkin() || player.skinTone != "gray" || player.skinAdj != "tough")) {
 				outputText("\n\n");
 				switch(player.skinType) {
 					case SKIN_TYPE_PLAIN:
@@ -1611,8 +1611,9 @@ package classes.Scenes.Places.Bazaar
 					case SKIN_TYPE_FUR:
 						outputText("You feel an itching sensation as your fur beings to fall off in clumps, <b>revealing tough gray skin</b> beneath it.");
 						break;
-					case SKIN_TYPE_SCALES:
-					case SKIN_TYPE_DRACONIC:
+					case SKIN_TYPE_LIZARD_SCALES:
+					case SKIN_TYPE_DRAGON_SCALES:
+					case SKIN_TYPE_FISH_SCALES:
 						outputText("You feel an odd rolling sensation as your scales begin to shift, spreading and reforming as they grow and disappear, <b>becoming tough gray skin</b>.");
 						break;
 					case SKIN_TYPE_GOO:
@@ -1849,8 +1850,6 @@ package classes.Scenes.Places.Bazaar
 			
 			// Normal TFs
 			//------------
-			if (rand(5) == 0) mutations.updateOvipositionPerk(tfSource);
-
 			if (rand(4) == 0 && changes < changeLimit && player.hairType != HAIR_NORMAL && player.hairType != HAIR_QUILL) {
 				outputText("\n\nYour scalp feels really strange, but the sensation is brief. You feel your hair, and you immediately notice the change. <b>It would seem that your hair is normal again!</b>");
 				player.hairType = HAIR_NORMAL;
@@ -1879,7 +1878,7 @@ package classes.Scenes.Places.Bazaar
 			// Main TFs
 			//------------
 			//Change to fur
-			if (rand(3) == 0 && changes < changeLimit && player.skinType != SKIN_TYPE_FUR) {
+			if (rand(3) == 0 && changes < changeLimit && !player.hasFur()) {
 				outputText("\n\nYou shiver, feeling a bit cold. Just as you begin to wish for something to cover up with, it seems your request is granted; <b>fur begins to grow all over your body!</b> You tug at the tufts in alarm, but they're firmly rooted and... actually pretty soft. Huh. ");
 				player.skinAdj = "";
 				player.skinDesc = "fur";
@@ -2029,7 +2028,7 @@ package classes.Scenes.Places.Bazaar
 				changes++;
 			}
 			//Gain Echidna face if you have the right conditions.
-			if (rand(4) == 0 && changes < changeLimit && player.skinType == SKIN_TYPE_FUR && player.earType == EARS_ECHIDNA && player.tailType == TAIL_TYPE_ECHIDNA && player.tongueType == TONGUE_ECHIDNA) {
+			if (rand(4) == 0 && changes < changeLimit && player.hasFur() && player.earType == EARS_ECHIDNA && player.tailType == TAIL_TYPE_ECHIDNA && player.tongueType == TONGUE_ECHIDNA) {
 				outputText("You groan loudly as the bones in your face begin to reshape and rearrange. Most notable, you feel your mouth lengthening into a long, thin snout. <b>You now have an echidna face!</b>");
 				player.faceType = FACE_ECHIDNA;
 				changes++;
@@ -2063,10 +2062,7 @@ package classes.Scenes.Places.Bazaar
 				changes++;
 			}
 			if (rand(4) == 0 && changes < changeLimit && player.echidnaScore() >= 3 && player.hasVagina() && player.findPerk(PerkLib.Oviposition) < 0) {
-				outputText("\n\nDeep inside yourself there is a change.  It makes you feel a little woozy, but passes quickly.  Beyond that, you aren't sure exactly what just happened, but you are sure it originated from your womb.\n");
-				outputText("(<b>Perk Gained: Oviposition</b>)");
-				player.createPerk(PerkLib.Oviposition, 0, 0, 0, 0);
-				changes++;
+				mutations.updateOvipositionPerk(tfSource);
 			}
 			if (rand(3) == 0 && (rand(2) == 0 || !player.inHeat) && player.hasVagina() && player.statusEffectv2(StatusEffects.Heat) < 30) {
 				player.goIntoHeat(true);
