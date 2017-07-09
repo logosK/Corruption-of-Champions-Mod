@@ -1,10 +1,15 @@
-﻿package classes
+package classes
 {
 
+	import classes.BodyParts.UnderBody;
 	import classes.GlobalFlags.kGAMECLASS;
 	import classes.GlobalFlags.kACHIEVEMENTS;
 	import classes.Scenes.Inventory;
 	import classes.Scenes.Places.TelAdre.Katherine;
+	import classes.internals.LoggerFactory;
+	import classes.internals.ISerializable;
+	import classes.internals.SerializationUtils;
+	import mx.logging.ILogger;
 
 	CONFIG::AIR 
 	{
@@ -28,6 +33,7 @@
 
 
 public class Saves extends BaseContent {
+	private static const LOGGER:ILogger = LoggerFactory.getLogger(Saves);
 
 	private static const SAVE_FILE_CURRENT_INTEGER_FORMAT_VERSION:int		= 816;
 		//Didn't want to include something like this, but an integer is safer than depending on the text version number from the CoC class.
@@ -55,7 +61,7 @@ public var file:FileReference;
 public var loader:URLLoader;
 
 public var saveFileNames:Array = ["CoC_1", "CoC_2", "CoC_3", "CoC_4", "CoC_5", "CoC_6", "CoC_7", "CoC_8", "CoC_9", "CoC_10", "CoC_11", "CoC_12", "CoC_13", "CoC_14"];
-public var versionProperties:Object = { "legacy" : 100, "0.8.3f7" : 124, "0.8.3f8" : 125, "0.8.4.3":119, "latest" : 119 };
+public var versionProperties:Object = {"test" : 0, "legacy" : 100, "0.8.3f7" : 124, "0.8.3f8" : 125, "0.8.4.3":119, "latest" : 119};
 public var savedGameDir:String = "data/com.fenoxo.coc";
 
 public var notes:String = "";
@@ -162,10 +168,12 @@ public function loadScreenAIR():void
 	}
 	catch (error:Error)
 	{
-		outputText("Error reading save directory: " + airSaveDir.url + " (" + error.message + ")", true);
+		clearOutput();
+		outputText("Error reading save directory: " + airSaveDir.url + " (" + error.message + ")");
 		return;		
 	}
-	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r", true);
+	clearOutput();
+	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r");
 	
 	var i:uint = 0;
 	for (var fileCount:uint = 0; fileCount < fileList.length; fileCount++)
@@ -180,7 +188,7 @@ public function loadScreenAIR():void
 			continue;
 
 		gameObjects[i] = getGameObjectFromFile(fileList[fileCount]);
-		outputText(loadSaveDisplay(gameObjects[i], String(i+1)), false);
+		outputText(loadSaveDisplay(gameObjects[i], String(i+1)));
 				
 		if (gameObjects[i].data.exists)
 		{
@@ -227,7 +235,8 @@ public function getGameObjectFromFile(aFile:File):Object
 	}
 	catch (error:Error)
 	{
-		outputText("Failed to read save file, " + aFile.url + " (" + error.message + ")", true);
+		clearOutput();
+		outputText("Failed to read save file, " + aFile.url + " (" + error.message + ")");
 	}
 	return null;
  }
@@ -238,12 +247,13 @@ public function loadScreen():void
 {
 	var slots:Array = new Array(saveFileNames.length);
 		
-	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r", true);
+	clearOutput();
+	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r");
 	
 	for (var i:int = 0; i < saveFileNames.length; i += 1)
 	{
 		var test:Object = SharedObject.getLocal(saveFileNames[i], "/");
-		outputText(loadSaveDisplay(test, String(i + 1)), false);
+		outputText(loadSaveDisplay(test, String(i + 1)));
 		if (test.data.exists/* && test.data.flags[2066] == undefined*/)
 		{
 			//trace("Creating function with indice = ", i);
@@ -257,7 +267,8 @@ public function loadScreen():void
 						doNext(playerMenu);
 						showStats();
 						statScreenRefresh();
-						outputText("Slot " + i + " Loaded!", true);
+						clearOutput();
+						outputText("Slot " + i + " Loaded!");
 					}
 				}
 			})(i);
@@ -282,21 +293,23 @@ public function saveScreen():void
 	mainView.nameBox.y = 620;
 	mainView.nameBox.width = 550;
 	mainView.nameBox.text = "";
+	mainView.nameBox.maxChars = 54;
 	mainView.nameBox.visible = true;
 	
 	// var test; // Disabling this variable because it seems to be unused.
 	if (flags[kFLAGS.HARDCORE_MODE] > 0)
 	{
 		saveGame(flags[kFLAGS.HARDCORE_SLOT])
-		outputText("You may not create copies of Hardcore save files! Your current progress has been saved.", true);
+		clearOutput();
+		outputText("You may not create copies of Hardcore save files! Your current progress has been saved.");
 		doNext(playerMenu);
 		return;
 	}
 	
 	clearOutput();
 	if (player.slotName != "VOID")
-		outputText("<b>Last saved or loaded from: " + player.slotName + "</b>\r\r", false);
-	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r", false);
+		outputText("<b>Last saved or loaded from: " + player.slotName + "</b>\r\r");
+	outputText("<b><u>Slot: Sex,  Game Days Played</u></b>\r");
 	
 	var saveFuncs:Array = [];
 	
@@ -304,14 +317,15 @@ public function saveScreen():void
 	for (var i:int = 0; i < saveFileNames.length; i += 1)
 	{
 		var test:Object = SharedObject.getLocal(saveFileNames[i], "/");
-		outputText(loadSaveDisplay(test, String(i + 1)), false);
+		outputText(loadSaveDisplay(test, String(i + 1)));
 		trace("Creating function with indice = ", i);
 		(function(i:int) : void		// messy hack to work around closures. See: http://en.wikipedia.org/wiki/Immediately-invoked_function_expression
 		{
 			saveFuncs[i] = function() : void 		// Anonymous functions FTW
 			{
+				clearOutput();
 				trace("Saving game with name", saveFileNames[i], "at index", i);
-				saveGame(saveFileNames[i], true);
+				saveGame(saveFileNames[i]);
 			}
 		})(i);
 		
@@ -319,9 +333,9 @@ public function saveScreen():void
 	
 
 	if (player.slotName == "VOID")
-		outputText("\r\r", false);
+		outputText("\r\r");
 	
-	outputText("<b>Leave the notes box blank if you don't wish to change notes.\r<u>NOTES:</u></b>", false);
+	outputText("<b>Leave the notes box blank if you don't wish to change notes.\r<u>NOTES:</u></b>");
 	menu();
 	var s:int = 0
 	while (s < 14) {
@@ -343,13 +357,13 @@ public function saveLoad(e:MouseEvent = null):void
 	else autoSaveSuffix = "OFF";
 	
 	clearOutput();
-	outputText("<b>Where are my saves located?</b>\n", false);
-	outputText("<i>In Windows Vista/7 (IE/FireFox/Other): <pre>Users/{username}/Appdata/Roaming/Macromedia/Flash Player/#Shared Objects/{GIBBERISH}/</pre>\n\n", false);
-	outputText("In Windows Vista/7 (Chrome): <pre>Users/{username}/AppData/Local/Google/Chrome/User Data/Default/Pepper Data/Shockwave Flash/WritableRoot/#SharedObjects/{GIBBERISH}/</pre>\n\n", false);
-	outputText("Inside that folder it will saved in a folder corresponding to where it was played from.  If you saved the CoC.swf to your HDD, then it will be in a folder called localhost.  If you played from my website, it will be in fenoxo.com.  The save files will be labelled CoC_1.sol, CoC_2.sol, CoC_3.sol, etc.</i>\n\n", false);
-	outputText("<b>Why do my saves disappear all the time?</b>\n<i>There are numerous things that will wipe out flash local shared files.  If your browser or player is set to delete flash cookies or data, that will do it.  CCleaner will also remove them.  CoC or its updates will never remove your savegames - if they disappear something else is wiping them out.</i>\n\n", false);
-	outputText("<b>When I play from my HDD I have one set of saves, and when I play off your site I have a different set of saves.  Why?</b>\n<i>Flash stores saved data relative to where it was accessed from.  Playing from your HDD will store things in a different location than fenoxo.com or FurAffinity.</i>\n", false);
-	outputText("<i>If you want to be absolutely sure you don't lose a character, copy the .sol file for that slot out and back it up! <b>For more information, google flash shared objects.</b></i>\n\n", false);
+	outputText("<b>Where are my saves located?</b>\n");
+	outputText("<i>In Windows Vista/7 (IE/FireFox/Other): <pre>Users/{username}/Appdata/Roaming/Macromedia/Flash Player/#Shared Objects/{GIBBERISH}/</pre>\n\n");
+	outputText("In Windows Vista/7 (Chrome): <pre>Users/{username}/AppData/Local/Google/Chrome/User Data/Default/Pepper Data/Shockwave Flash/WritableRoot/#SharedObjects/{GIBBERISH}/</pre>\n\n");
+	outputText("Inside that folder it will saved in a folder corresponding to where it was played from.  If you saved the CoC.swf to your HDD, then it will be in a folder called localhost.  If you played from my website, it will be in fenoxo.com.  The save files will be labelled CoC_1.sol, CoC_2.sol, CoC_3.sol, etc.</i>\n\n");
+	outputText("<b>Why do my saves disappear all the time?</b>\n<i>There are numerous things that will wipe out flash local shared files.  If your browser or player is set to delete flash cookies or data, that will do it.  CCleaner will also remove them.  CoC or its updates will never remove your savegames - if they disappear something else is wiping them out.</i>\n\n");
+	outputText("<b>When I play from my HDD I have one set of saves, and when I play off your site I have a different set of saves.  Why?</b>\n<i>Flash stores saved data relative to where it was accessed from.  Playing from your HDD will store things in a different location than fenoxo.com or FurAffinity.</i>\n");
+	outputText("<i>If you want to be absolutely sure you don't lose a character, copy the .sol file for that slot out and back it up! <b>For more information, google flash shared objects.</b></i>\n\n");
 	outputText("<b>Why does the Save File and Load File option not work?</b>\n");
 	outputText("<i>Save File and Load File are limited by the security settings imposed upon CoC by Flash. These options will only work if you have downloaded the game from the website, and are running it from your HDD. Additionally, they can only correctly save files to and load files from the directory where you have the game saved.</i>");
 	//This is to clear the 'game over' block from stopping simpleChoices from working.  Loading games supercede's game over.
@@ -365,11 +379,12 @@ public function saveLoad(e:MouseEvent = null):void
 	//addButton(5, "Save to File", saveToFile);
 	addButton(6, "Load File", loadFromFile);
 	//addButton(8, "AutoSave: " + autoSaveSuffix, autosaveToggle);
-	addButton(14, "Back", kGAMECLASS.gameOver, true);
+	addButton(14, "Back", kGAMECLASS.gameOver);
 	
 	
 	if (temp == 777) {
-		addButton(14, "Back", kGAMECLASS.gameOver, true);
+		clearOutput();
+		addButton(14, "Back", kGAMECLASS.gameOver);
 		return;
 	}
 	if (player.str == 0) {
@@ -399,6 +414,7 @@ public function saveLoad(e:MouseEvent = null):void
 }
 
 private function saveToFile():void {
+	clearOutput();
 	saveGameObject(null, true);
 }
 
@@ -415,7 +431,8 @@ private function autosaveToggle():void {
 
 public function deleteScreen():void
 {
-	outputText("Slot,  Race,  Sex,  Game Days Played\n", true);
+	clearOutput();
+	outputText("Slot,  Race,  Sex,  Game Days Played\n");
 	
 
 	var delFuncs:Array = [];
@@ -424,7 +441,7 @@ public function deleteScreen():void
 	for (var i:int = 0; i < saveFileNames.length; i += 1)
 	{
 		var test:Object = SharedObject.getLocal(saveFileNames[i], "/");
-		outputText(loadSaveDisplay(test, String(i + 1)), false);
+		outputText(loadSaveDisplay(test, String(i + 1)));
 		if (test.data.exists)
 		{
 			//slots[i] = loadFuncs[i];
@@ -443,7 +460,7 @@ public function deleteScreen():void
 			delFuncs[i] = null;	//disable buttons for empty slots
 	}
 	
-	outputText("\n<b>ONCE DELETED, YOUR SAVE IS GONE FOREVER.</b>", false);
+	outputText("\n<b>ONCE DELETED, YOUR SAVE IS GONE FOREVER.</b>");
 	menu();
 	var s:int = 0
 	while (s < 14) {
@@ -451,23 +468,15 @@ public function deleteScreen():void
 		s++;
 	}
 	addButton(14, "Back", returnToSaveMenu);
-	/*
-	choices("Slot 1", delFuncs[0], 
-			"Slot 2", delFuncs[1], 
-			"Slot 3", delFuncs[2], 
-			"Slot 4", delFuncs[3], 
-			"Slot 5", delFuncs[4], 
-			"Slot 6", delFuncs[5], 
-			"Slot 7", delFuncs[6], 
-			"Slot 8", delFuncs[7], 
-			"Slot 9", delFuncs[8], 
-			"Back", returnToSaveMenu);*/
 }
 
 public function confirmDelete():void
 {
-	outputText("You are about to delete the following save: <b>" + flags[kFLAGS.TEMP_STORAGE_SAVE_DELETION] + "</b>\n\nAre you sure you want to delete it?", true);
-	simpleChoices("No", deleteScreen, "Yes", purgeTheMutant, "", null, "", null, "", null);
+	clearOutput();
+	outputText("You are about to delete the following save: <b>" + flags[kFLAGS.TEMP_STORAGE_SAVE_DELETION] + "</b>\n\nAre you sure you want to delete it?");
+	menu();
+	addButton(0, "No", deleteScreen);
+	addButton(1, "Yes", purgeTheMutant);
 }
 
 public function purgeTheMutant():void
@@ -478,7 +487,8 @@ public function purgeTheMutant():void
 	
 	trace(blah.length + " array slots");
 	var select:Number = rand(blah.length);
-	outputText(flags[kFLAGS.TEMP_STORAGE_SAVE_DELETION] + " has " + blah[select] + ".", true);
+	clearOutput();
+	outputText(flags[kFLAGS.TEMP_STORAGE_SAVE_DELETION] + " has " + blah[select] + ".");
 	test.clear();
 	doNext(deleteScreen);
 }
@@ -536,7 +546,8 @@ public function loadGame(slot:String):void
 	if (numProps < sfVer)
 	{
 		trace("Got " + numProps + " file properties -- failed!");
-		outputText("<b>Aborting load.  The current save file is missing a number of expected properties.</b>\n\n", true);
+		clearOutput();
+		outputText("<b>Aborting load.  The current save file is missing a number of expected properties.</b>\n\n");
 		
 		var backup:SharedObject = SharedObject.getLocal(slot + "_backup", "/");
 		
@@ -612,6 +623,7 @@ public function savePermObject(isFile:Boolean):void {
 		
 		saveFile.data.flags[kFLAGS.SHOW_SPRITES_FLAG] = flags[kFLAGS.SHOW_SPRITES_FLAG];
 		saveFile.data.flags[kFLAGS.SILLY_MODE_ENABLE_FLAG] = flags[kFLAGS.SILLY_MODE_ENABLE_FLAG];
+		saveFile.data.flags[kFLAGS.PRISON_ENABLED] = flags[kFLAGS.PRISON_ENABLED];
 		saveFile.data.flags[kFLAGS.WATERSPORTS_ENABLED] = flags[kFLAGS.WATERSPORTS_ENABLED];
 		
 		saveFile.data.flags[kFLAGS.USE_OLD_INTERFACE] = flags[kFLAGS.USE_OLD_INTERFACE];
@@ -650,8 +662,9 @@ public function savePermObject(isFile:Boolean):void {
 }
 
 public function loadPermObject():void {
-	var saveFile:* = SharedObject.getLocal("CoC_Main", "/");
-	trace("Loading achievements!")
+	var permObjectFileName:String = "CoC_Main";
+	var saveFile:* = SharedObject.getLocal(permObjectFileName, "/");
+	LOGGER.info("Loading achievements from {0}!", permObjectFileName);
 	//Initialize the save file
 	//var saveFile:Object = loader.data.readObject();
 	if (saveFile.data.exists)
@@ -663,6 +676,7 @@ public function loadPermObject():void {
 			
 			if (saveFile.data.flags[kFLAGS.SHOW_SPRITES_FLAG] != undefined) flags[kFLAGS.SHOW_SPRITES_FLAG] = saveFile.data.flags[kFLAGS.SHOW_SPRITES_FLAG];
 			if (saveFile.data.flags[kFLAGS.SILLY_MODE_ENABLE_FLAG] != undefined) flags[kFLAGS.SILLY_MODE_ENABLE_FLAG] = saveFile.data.flags[kFLAGS.SILLY_MODE_ENABLE_FLAG];
+			if (saveFile.data.flags[kFLAGS.PRISON_ENABLED] != undefined) flags[kFLAGS.PRISON_ENABLED] = saveFile.data.flags[kFLAGS.PRISON_ENABLED];
 			
 			if (saveFile.data.flags[kFLAGS.USE_OLD_INTERFACE] != undefined) flags[kFLAGS.USE_OLD_INTERFACE] = saveFile.data.flags[kFLAGS.USE_OLD_INTERFACE];
 			if (saveFile.data.flags[kFLAGS.USE_OLD_FONT] != undefined) flags[kFLAGS.USE_OLD_FONT] = saveFile.data.flags[kFLAGS.USE_OLD_FONT];
@@ -694,7 +708,7 @@ public function loadPermObject():void {
 
 		if (saveFile.data.permObjVersionID != undefined) {
 			getGame().permObjVersionID = saveFile.data.permObjVersionID;
-			trace("Found internal permObjVersionID:", getGame().permObjVersionID);
+			LOGGER.debug("Found internal permObjVersionID:{0}", getGame().permObjVersionID);
 		}
 
 		if (getGame().permObjVersionID < 1039900) {
@@ -705,7 +719,7 @@ public function loadPermObject():void {
 			achievements[kACHIEVEMENTS.GENERAL_BAD_ENDER] = 0;
 			getGame().permObjVersionID = 1039900;
 			savePermObject(false);
-			trace("PermObj internal versionID updated:", getGame().permObjVersionID);
+			LOGGER.debug("PermObj internal versionID updated:{0}", getGame().permObjVersionID);
 		}
 	}
 }
@@ -855,7 +869,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.ascensionPerkPoints = player.ascensionPerkPoints;
 		//Appearance
 		saveFile.data.startingRace = player.startingRace;
-		saveFile.data.gender = player.gender;
 		saveFile.data.femininity = player.femininity;
 		saveFile.data.thickness = player.thickness;
 		saveFile.data.tone = player.tone;
@@ -868,6 +881,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.hairLength = player.hairLength;
 		saveFile.data.beardLength = player.beardLength;
 		saveFile.data.eyeType = player.eyeType;
+		saveFile.data.eyeCount = player.eyeCount;
 		saveFile.data.beardStyle = player.beardStyle;
 		saveFile.data.skinType = player.skinType;
 		saveFile.data.skinTone = player.skinTone;
@@ -880,12 +894,15 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.antennae = player.antennae;
 		saveFile.data.horns = player.horns;
 		saveFile.data.hornType = player.hornType;
+		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
+		saveFile.data.underBody = player.underBody;
+		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		saveFile.data.clawTone = player.clawTone;
 		saveFile.data.clawType = player.clawType;
 		// </mod>
-		saveFile.data.wingDesc = player.wingDesc;
 		saveFile.data.wingType = player.wingType;
+		saveFile.data.wingColor = player.wingColor;
 		saveFile.data.lowerBody = player.lowerBody;
 		saveFile.data.legCount = player.legCount;
 		saveFile.data.tailType = player.tailType;
@@ -900,7 +917,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.ballSize = player.ballSize;
 		saveFile.data.hoursSinceCum = player.hoursSinceCum;
 		saveFile.data.fertility = player.fertility;
-		saveFile.data.clitLength = player.clitLength;
 		
 		//Preggo stuff
 		saveFile.data.pregnancyIncubation = player.pregnancyIncubation;
@@ -914,8 +930,8 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		   myLocalData.data.girlEffectArray.push(new Array());
 		 }*/
 
+		
 		saveFile.data.cocks = [];
-		saveFile.data.vaginas = [];
 		saveFile.data.breastRows = [];
 		saveFile.data.perks = [];
 		saveFile.data.statusAffects = [];
@@ -940,26 +956,9 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 			saveFile.data.cocks[i].pLongDesc = player.cocks[i].pLongDesc;
 			saveFile.data.cocks[i].sock = player.cocks[i].sock;
 		}
-		//Set Vaginal Array
-		for (i = 0; i < player.vaginas.length; i++)
-		{
-			saveFile.data.vaginas.push([]);
-		}
-		//Populate Vaginal Array
-		for (i = 0; i < player.vaginas.length; i++)
-		{
-			saveFile.data.vaginas[i].type = player.vaginas[i].type;
-			saveFile.data.vaginas[i].vaginalWetness = player.vaginas[i].vaginalWetness;
-			saveFile.data.vaginas[i].vaginalLooseness = player.vaginas[i].vaginalLooseness;
-			saveFile.data.vaginas[i].fullness = player.vaginas[i].fullness;
-			saveFile.data.vaginas[i].virgin = player.vaginas[i].virgin;
-			saveFile.data.vaginas[i].labiaPierced = player.vaginas[i].labiaPierced;
-			saveFile.data.vaginas[i].labiaPShort = player.vaginas[i].labiaPShort;
-			saveFile.data.vaginas[i].labiaPLong = player.vaginas[i].labiaPLong;
-			saveFile.data.vaginas[i].clitPierced = player.vaginas[i].clitPierced;
-			saveFile.data.vaginas[i].clitPShort = player.vaginas[i].clitPShort;
-			saveFile.data.vaginas[i].clitPLong = player.vaginas[i].clitPLong;
-		}
+		
+		saveFile.data.vaginas = SerializationUtils.serializeVector(player.vaginas as Vector.<*>);
+		
 		//NIPPLES
 		saveFile.data.nippleLength = player.nippleLength;
 		//Set Breast Array
@@ -1145,7 +1144,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 	// Something to do in the future
 	if (isFile && !processingError)
 	{
-		//outputText(serializeToString(saveFile.data), true);
+		//outputText(serializeToString(saveFile.data)));
 		var bytes:ByteArray = new ByteArray();
 		bytes.writeObject(saveFile);
 		CONFIG::AIR
@@ -1160,13 +1159,15 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 				stream.open(airFile, FileMode.WRITE);
 				stream.writeBytes(bytes);
 				stream.close();
-				outputText("Saved to file: " + airFile.url, true);
+				clearOutput();
+				outputText("Saved to file: " + airFile.url);
 				doNext(playerMenu);
 			}
 			catch (error:Error)
 			{
 				backupAborted = true;
-				outputText("Failed to write to file: " + airFile.url + " (" + error.message + ")", true);
+				clearOutput();
+				outputText("Failed to write to file: " + airFile.url + " (" + error.message + ")");
 				doNext(playerMenu);
 			}
 		}
@@ -1174,7 +1175,8 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		{
 			file = new FileReference();
 			file.save(bytes, null);
-			outputText("Attempted to save to file.", true);
+			clearOutput();
+			outputText("Attempted to save to file.");
 		}
 	}
 	else if (!processingError)
@@ -1197,7 +1199,8 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		// There should be 124 root properties minimum in the save file. Give some wiggleroom for things that might be omitted? (All of the broken saves I've seen are MUCH shorter than expected)
 		if (numProps < versionProperties[ver])
 		{
-			outputText("<b>Aborting save.  Your current save file is broken, and needs to be bug-reported.</b>\n\nWithin the save folder for CoC, there should be a pair of files named \"" + slot + ".sol\" and \"" + slot + "_backup.sol\"\n\n<b>We need BOTH of those files, and a quick report of what you've done in the game between when you last saved, and this message.</b>\n\n", true);
+			clearOutput();
+			outputText("<b>Aborting save.  Your current save file is broken, and needs to be bug-reported.</b>\n\nWithin the save folder for CoC, there should be a pair of files named \"" + slot + ".sol\" and \"" + slot + "_backup.sol\"\n\n<b>We need BOTH of those files, and a quick report of what you've done in the game between when you last saved, and this message.</b>\n\n");
 			outputText("When you've sent us the files, you can copy the _backup file over your old save to continue from your last save.\n\n");
 			outputText("Alternatively, you can just hit the restore button to overwrite the broken save with the backup... but we'd really like the saves first!");
 			trace("Backup Save Aborted! Broken save detected!");
@@ -1209,8 +1212,10 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 			backup.flush();
 		}
 		
-		if (!backupAborted)
-			outputText("Saved to slot" + slot + "!", true);
+		if (!backupAborted) {
+			clearOutput();
+			outputText("Saved to slot" + slot + "!");
+		}
 	}
 	else
 	{
@@ -1247,7 +1252,8 @@ public function restore(slotName:String):void
 	
 	overwriteFile.flush();
 	
-	outputText("Restored backup of " + slotName, true);
+	clearOutput();
+	outputText("Restored backup of " + slotName);
 	menu();
 	doNext(playerMenu);
 }
@@ -1301,13 +1307,15 @@ public function onFileLoaded(evt:Event):void
 	}
 	catch (error:Error)
 	{
-		outputText("<b>!</b> Save file not found, check that it is in the same directory as the CoC.swf file.\n\nLoad from file is not available when playing directly from a website like furaffinity or fenoxo.com.",true);
+		clearOutput();
+		outputText("<b>!</b> Save file not found, check that it is in the same directory as the CoC.swf file.\n\nLoad from file is not available when playing directly from a website like furaffinity or fenoxo.com.");
 	}
 }
 
 public function ioErrorHandler(e:IOErrorEvent):void
 {
-	outputText("<b>!</b> Save file not found, check that it is in the same directory as the CoC_" + ver + ".swf file.\r\rLoad from file is not available when playing directly from a website like furaffinity or fenoxo.com.", true);
+	clearOutput();
+	outputText("<b>!</b> Save file not found, check that it is in the same directory as the CoC_" + ver + ".swf file.\r\rLoad from file is not available when playing directly from a website like furaffinity or fenoxo.com.");
 	doNext(returnToSaveMenu);
 }
 
@@ -1323,7 +1331,8 @@ public function onDataLoaded(evt:Event):void
 	{
 		// I want to be able to write some debug stuff to the GUI during the loading process
 		// Therefore, we clear the display *before* calling loadGameObject
-		outputText("Loading save...", true);
+		clearOutput();
+		outputText("Loading save...");
 		trace("OnDataLoaded! - Reading data", loader, loader.data.readObject);
 		var tmpObj:Object = loader.data.readObject();
 		trace("Read in object = ", tmpObj);
@@ -1340,12 +1349,14 @@ public function onDataLoaded(evt:Event):void
 	}
 	catch (rangeError:RangeError)
 	{
-		outputText("<b>!</b> File is either corrupted or not a valid save", true);
+		clearOutput();
+		outputText("<b>!</b> File is either corrupted or not a valid save");
 		doNext(returnToSaveMenu);
 	}
 	catch (error:Error)
 	{
-		outputText("<b>!</b> Unhandled Exception", true);
+		clearOutput();
+		outputText("<b>!</b> Unhandled Exception");
 		outputText("[pg]Failed to load save. The file may be corrupt!");
 
 		doNext(returnToSaveMenu);
@@ -1599,7 +1610,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		//LEVEL STATS
 		player.XP = saveFile.data.XP;
 		player.level = saveFile.data.level;
-		player.gems = saveFile.data.gems;
+		player.gems = saveFile.data.gems || 0;
 		if (saveFile.data.perkPoints == undefined)
 			player.perkPoints = 0;
 		else
@@ -1618,7 +1629,6 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		//Appearance
 		if (saveFile.data.startingRace != undefined)
 			player.startingRace = saveFile.data.startingRace;
-		player.gender = saveFile.data.gender;
 		if (saveFile.data.femininity == undefined)
 			player.femininity = 50;
 		else
@@ -1766,13 +1776,17 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		else
 			player.hornType = saveFile.data.hornType;
 
+		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
+		if (saveFile.data.underBody is UnderBody)
+			player.underBody.setAllProps(saveFile.data.underBody);
+		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		player.clawTone = (saveFile.data.clawTone == undefined) ? ""               : saveFile.data.clawTone;
 		player.clawType = (saveFile.data.clawType == undefined) ? CLAW_TYPE_NORMAL : saveFile.data.clawType;
 		// </mod>
 
-		player.wingDesc = saveFile.data.wingDesc;
 		player.wingType = saveFile.data.wingType;
+		player.wingColor = saveFile.data.wingColor || "no";
 		player.lowerBody = saveFile.data.lowerBody;
 		player.tailType = saveFile.data.tailType;
 		player.tailVenom = saveFile.data.tailVenum;
@@ -1780,18 +1794,28 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		player.hipRating = saveFile.data.hipRating;
 		player.buttRating = saveFile.data.buttRating;
 		
+		if (player.lowerBody === 4) {
+			player.lowerBody = LOWER_BODY_TYPE_HOOFED;
+			player.legCount = 4;
+		}
+		
+		if (player.lowerBody === 24) {
+			player.lowerBody = LOWER_BODY_TYPE_CLOVEN_HOOFED;
+			player.legCount = 4;
+		}
+		
 		if (saveFile.data.legCount == undefined) {
 			if (player.lowerBody == LOWER_BODY_TYPE_DRIDER_LOWER_BODY) {
 				player.legCount = 8;
 			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_CENTAUR) {
+			else if (player.lowerBody == 4) {
 				player.legCount = 4;
 				player.lowerBody = LOWER_BODY_TYPE_HOOFED;
 			}
 			else if (player.lowerBody == LOWER_BODY_TYPE_PONY) {
 				player.legCount = 4;
 			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_DEERTAUR) {
+			else if (player.lowerBody == 24) {
 				player.legCount = 4;
 				player.lowerBody = LOWER_BODY_TYPE_CLOVEN_HOOFED;
 			}
@@ -1805,14 +1829,33 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		}
 		else
 			player.legCount = saveFile.data.legCount;
-		
+			
+		if (saveFile.data.eyeCount == undefined) {
+			if (player.eyeType == EYES_SPIDER) {
+				player.eyeCount = 4;
+			}
+			else if (player.eyeType == EYES_FOUR_SPIDER_EYES) {
+				player.eyeType = EYES_SPIDER;
+				player.eyeCount = 4;
+			}
+			else player.eyeCount = 2;
+		}
+		else
+			player.eyeCount = saveFile.data.eyeCount;
+			
+
+		// Fix deprecated and merged underBody-types
+		switch (player.underBody.type) {
+			case UNDER_BODY_TYPE_DRAGON: player.underBody.type = UNDER_BODY_TYPE_REPTILE; break;
+			case UNDER_BODY_TYPE_WOOL:   player.underBody.type = UNDER_BODY_TYPE_FURRY;   break;
+		}
+
 		//Sexual Stuff
 		player.balls = saveFile.data.balls;
 		player.cumMultiplier = saveFile.data.cumMultiplier;
 		player.ballSize = saveFile.data.ballSize;
 		player.hoursSinceCum = saveFile.data.hoursSinceCum;
 		player.fertility = saveFile.data.fertility;
-		player.clitLength = saveFile.data.clitLength;
 		
 		//Preggo stuff
 		player.knockUpForce(saveFile.data.pregnancyType, saveFile.data.pregnancyIncubation);
@@ -1861,39 +1904,13 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			}
 				//trace("LoadOne Cock i(" + i + ")");
 		}
-		//Set Vaginal Array
-		for (i = 0; i < saveFile.data.vaginas.length; i++)
-		{
-			player.createVagina();
-		}
-		//Populate Vaginal Array
-		for (i = 0; i < saveFile.data.vaginas.length; i++)
-		{
-			player.vaginas[i].vaginalWetness = saveFile.data.vaginas[i].vaginalWetness;
-			player.vaginas[i].vaginalLooseness = saveFile.data.vaginas[i].vaginalLooseness;
-			player.vaginas[i].fullness = saveFile.data.vaginas[i].fullness;
-			player.vaginas[i].virgin = saveFile.data.vaginas[i].virgin;
-			if (saveFile.data.vaginas[i].type == undefined) player.vaginas[i].type = 0;
-			else player.vaginas[i].type = saveFile.data.vaginas[i].type;
-			if (saveFile.data.vaginas[i].labiaPierced == undefined) {
-				player.vaginas[i].labiaPierced = 0;
-				player.vaginas[i].labiaPShort = "";
-				player.vaginas[i].labiaPLong = "";
-				player.vaginas[i].clitPierced = 0;
-				player.vaginas[i].clitPShort = "";
-				player.vaginas[i].clitPLong = "";
-			}
-			else
-			{
-				player.vaginas[i].labiaPierced = saveFile.data.vaginas[i].labiaPierced;
-				player.vaginas[i].labiaPShort = saveFile.data.vaginas[i].labiaPShort;
-				player.vaginas[i].labiaPLong = saveFile.data.vaginas[i].labiaPLong;
-				player.vaginas[i].clitPierced = saveFile.data.vaginas[i].clitPierced;
-				player.vaginas[i].clitPShort = saveFile.data.vaginas[i].clitPShort;
-				player.vaginas[i].clitPLong = saveFile.data.vaginas[i].clitPLong;
-			}
-				//trace("LoadOne Vagina i(" + i + ")");
-		}
+		
+		player.vaginas = new Vector.<VaginaClass>();
+		SerializationUtils.deserializeVector(player.vaginas as Vector.<*>, saveFile.data.vaginas, VaginaClass);
+		
+		if (player.hasVagina() && player.vaginaType() != 5 && player.vaginaType() != 0)
+			player.vaginaType(0);
+		
 		//NIPPLES
 		if (saveFile.data.nippleLength == undefined)
 			player.nippleLength = .25;
@@ -2283,6 +2300,10 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 public function unFuckSave():void
 {
 	//Fixing shit!
+	if (player.wings.type == WING_TYPE_FEATHERED_LARGE && player.wings.color == "no") {
+		// Player has harpy wings from an old save, let's fix its color
+		player.wings.color = player.hasFur() ? player.furColor : player.hairColor;
+	}
 
 	// Fix duplicate elven bounty perks
 	if (player.findPerk(PerkLib.ElvenBounty) >= 0) {
@@ -2295,12 +2316,12 @@ public function unFuckSave():void
 		}
 	}
 	
-	if (player.findStatusEffect(StatusEffects.KnockedBack) >= 0)
+	while (player.hasStatusEffect(StatusEffects.KnockedBack))
 	{
 		player.removeStatusEffect(StatusEffects.KnockedBack);
 	}
 	
-	if (player.findStatusEffect(StatusEffects.Tentagrappled) >= 0)
+	if (player.hasStatusEffect(StatusEffects.Tentagrappled))
 	{
 		player.removeStatusEffect(StatusEffects.Tentagrappled);
 	}
@@ -2311,7 +2332,7 @@ public function unFuckSave():void
 
 	if (player.gems < 0) player.gems = 0; //Force fix gems
 	
-	if (player.findStatusEffect(StatusEffects.SlimeCraving) >= 0 && player.statusEffectv4(StatusEffects.SlimeCraving) == 1) {
+	if (player.hasStatusEffect(StatusEffects.SlimeCraving) && player.statusEffectv4(StatusEffects.SlimeCraving) == 1) {
 		player.changeStatusValue(StatusEffects.SlimeCraving, 3, player.statusEffectv2(StatusEffects.SlimeCraving)); //Duplicate old combined strength/speed value
 		player.changeStatusValue(StatusEffects.SlimeCraving, 4, 1); //Value four indicates this tracks strength and speed separately
 	}
@@ -2431,8 +2452,8 @@ public function unFuckSave():void
 		}
 
 		if (flags[kFLAGS.TAMANI_PREGNANCY_TYPE] != 0) return; //Must be a new format save
-		if (player.findStatusEffect(StatusEffects.TamaniFemaleEncounter) >= 0) player.removeStatusEffect(StatusEffects.TamaniFemaleEncounter); //Wasn't used in previous code
-		if (player.findStatusEffect(StatusEffects.Tamani) >= 0) {
+		if (player.hasStatusEffect(StatusEffects.TamaniFemaleEncounter)) player.removeStatusEffect(StatusEffects.TamaniFemaleEncounter); //Wasn't used in previous code
+		if (player.hasStatusEffect(StatusEffects.Tamani)) {
 			if (player.statusEffectv1(StatusEffects.Tamani) == -500) { //This used to indicate that a player had met Tamani as a male
 				flags[kFLAGS.TAMANI_PREGNANCY_INCUBATION] = 0;
 				flags[kFLAGS.TAMANI_MET]                  = 1; //This now indicates the same thing
@@ -2523,8 +2544,8 @@ public function unFuckSave():void
 	//Rigidly enforce cock size caps
 	if (player.hasCock()) {
 		for (var i:int = 0; i < player.cocks.length; i++) {
-			if (player.cocks[i].cockLength > 499.9) player.cocks[i].cockLength = 499.9;
-			if (player.cocks[i].cockThickness > 99.9) player.cocks[i].cockThickness = 99.9;
+			if (player.cocks[i].cockLength > 9999.9) player.cocks[i].cockLength = 9999.9;
+			if (player.cocks[i].cockThickness > 999.9) player.cocks[i].cockThickness = 999.9;
 		}
 	}
 	//If converting from vanilla, set Grimdark flag to 0.

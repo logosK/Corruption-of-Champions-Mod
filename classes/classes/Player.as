@@ -1,4 +1,4 @@
-﻿package classes
+package classes
 {
 import classes.GlobalFlags.kFLAGS;
 import classes.GlobalFlags.kGAMECLASS;
@@ -321,14 +321,14 @@ use namespace kGAMECLASS;
 		}
 		override public function get weaponAttack():Number {
 			var attack:Number = _weapon.attack;
-			if (findPerk(PerkLib.WeaponMastery) >= 0 && (weaponPerk == "Large" || weaponPerk == "fastrong") && str > 60)
+			if (hasPerk(PerkLib.WeaponMastery) && (weaponPerk == "Large" || weaponPerk == "fastrong") && str > 60)
 				attack *= (weaponPerk == "Large") ? 2 : 1.5;
-			if (findPerk(PerkLib.LightningStrikes) >= 0 && spe >= 60 && weaponPerk != "Large") {
+			if (hasPerk(PerkLib.LightningStrikes) && spe >= 60 && weaponPerk != "Large") {
 				attack += Math.round((spe - 50) / (weaponPerk == "fast" ? 2 : 3));
 			}
-			//Iron fists bonus!
+			//Iron fists bonus (now works at 50% strength with gauntlets) !
 			if (str >= 50 && (weaponName == "fists" || weaponName.indexOf("auntlets")>0 ))
-				attack += ((findPerk(PerkLib.IronFists3) >= 0) ? 11 : (findPerk(PerkLib.IronFists2) >= 0) ? 8 : 5) * (weaponName=="fists"?1:.5)
+				attack += (hasPerk(PerkLib.IronFists3) ? 11 : (hasPerk(PerkLib.IronFists2) ? 8 : 5)) * (weaponName=="fists"?1:.5)
 			//Bonus for being samurai!
 			if (armor == game.armors.SAMUARM && weapon == game.weapons.KATANA)
 				attack += 2;
@@ -1063,21 +1063,21 @@ use namespace kGAMECLASS;
 		public function cowScore():Number
 		{
 			var minoCounter:Number = 0;
-			if (faceType == FACE_HUMAN)
-				minoCounter++;
-			if (faceType == FACE_COW_MINOTAUR)
-				minoCounter--;
 			if (earType == EARS_COW)
 				minoCounter++;
 			if (tailType == TAIL_TYPE_COW)
 				minoCounter++;
 			if (hornType == HORNS_COW_MINOTAUR)
 				minoCounter++;
+			if (faceType == FACE_HUMAN && minoCounter > 0)
+				minoCounter++;
+			if (faceType == FACE_COW_MINOTAUR)
+				minoCounter--;
 			if (lowerBody == LOWER_BODY_TYPE_HOOFED && minoCounter > 0)
 				minoCounter++;
 			if (tallness >= 73 && minoCounter > 0)
 				minoCounter++;
-			if (vaginas.length > 0)
+			if (vaginas.length > 0 && minoCounter > 0)
 				minoCounter++;
 			if (biggestTitSize() > 4 && minoCounter > 0)
 				minoCounter++;
@@ -1091,7 +1091,7 @@ use namespace kGAMECLASS;
 			lacBovCounter += cowScore() - 4;
 			if (cor > 30)
 				lacBovCounter += 1;
-			if (findPerk(PerkLib.Feeder) >= 0)
+			if (hasPerk(PerkLib.Feeder))
 				lacBovCounter += 2;
 			if (breastRows.length>0 && breastRows[0].nipplesPerBreast ==4)
 				lacBovCounter += 1;
@@ -1300,11 +1300,7 @@ use namespace kGAMECLASS;
 				lizardCounter++;
 			if (tailType == TAIL_TYPE_LIZARD)
 				lizardCounter++;
-			if (tongueType == TONGUE_SNAKE)
-				lizardCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_LIZARD)
-				lizardCounter++;
-			if (lizardCocks() > 0)
 				lizardCounter++;
 			if (hasDragonHorns())
 				lizardCounter++;
@@ -1312,20 +1308,28 @@ use namespace kGAMECLASS;
 				lizardCounter++;
 			if (armType == ARM_TYPE_PREDATOR && clawType == CLAW_TYPE_LIZARD)
 				lizardCounter++;
-			if (hasReptileScales())
-				lizardCounter++;
 			if (eyeType == EYES_LIZARD)
 				lizardCounter++;
-			if (/*lizardCounter >= 4 &&*/ eyeType == EYES_BASILISK)
-				lizardCounter++;
+			if (lizardCounter > 2) {
+				if ([TONGUE_LIZARD, TONGUE_SNAKE].indexOf(tongueType) != -1)
+					lizardCounter++;
+				if (lizardCocks() > 0)
+					lizardCounter++;
+				if (eyeType == EYES_BASILISK)
+					lizardCounter++;
+				if (hasReptileScales())
+					lizardCounter++;
+			}
 			return lizardCounter;
 		}
 
 		public function spiderScore():Number
 		{
 			var score:Number = -2;
-			if (eyeType == EYES_FOUR_SPIDER_EYES)
-				score += 2;
+			if (eyeType == EYES_SPIDER)
+				score += 1;
+			if (eyeCount > 2 && eyeCount%2==0)
+				score += 1
 			if (faceType == FACE_SPIDER_FANGS)
 				score++;
 			if (armType == ARM_TYPE_SPIDER)
@@ -1481,7 +1485,7 @@ use namespace kGAMECLASS;
 				gooCounter++;
 			if (vaginalCapacity() > 9000)
 				gooCounter++;
-			if (findStatusEffect(StatusEffects.SlimeCraving) >= 0)
+			if (hasStatusEffect(StatusEffects.SlimeCraving))
 				gooCounter++;
 			return gooCounter;
 		}
@@ -1496,7 +1500,7 @@ use namespace kGAMECLASS;
 				gooCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_GOO)
 				gooCounter++;
-			if (findStatusEffect(StatusEffects.SlimeCraving) >= 0)
+			if (hasStatusEffect(StatusEffects.SlimeCraving))
 				gooCounter++;
 			if (gooCounter < 4)
 				return 0;
@@ -1505,11 +1509,11 @@ use namespace kGAMECLASS;
 				gooCounter++;
 			if (tou > 80)
 				gooCounter++;
-			if (findPerk(PerkLib.Regeneration) >= 0 && findPerk(PerkLib.Regeneration2) >= 0)
+			if (hasPerk(PerkLib.Regeneration) && hasPerk(PerkLib.Regeneration2))
 				gooCounter++;
 			if (flags[kFLAGS.GOOGIRL_BIRTHS] > 0)
 				gooCounter++;
-			if (findPerk(PerkLib.SlimeCore) > 0)
+			if (hasPerk(PerkLib.SlimeCore))
 				gooCounter++;
 			return gooCounter;
 		}
@@ -1619,8 +1623,6 @@ use namespace kGAMECLASS;
 			var mutantCounter:Number = 0;
 			if (faceType > 0)
 				mutantCounter++;
-			if (hasPlainSkin())
-				mutantCounter++;
 			if (tailType > 0)
 				mutantCounter++;
 			if (cocks.length > 1)
@@ -1679,11 +1681,11 @@ use namespace kGAMECLASS;
 			var sirenCounter:Number = 0;
 			if (faceType == FACE_SHARK_TEETH && tailType == TAIL_TYPE_SHARK && wingType == WING_TYPE_FEATHERED_LARGE && armType == ARM_TYPE_HARPY)
 				sirenCounter+= 4;
-			if (hasVagina()) 
+			if (sirenCounter > 0 && hasVagina()) 
 				sirenCounter++;
 			if (hasCock() && findFirstCockType(CockTypesEnum.ANEMONE) >= 0)
 				sirenCounter++;
-			return sirenCounter++;
+			return sirenCounter;
 		}
 		
 		public function pigScore():Number
@@ -1693,7 +1695,7 @@ use namespace kGAMECLASS;
 				pigCounter++;
 			if (tailType == TAIL_TYPE_PIG)
 				pigCounter++;
-			if (faceType == FACE_PIG || FACE_BOAR)
+			if ([FACE_PIG, FACE_BOAR].indexOf(faceType) != -1)
 				pigCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_CLOVEN_HOOFED)
 				pigCounter += 2;
@@ -1804,7 +1806,7 @@ use namespace kGAMECLASS;
 		//Manticore
 		public function manticoreScore():Number
 		{
-			var catCounter:Number = -2;
+			var catCounter:Number = 0;
 			if (faceType == FACE_CAT)
 				catCounter++;
 			if (earType == EARS_CAT)
@@ -1813,17 +1815,97 @@ use namespace kGAMECLASS;
 				catCounter += 2;
 			if (lowerBody == LOWER_BODY_TYPE_CAT)
 				catCounter++;
-			if (hornType == HORNS_DEMON || hasDragonHorns())
-				catCounter++;
-			if (hasLeatheryWings())
-				catCounter++;
-			if (hasLeatheryWings(true))
-				catCounter++;
-			catCounter -= 2;	// before this change, pure cats had manticorescore 4
+			if (catCounter >= 4) {
+				if (hornType == HORNS_DEMON || hasDragonHorns())
+					catCounter++;
+				if (hasLeatheryWings())
+					catCounter++;
+				if (hasLeatheryWings(true))
+					catCounter++;
+			}
 			//Fur only counts if some canine features are present
 			if (hasFur() && catCounter >= 6)
 				catCounter++;
 			return catCounter;
+		}
+		public function bimboScore() : Number  
+		{
+			
+			var bimboCounter:Number = 0;
+			if (hasVagina()) {
+				bimboCounter += 2; 
+				if (vaginas[0].vaginalWetness >= VAGINA_WETNESS_SLICK) 
+					bimboCounter++;
+			}
+			if (hasCock()) 
+				bimboCounter -= 2;
+			if (armorName == "bimbo skirt") 
+				bimboCounter += 1;
+			if (hasPerk(PerkLib.BimboBrains)) 
+				bimboCounter += 2;
+			if (hasPerk(PerkLib.BimboBody)) 
+				bimboCounter += 2;
+			if (flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST] > 25) 
+				bimboCounter++;
+			if (flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST] > 10) 
+				bimboCounter++;				
+			if (biggestTitSize() >= 5) 
+				bimboCounter++;
+			else 
+				bimboCounter += biggestTitSize() / 5.0;
+				
+			if (biggestTitSize() >= 10) 
+				bimboCounter++;
+			else 
+				bimboCounter += biggestTitSize() / 10.0;
+				
+			if (hipRating >= 8) 
+				bimboCounter++;
+			else 
+				bimboCounter += hipRating / 8.0;
+			
+			if (buttRating > 8)
+				bimboCounter++;
+			else 
+				bimboCounter += buttRating / 8.0;
+			
+			if (tone < 15) 
+				bimboCounter++;
+			if (femininity > 80) 
+				bimboCounter++;
+			else if (femininity < 20) 
+				bimboCounter--;
+			else 
+				bimboCounter += (femininity - 50.0) / 30.0;
+			
+			if (hairColor == "platinum blonde") 
+				bimboCounter++;
+			if (hairLength > 10) 
+				bimboCounter++;
+			if (inte < 20) 
+				bimboCounter++;
+			if (bimboCounter < 0)  bimboCounter = 0;
+			if (bimboCounter > 20) bimboCounter = 20;
+
+			//if (biggestTitSize() > 5) 
+				//bimboCounter++;
+			//if (biggestTitSize() > 10) 
+				//bimboCounter++;
+			//if (hipRating > 8) 
+				//bimboCounter++;
+			//if (buttRating > 8)
+				//bimboCounter++;
+			//if (tone < 15) 
+				//bimboCounter++;
+			//if (hairColor == "platinum blonde") 
+				//bimboCounter++;
+			//if (hairLength > 10) 
+				//bimboCounter++;
+			//if (inte < 20) 
+				//bimboCounter++;
+			//if (bimboCounter < 0) bimboCounter = 0;
+			//
+			return bimboCounter;
 		}
 		
 		//Determine Alicorn Rating
@@ -1856,7 +1938,7 @@ use namespace kGAMECLASS;
 				hellHoundCounter++;
 			if (getLargestKnotSize() > 1.4)
 				hellHoundCounter++;
-			if (findPerk(PerkLib.Hellfire) >= 0)
+			if (hasPerk(PerkLib.Hellfire))
 				hellHoundCounter ++;
 			//Fur only counts if some canine features are present
 			if (skinType == SKIN_TYPE_FUR && hellHoundCounter >= 6)
@@ -1997,11 +2079,18 @@ use namespace kGAMECLASS;
 			//(Small – 0.01 mLs – Size 1 + 1 Multi)
 			//(Large – 0.8 - Size 10 + 4 Multi)
 			//(HUGE – 2.4 - Size 12 + 5 Multi + 4 tits)
-			var total:Number;
-			if (findStatusEffect(StatusEffects.LactationEndurance) < 0)
+			
+			var total:Number = 0;
+			if (!hasStatusEffect(StatusEffects.LactationEndurance))
 				createStatusEffect(StatusEffects.LactationEndurance, 1, 0, 0, 0);
-			total = biggestTitSize() * 10 * averageLactation() * statusEffectv1(StatusEffects.LactationEndurance) * totalBreasts();
-			if (findPerk(PerkLib.MilkMaid) >= 0)
+			
+			var counter:Number = breastRows.length;
+			while (counter > 0) {
+				counter--;
+				total += 10 * breastRows[counter].breastRating * breastRows[counter].lactationMultiplier * breastRows[counter].breasts * statusEffectv1(StatusEffects.LactationEndurance);
+				
+			}
+			if (hasPerk(PerkLib.MilkMaid))
 				total += 200 + (perkv1(PerkLib.MilkMaid) * 100);
 			if (statusEffectv1(StatusEffects.LactationReduction) >= 48)
 				total = total * 1.5;
@@ -2562,39 +2651,45 @@ use namespace kGAMECLASS;
 			}
 			
 			//Bimbo body boosts minimum lust by 40
-			if (findStatusEffect(StatusEffects.BimboChampagne) >= 0 || findPerk(PerkLib.BimboBody) >= 0 || findPerk(PerkLib.BroBody) >= 0 || findPerk(PerkLib.FutaForm) >= 0) {
+			if (hasStatusEffect(StatusEffects.BimboChampagne) || hasPerk(PerkLib.BimboBody) || hasPerk(PerkLib.BroBody) || hasPerk(PerkLib.FutaForm)) {
 				if (min > 40) min += 10;
 				else if (min >= 20) min += 20;
 				else min += 40;
+				if (armorName == "bimbo skirt") min += flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST] / 4;
+			}
+			else if (kGAMECLASS.bimboProgress.ableToProgress()) {
+				if (min > 40) min += flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST] / 4;
+				else if (min >= 20 ) min += flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST] / 2;
+				else min += flags[kFLAGS.BIMBOSKIRT_MINIMUM_LUST];
 			}
 			//Omnibus' Gift
-			if (findPerk(PerkLib.OmnibusGift) >= 0) {
+			if (hasPerk(PerkLib.OmnibusGift)) {
 				if (min > 40) min += 10;
 				else if (min >= 20) min += 20;
 				else min += 35;
 			}
 			//Nymph perk raises to 30
-			if (findPerk(PerkLib.Nymphomania) >= 0) {
+			if (hasPerk(PerkLib.Nymphomania)) {
 				if (min >= 40) min += 10;
 				else if (min >= 20) min += 15;
 				else min += 30;
 			}
 			//Oh noes anemone!
-			if (findStatusEffect(StatusEffects.AnemoneArousal) >= 0) {
+			if (hasStatusEffect(StatusEffects.AnemoneArousal)) {
 				if (min >= 40) min += 10;
 				else if (min >= 20) min += 20;
 				else min += 30;
 			}
 			//Hot blooded perk raises min lust!
-			if (findPerk(PerkLib.HotBlooded) >= 0) {
+			if (hasPerk(PerkLib.HotBlooded)) {
 				if (min > 0) min += perk(findPerk(PerkLib.HotBlooded)).value1 / 2;
 				else min += perk(findPerk(PerkLib.HotBlooded)).value1;
 			}
-			if (findPerk(PerkLib.LuststickAdapted) > 0) {
+			if (hasPerk(PerkLib.LuststickAdapted)) {
 				if (min < 50) min += 10;
 				else min += 5;
 			}
-			if (findStatusEffect(StatusEffects.Infested) >= 0) {
+			if (hasStatusEffect(StatusEffects.Infested)) {
 				if (min < 50) min = 50;
 			}
 			//Add points for Crimstone
@@ -2603,7 +2698,7 @@ use namespace kGAMECLASS;
 			min -= perkv1(PerkLib.PiercedIcestone);
 			min += perkv1(PerkLib.PentUp);
 			//Cold blooded perk reduces min lust, to a minimum of 20! Takes effect after piercings. This effectively caps minimum lust at 80.
-			if (findPerk(PerkLib.ColdBlooded) >= 0) {
+			if (hasPerk(PerkLib.ColdBlooded)) {
 				if (min >= 20) {
 					if (min <= 40) min -= (min - 20);
 					else min -= 20;
@@ -2611,7 +2706,7 @@ use namespace kGAMECLASS;
 				minCap -= 20;
 			}
 			//Harpy Lipstick status forces minimum lust to be at least 50.
-			if (min < 50 && findStatusEffect(StatusEffects.Luststick) >= 0) min = 50;
+			if (min < 50 && hasStatusEffect(StatusEffects.Luststick)) min = 50;
 			//SHOULDRA BOOSTS
 			//+20
 			if (flags[kFLAGS.SHOULDRA_SLEEP_TIMER] <= -168 && flags[kFLAGS.URTA_QUEST_STATUS] != 0.75) {
@@ -2883,17 +2978,12 @@ use namespace kGAMECLASS;
 			//Taur effects
 			if (isNaga()) maxSpe += 10;
 			if (isTaur() || isDrider()) maxSpe += 20;
-			//Apply New Game+
-			maxStr += ascensionFactor();
-			maxTou += ascensionFactor();
-			maxSpe += ascensionFactor();
-			maxInt += ascensionFactor();
 			//Might
-			if (findStatusEffect(StatusEffects.Might) >= 0) {
+			if (hasStatusEffect(StatusEffects.Might)) {
 				maxStr += statusEffectv1(StatusEffects.Might);
 				maxTou += statusEffectv2(StatusEffects.Might);
 			}
-			if (findStatusEffect(StatusEffects.AndysSmoke) >= 0) {
+			if (hasStatusEffect(StatusEffects.AndysSmoke)) {
 				maxSpe -= statusEffectv2(StatusEffects.AndysSmoke);
 				maxInt += statusEffectv3(StatusEffects.AndysSmoke);
 			}
@@ -3079,14 +3169,14 @@ use namespace kGAMECLASS;
 				kGAMECLASS.mainView.statsView.showStatUp('spe');
 				removeStatusEffect(StatusEffects.GardenerSapSpeed);
 			}
-			if (findStatusEffect(StatusEffects.KnockedBack) >= 0) removeStatusEffect(StatusEffects.KnockedBack);
-			if (findStatusEffect(StatusEffects.RemovedArmor) >= 0) removeStatusEffect(StatusEffects.RemovedArmor);
-			if (findStatusEffect(StatusEffects.JCLustLevel) >= 0) removeStatusEffect(StatusEffects.JCLustLevel);
-			if (findStatusEffect(StatusEffects.MirroredAttack) >= 0) removeStatusEffect(StatusEffects.MirroredAttack);
-			if (findStatusEffect(StatusEffects.Tentagrappled) >= 0) removeStatusEffect(StatusEffects.Tentagrappled);
-			if (findStatusEffect(StatusEffects.TentagrappleCooldown) >= 0) removeStatusEffect(StatusEffects.TentagrappleCooldown);
-			if (findStatusEffect(StatusEffects.ShowerDotEffect) >= 0) removeStatusEffect(StatusEffects.ShowerDotEffect);
-			if (findStatusEffect(StatusEffects.GardenerSapSpeed) >= 0)
+			if (hasStatusEffect(StatusEffects.KnockedBack)) removeStatusEffect(StatusEffects.KnockedBack);
+			if (hasStatusEffect(StatusEffects.RemovedArmor)) removeStatusEffect(StatusEffects.KnockedBack);
+			if (hasStatusEffect(StatusEffects.JCLustLevel)) removeStatusEffect(StatusEffects.JCLustLevel);
+			if (hasStatusEffect(StatusEffects.MirroredAttack)) removeStatusEffect(StatusEffects.MirroredAttack);
+			if (hasStatusEffect(StatusEffects.Tentagrappled)) removeStatusEffect(StatusEffects.Tentagrappled);
+			if (hasStatusEffect(StatusEffects.TentagrappleCooldown)) removeStatusEffect(StatusEffects.TentagrappleCooldown);
+			if (hasStatusEffect(StatusEffects.ShowerDotEffect)) removeStatusEffect(StatusEffects.ShowerDotEffect);
+			if (hasStatusEffect(StatusEffects.GardenerSapSpeed))
 			{
 				spe += statusEffectv1(StatusEffects.GardenerSapSpeed);
 				kGAMECLASS.mainView.statsView.showStatUp('spe');
@@ -3436,7 +3526,7 @@ use namespace kGAMECLASS;
 				return false;
 			}
 			
-			if (findPerk(PerkLib.AlchemicalFertility)) {
+			if (hasPerk(PerkLib.AlchemicalFertility)) {
 				intensity *= (1 + perkv3(PerkLib.AlchemicalFertility));
 			}
 			
@@ -3454,7 +3544,7 @@ use namespace kGAMECLASS;
 			//Go into heat.  Heats v1 is bonus fertility, v2 is bonus libido, v3 is hours till it's gone
 			else {
 				if (output) {
-					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a cock overwhelm you as <b>you realize you have gone into heat!</b>", false);
+					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a cock overwhelm you as <b>you realize you have gone into heat!</b>");
 				}
 				createStatusEffect(StatusEffects.Heat, 10 * intensity, 15 * intensity, 48 * intensity, 0);
 				game.dynStats("lib", 15 * intensity, "resisted", false, "noBimbo", true);

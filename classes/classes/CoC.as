@@ -8,7 +8,12 @@
 package classes
 {
 	// BREAKING ALL THE RULES.
-	import classes.GlobalFlags.kFLAGS; // This file contains most of the persistent gamestate flags.
+	import classes.GlobalFlags.kFLAGS;
+	import classes.display.SpriteDb;
+	import classes.internals.*;
+	import flash.display.BitmapData;
+
+// This file contains most of the persistent gamestate flags.
 	import classes.GlobalFlags.kGAMECLASS; // This file creates the gameclass that the game will run within.
 	import classes.GlobalFlags.kACHIEVEMENTS; // This file creates the flags for the achievements system.
 	import classes.Scenes.Combat.Combat;
@@ -42,6 +47,8 @@ the text from being too boring.
 
 	import classes.AssClass; // Creates the class that holds ass-related variables as described above. 
 	import classes.BreastRowClass; // Creates the class that holds breast-related variables.
+	import classes.BodyParts.Skin;
+	import classes.BodyParts.UnderBody;
 	import classes.Items.*; // This pulls in all the files in the Items folder. Basically any inventory item in the game
 	import classes.PerkLib; // This instantiates the IDs, names, and descriptions of perks. Does NOT have any code related to the actual perk! Use the ID field to search the code base for that. 
 
@@ -93,6 +100,7 @@ the text from being too boring.
 	import fl.data.DataProvider;
 	import flash.display.Loader;
 	import flash.display.MovieClip;
+	import flash.display.Stage;
 	import flash.events.*
 	import flash.net.FileReference;
 	import flash.net.navigateToURL;
@@ -106,6 +114,9 @@ the text from being too boring.
 	import flash.utils.ByteArray;
 	import flash.system.Capabilities;
 	import flash.display.Sprite;
+	import mx.logging.targets.TraceTarget;
+	import mx.logging.Log;
+	import mx.logging.LogEventLevel;
 
 	/****
 		classes.CoC: The Document class of Corruption of the Champions.
@@ -119,6 +130,15 @@ the text from being too boring.
 
 	public class CoC extends MovieClip 
 	{
+		{
+			/*
+			 * This is a static initializer block, used as an ugly hack to setup
+			 * logging before any of the class variables are initialized.
+			 * This is done because they could log messages during construction.
+			 */
+			
+			 CoC.setUpLogging();
+		}
 
 		// Include the functions. ALL THE FUNCTIONS
 		include "../../includes/input.as";
@@ -159,6 +179,7 @@ the text from being too boring.
 		public var playerAppearance:PlayerAppearance = new PlayerAppearance();
 		public var playerInfo:PlayerInfo = new PlayerInfo();
 		public var saves:Saves = new Saves(gameStateDirectGet, gameStateDirectSet);
+		public var perkTree:PerkTree = new PerkTree();
 		// Items/
 		public var mutations:Mutations = Mutations.init();
 		public var consumables:ConsumableLib = new ConsumableLib();
@@ -178,10 +199,15 @@ the text from being too boring.
 		public var inventory:Inventory = new Inventory(saves);
 		public var masturbation:Masturbation = new Masturbation();
 		public var pregnancyProgress:PregnancyProgression = new PregnancyProgression();
+		public var bimboProgress:BimboProgression = new BimboProgression();
+		
 		// Scenes/Areas/
+		public var commonEncounters:CommonEncounters = new CommonEncounters(); // Common dependencies go first
+
 		public var bog:Bog = new Bog();
 		public var desert:Desert = new Desert();
 		public var forest:Forest = new Forest();
+		public var deepWoods:DeepWoods = new DeepWoods(forest);
 		public var glacialRift:GlacialRift = new GlacialRift();
 		public var highMountains:HighMountains = new HighMountains();
 		public var lake:Lake = new Lake();
@@ -253,6 +279,7 @@ the text from being too boring.
 		public var telAdre:TelAdre = new TelAdre();
 		public var ingnam:Ingnam = new Ingnam();
 		public var prison:Prison = new Prison();
+		public var townRuins:TownRuins = new TownRuins();
 		// Scenes/Seasonal/
 		public var aprilFools:AprilFools = new AprilFools();
 		public var fera:Fera = new Fera();
@@ -276,8 +303,6 @@ the text from being too boring.
 		public var bindings:Bindings = new Bindings();
 		public var output:Output = Output.init();
 		public var measurements:Measurements = Measurements.init();
-		public function get currentText():String { return output.currentText; }
-		public function set currentText(text:String):void { output.currentText = text; }
 		/****
 			This is used purely for bodges while we get things cleaned up.
 			Hopefully, anything you stick to this object can be removed eventually.
@@ -332,7 +357,7 @@ the text from being too boring.
 		public var date:Date = new Date();
 		
 		//Mod save version.
-		public var modSaveVersion:Number = 13;
+		public var modSaveVersion:Number = 15;
 		public var levelCap:Number = 120;
 		
 		//dungeoneering variables (If it ain't broke, don't fix it)
@@ -346,8 +371,44 @@ the text from being too boring.
 		public var timeQ:Number = 0;
 		public var campQ:Boolean = false;
 		
-		public function CoC()
+		private static var traceTarget:TraceTarget;
+		
+		private static function setUpLogging():void {
+			traceTarget = new TraceTarget();
+
+			traceTarget.level = LogEventLevel.WARN;
+			
+			CONFIG::debug
+			{
+				traceTarget.level = LogEventLevel.DEBUG;
+			}
+
+			//Add date, time, category, and log level to the output
+			traceTarget.includeDate = true;
+			traceTarget.includeTime = true;
+			traceTarget.includeCategory = true;
+			traceTarget.includeLevel = true;
+
+			// let the logging begin!
+			Log.addTarget(traceTarget);
+		}
+		
+		/**
+		 * Create the main game instance.
+		 * If a stage is injected it will be use instead of the one from the superclass.
+		 * 
+		 * @param injectedStage if not null, it will be used instead of this.stage
+		 */
+		public function CoC(injectedStage:Stage = null)
 		{
+			var stageToUse:Stage;
+			
+			if (injectedStage != null) {
+				stageToUse = injectedStage;
+			}else{
+				stageToUse = this.stage;
+			}
+		
 			// Cheatmode.
 			kGAMECLASS = this;
 			
@@ -363,7 +424,7 @@ the text from being too boring.
 			this.model = new GameModel();
 			this.mainView = new MainView(/*this.model*/);
 			this.mainView.name = "mainView";
-			this.stage.addChild( this.mainView );
+			stageToUse.addChild( this.mainView );
 
 			// Hooking things to MainView.
 			this.mainView.onNewGameClick = charCreation.newGameGo;
@@ -390,15 +451,15 @@ the text from being too boring.
 			 * Debug, Version, etc
 			 */
 			debug = false; //DEBUG, used all over the place
-			ver = "1.0.2_mod_1.4_dev"; //Version NUMBER
-			version = ver + " (<b>I give up</b>)"; //Version TEXT
+			ver = "1.0.2_mod_1.4.7"; //Version NUMBER
+			version = ver + " (<b>Bug Fixin</b>)"; //Version TEXT
 
 			//Indicates if building for mobile?
 			mobile = false;
 			model.mobile = mobile;
 
-			this.images = new ImageManager(stage);
-			this.inputManager = new InputManager(stage, false);
+			this.images = new ImageManager(stageToUse);
+			this.inputManager = new InputManager(stageToUse, false);
 			include "../../includes/ControlBindings.as";
 			
 			//} endregion
@@ -454,8 +515,7 @@ the text from being too boring.
 			model.time = time;
 
 			//The string holds all the "story" text, mainly used in engineCore
-			currentText = "";
-			//}endregion 
+			//}endregion
 
 			// These are toggled between by the [home] key.
 			mainView.textBGWhite.visible = false;
@@ -508,6 +568,8 @@ the text from being too boring.
 			registerClassAlias("Player", Player);
 			registerClassAlias("StatusEffectClass", StatusEffectClass);
 			registerClassAlias("VaginaClass", VaginaClass);
+			registerClassAlias("Skin", Skin);
+			registerClassAlias("UnderBody", UnderBody);
 			//registerClassAlias("Enum", Enum);
 
 			//Hide sprites
@@ -547,6 +609,20 @@ the text from being too boring.
 			{
 				_updateHack.x = 0;
 				_updateHack.removeEventListener(Event.ENTER_FRAME, moveHackUpdate);
+			}
+		}
+
+		public function spriteSelect(choice:Object = 0):void {
+			// Inlined call from lib/src/coc/view/MainView.as
+			// TODO: When flags goes away, if it goes away, replace this with the appropriate settings thing.
+			if (choice <= 0 || choice == null || flags[kFLAGS.SHOW_SPRITES_FLAG] == 1) {
+				mainViewManager.hideSprite();
+			} else {
+				if (choice is Class) {
+					mainViewManager.showSpriteBitmap(SpriteDb.bitmapData(choice as Class));
+				} else {
+					mainViewManager.hideSprite();
+				}
 			}
 		}
 	}

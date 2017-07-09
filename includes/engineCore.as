@@ -1,31 +1,12 @@
-﻿import classes.*;
+import classes.*;
 import flash.text.TextFormat;
-// // import flash.events.MouseEvent;
-// 
-// //const DOUBLE_ATTACK_STYLE:int = 867;
-// //const SPELLS_CAST:int = 868;
-// 
-// //Fenoxo loves his temps
-// var temp:int = 0;
-// 
-// //Used to set what each action buttons displays and does.
-// var args:Array = new Array();
-// var funcs:Array = new Array();
-// 
-// //Used for stat tracking to keep up/down arrows correct.
-// var oldStats = {};
-// model.oldStats = oldStats;
-// oldStats.oldStr  = 0;
-// oldStats.oldTou  = 0;
-// oldStats.oldSpe  = 0;
-// oldStats.oldInte = 0;
-// oldStats.oldSens = 0;
-// oldStats.oldLib  = 0;
-// oldStats.oldCor  = 0;
-// oldStats.oldHP   = 0;
-// oldStats.oldLust = 0;
-// 
-// model.maxHP = maxHP;
+
+// at least one import or other usage of *class* so it won't be marked unused.
+import classes.internals.Profiling;
+import classes.internals.profiling.Begin;
+import classes.internals.profiling.End;
+
+public static const MAX_BUTTON_INDEX:int = 14;
 
 public function maxHP():Number {
 	return player.maxHP();
@@ -33,7 +14,6 @@ public function maxHP():Number {
 
 public function silly():Boolean {
 	return flags[kFLAGS.SILLY_MODE_ENABLE_FLAG] == 1;
-
 }
 
 /**
@@ -87,19 +67,19 @@ public function HPChange(changeNum:Number, display:Boolean):Number
 public function HPChangeNotify(changeNum:Number):void {
 	if (changeNum == 0) {
 		if (player.HP >= maxHP())
-			outputText("You're as healthy as you can be.\n", false);
+			outputText("You're as healthy as you can be.\n");
 	}
 	else if (changeNum > 0) {
 		if (player.HP >= maxHP())
-			outputText("Your HP maxes out at " + maxHP() + ".\n", false);
+			outputText("Your HP maxes out at " + maxHP() + ".\n");
 		else
-			outputText("You gain <b><font color=\"#008000\">" + int(changeNum) + "</font></b> HP.\n", false);
+			outputText("You gain <b><font color=\"#008000\">" + int(changeNum) + "</font></b> HP.\n");
 	}
 	else {
 		if (player.HP <= 0)
-			outputText("You take <b><font color=\"#800000\">" + int(changeNum*-1) + "</font></b> damage, dropping your HP to 0.\n", false);
+			outputText("You take <b><font color=\"#800000\">" + int(changeNum*-1) + "</font></b> damage, dropping your HP to 0.\n");
 		else
-			outputText("You take <b><font color=\"#800000\">" + int(changeNum*-1) + "</font></b> damage.\n", false);
+			outputText("You take <b><font color=\"#800000\">" + int(changeNum*-1) + "</font></b> damage.\n");
 	}
 }
 		
@@ -110,20 +90,12 @@ public function clone(source:Object):* {
 	return(copier.readObject());
 }
 
-/* Was only used in two places at the start of the game
-public function speech(output:String, speaker:String):void {
-	var speech:String = "";
-	speech = speaker + " says, \"<i>" + output + "</i>\"\n";
-	outputText(speech, false);
-}
-*/
-
 /**
  * Clear the text on screen.
  */
 public function clearOutput():void {
 	forceUpdate();
-	currentText = "";
+	output.clear();
 	mainView.clearOutputText();
 	if (_gameState != 3) mainView.hideMenuButton( MainView.MENU_DATA );
 	mainView.hideMenuButton( MainView.MENU_APPEARANCE );
@@ -145,14 +117,14 @@ public function rawOutputText(output:String, purgeText:Boolean = false):void
 		//if (!debug) mainText.htmlText = output;
 		//trace("Purging and writing Text", output);
 		clearOutput();
-		currentText = output;
+		this.output.raw(output);
 		mainView.setOutputText( output );
 		// mainText.htmlText = output;
 	}
 	else
 	{
 		//trace("Adding Text");
-		currentText += output;
+		this.output.raw(output);
 		mainView.appendOutputText( output );
 		// mainText.htmlText += output;
 	}
@@ -165,11 +137,8 @@ public function rawOutputText(output:String, purgeText:Boolean = false):void
  * Output the text on main text interface.
  * @param	output The text to show. It can be formatted such as bold, italics, and underline tags.
  * @param	purgeText Clear the old text.
- * @param	parseAsMarkdown Parses the text using Markdown.
  */
-public function outputText(output:String, 
-						purgeText:Boolean = false, 
-						parseAsMarkdown:Boolean = false):void
+public function outputText(output:String):void
 {
 	// we have to purge the output text BEFORE calling parseText, because if there are scene commands in 
 	// the parsed text, parseText() will write directly to the output
@@ -179,26 +148,12 @@ public function outputText(output:String,
 	// It's needed since those buttons are available even when in the event-tester
 	mainView.hideTestInputPanel();
 
-	if (purgeText)
-	{
-		clearOutput();
-	}
-
-	output = this.parser.recursiveParser(output, parseAsMarkdown);
-
-	//OUTPUT!
-	if (purgeText) {
-		//if (!debug) mainText.htmlText = output;
-		currentText = output;
-	}
-	else {
-		currentText += output;
+	this.output.text(output);
 		//if (!debug) mainText.htmlText = currentText;
-	}
-	if (debug) 
+	/*if (debug)
 	{
 		mainView.setOutputText( currentText );
-	}
+	}*/
 
 }
 
@@ -207,7 +162,7 @@ public function displayHeader(string:String):void {
 }
 
 public function buttonIsVisible(index:int):Boolean {
-	if ( index < 0 || index > 14 ) {
+	if ( index < 0 || index > MAX_BUTTON_INDEX ) {
 		return undefined;
 	}
 	else {
@@ -247,21 +202,13 @@ public function buttonTextIsOneOf(index:int, possibleLabels:Array):Boolean {
 public function getButtonText(index:int):String {
 	var matches:*;
 
-	if (index < 0 || index > 14) {
+	if (index < 0 || index > MAX_BUTTON_INDEX) {
 		return '';
 	}
 	else {
 		return mainView.bottomButtons[index].labelText;
 	}
 }
-
-/*public function setButtonToolTip(button:int, header:String = "", text:String = ""):void {
-	if (header == "") {
-		header = mainView.bottomButtons[button].labelText;
-	}
-	mainView.bottomButtons[button].toolTipHeader = header;
-	mainView.bottomButtons[button].toolTipText = text;
-}*/
 
 public function getButtonToolTipHeader(buttonText:String):String
 {
@@ -358,19 +305,7 @@ public function getButtonToolTipText(buttonText:String):String
 	if (buttonText.indexOf("Fake Mare") != -1) {
 		toolTipText = "This fake mare is made of metal and wood, but the anatomically correct vagina looks as soft and wet as any female centaur's.";
 	}
-	//Books
-	if (buttonText.indexOf("Dangerous Plants") != -1) {
-		toolTipText = "This is a book titled 'Dangerous Plants'.  As explained by the title, this tome is filled with information on all manner of dangerous plants from this realm.";
-	}
-	if (buttonText.indexOf("Traveler's Guide") != -1) {
-		toolTipText = "This traveler's guide is more of a pamphlet than an actual book, but it still contains some useful information on avoiding local pitfalls.";
-	}
-	if (buttonText.indexOf("Yoga Guide") != -1) {
-		toolTipText = "This leather-bound book is titled 'Yoga for Non-Humanoids.' It contains numerous illustrations of centaurs, nagas and various other oddly-shaped beings in a variety of poses.";
-	}
-	if (buttonText.indexOf("Hentai Comic") != -1) {
-		toolTipText = "This oddly drawn comic book is filled with images of fornication, sex, and overly large eyeballs.";
-	}
+	//Books - MOVED
 	//------------
 	// TITLE SCREEN 
 	//------------
@@ -506,17 +441,6 @@ public function createCallBackFunction(func:Function, arg:*, arg2:* = null, arg3
 		}
 	}
 }
-public function createCallBackFunction2(func:Function,...args):Function
-{
-	if (func == null){
-		CoC_Settings.error("createCallBackFunction(null,"+args+")");
-	}
-	return function():*
-	{
-		if (CoC_Settings.haltOnErrors) logFunctionInfo(func,args);
-		return func.apply(null,args);
-	}
-}
 
 /**
  * Adds a button.
@@ -534,7 +458,7 @@ public function addButton(pos:int, text:String = "", func1:Function = null, arg1
 	var callback:Function;
 
 	//Let the mainView decide if index is valid
-	if (pos > 14) {
+	if (pos > MAX_BUTTON_INDEX) {
 		trace("INVALID BUTTON");
 		return;
 	}
@@ -550,7 +474,10 @@ public function addButton(pos:int, text:String = "", func1:Function = null, arg1
 	if (toolTipText == "") toolTipText = getButtonToolTipText(text);
 	if (toolTipHeader == "") toolTipHeader = getButtonToolTipHeader(text);
 	mainView.bottomButtons[pos].alpha = 1; // failsafe to avoid possible problems with dirty hack
-	mainView.showBottomButton(pos, text, callback, toolTipText, toolTipHeader);
+	mainView.showBottomButton(pos, text, function():void {
+		output.record("<br>["+text+"]<br>");
+		callback();
+	}, toolTipText, toolTipHeader);
 	//mainView.setOutputText( currentText );
 	output.flush();
 }
@@ -559,7 +486,7 @@ public function addButtonDisabled(pos:int, text:String = "", toolTipText:String 
 	//Removes sex-related button in SFW mode.
 	if (flags[kFLAGS.SFW_MODE] > 0) {
 		if (text.indexOf("Sex") != -1 || text.indexOf("Threesome") != -1 ||  text.indexOf("Foursome") != -1 || text == "Watersports" || text == "Make Love" || text == "Use Penis" || text == "Use Vagina" || text.indexOf("Fuck") != -1 || text.indexOf("Ride") != -1 || (text.indexOf("Mount") != -1 && text.indexOf("Mountain") == -1) || text.indexOf("Vagina") != -1) {
-			trace("Button removed due to SFW mode.");
+			//trace("Button removed due to SFW mode.");
 			return;
 		}
 	}
@@ -591,7 +518,7 @@ public function removeButton(arg:*):void {
 		buttonToRemove = mainView.indexOfButtonWithLabel( arg as String );
 	}
 	if (arg is Number) {
-		if (arg < 0 || arg > 14) return;
+		if (arg < 0 || arg > MAX_BUTTON_INDEX) return;
 		buttonToRemove = Math.round(arg);
 	}
 	mainView.hideBottomButton( buttonToRemove );
@@ -601,253 +528,11 @@ public function removeButton(arg:*):void {
  * Hides all bottom buttons.
  */
 public function menu():void { //The newer, simpler menu - blanks all buttons so addButton can be used
-	for (var i:int = 0; i <= 14; i++) {
+	for (var i:int = 0; i <= MAX_BUTTON_INDEX; i++) {
 		mainView.hideBottomButton(i);
 		mainView.bottomButtons[i].alpha = 1; // Dirty hack.
 	}
 	output.flush();
-}
-
-/**
- * Adds buttons that can be chosen. 
- * 
- * I highly recommend you <b>DO NOT</b> use this for new content. Use addButton() instead.
- */
-public function choices(text1:String, butt1:Function,
-						text2:String, butt2:Function,
-						text3:String, butt3:Function,
-						text4:String, butt4:Function,
-						text5:String, butt5:Function,
-						text6:String, butt6:Function,
-						text7:String, butt7:Function,
-						text8:String, butt8:Function,
-						text9:String, butt9:Function,
-						text0:String, butt0:Function):void { //New typesafe version
-							
-	menu();	
-	addButton(0, text1, butt1);
-	addButton(1, text2, butt2);
-	addButton(2, text3, butt3);
-	addButton(3, text4, butt4);
-	addButton(4, text5, butt5);
-	addButton(5, text6, butt6);
-	addButton(6, text7, butt7);
-	addButton(7, text8, butt8);
-	addButton(8, text9, butt9);
-	addButton(9, text0, butt0);
-/*
-	var callback :Function;
-	var toolTipText :String;
-
-	var textLabels :Array;
-	var j :int;
-
-	textLabels = [
-		text1,
-		text2,
-		text3,
-		text4,
-		text5,
-		text6,
-		text7,
-		text8,
-		text9,
-		text0
-	];
-
-	//Transfer event code to storage
-	buttonEvents[0] = butt1;
-	buttonEvents[1] = butt2;
-	buttonEvents[2] = butt3;
-	buttonEvents[3] = butt4;
-	buttonEvents[4] = butt5;
-	buttonEvents[5] = butt6;
-	buttonEvents[6] = butt7;
-	buttonEvents[7] = butt8;
-	buttonEvents[8] = butt9;
-	buttonEvents[9] = butt0;
-
-	var tmpJ:int;
-
-	// iterate over the button options, and only enable the ones which have a corresponding event number
-	menu();
-	for (tmpJ = 0; tmpJ < 10; tmpJ += 1)
-	{
-		if (buttonEvents[tmpJ] == -9000 || buttonEvents[tmpJ] == 0 || buttonEvents[tmpJ] == null) {
-			mainView.hideBottomButton( tmpJ );
-		}
-		else {
-			if (buttonEvents[tmpJ] is Number) {
-				addButton(tmpJ, textLabels[tmpJ], eventParser, buttonEvents[tmpJ]);
-				//callback = createCallBackFunction(eventParser, buttonEvents[tmpJ] );
-			} else {
-				addButton(tmpJ, textLabels[tmpJ], buttonEvents[tmpJ]);
-				//callback = createCallBackFunction(buttonEvents[tmpJ], null);
-			}
-			toolTipText = getButtonToolTipText( textLabels[ tmpJ ] );
-
-			//mainView.showBottomButton( tmpJ, textLabels[ tmpJ ], callback, toolTipText );
-		}
-
-	}
-	// funcs = new Array();
-	// args = new Array();
-	//mainView.setOutputText( currentText );
-	output.flush();
-*/
-}
-
-/****
-	This function is made for multipage menus of unpredictable length,
-	say a collection of items or places or people that can change
-	depending on certain events, past choices, the time of day, or whatever.
-
-	This is not the best for general menu use.  Use choices() for that.
-
-	This is a bit confusing, so here's usage instructions.
-	Pay attention to all the braces.
-
-	This is made to be used with an array that you create before calling it,
-	so that you can push as many items on to that array as you like
-	before passing that array off to this function.
-
-	So you can do something like this:
-		var itemsInStorage :Array = new Array();
-
-		// The extra square braces are important.
-		itemsInStorage.push( [ "Doohicky", useDoohickyFunc ] );
-		itemsInStorage.push( [ "Whatsit", useWhatsitFunc ] );
-		itemsInStorage.push( [ "BagOfDicks", eatBagOfDicks ] );
-		...
-
-		// see notes about cancelFunc
-		multipageChoices( cancelFunc, itemsInStorage );
-
-	cancelfunc is a function (A button event function, specifically)
-	that exits the menu.  Provide this if you want a Back button to appear
-	in the bottom right.
-
-	If you do not need a cancel function, perhaps because some or all
-	of the choices will exit the menu, then you can
-	pass null or 0 for the cancelFunction.
-
-		// This menu shows no Back button.
-		multipageChoices( null, itemsInStorage );
-
-	You can call it directly if you want, but that's ridiculous.
-		multipageChoices( justGoToCamp, [
-			[ "Do this", doThisEvent ],
-			[ "Do that", doThatEvent ],
-			[ "Do something", doSomethingEvent ],
-			[ "Fap", goFapEvent ],
-			[ "Rape Jojo", jojoRape ],
-			// ... more items here...
-			[ "What", goWhat ],
-			[ "Margle", gurgleFluidsInMouthEvent ] // no comma on last item.
-		]);
-****/
-public function multipageChoices( cancelFunction :*, menuItems :Array ) :void {
-	const itemsPerPage :int = 8;
-
-	var currentPageIndex :int;
-	var pageCount :int;
-
-	function getPageOfItems( pageIndex :int ) :Array {
-		var startItemIndex:int = pageIndex * itemsPerPage;
-
-		return menuItems.slice( startItemIndex, startItemIndex + itemsPerPage );
-	}
-
-	function flatten( pageItems :Array ) :Array {
-		var i:int, l:int;
-		var flattenedItems:Array = [];
-
-		for( i = 0, l = pageItems.length; i < l; ++i ) {
-			flattenedItems = flattenedItems.concat( pageItems[ i ] );
-		}
-
-		return flattenedItems;
-	}
-
-	function showNextPage() :void {
-		showPage( (currentPageIndex + 1) % pageCount );
-	}
-
-	function showPage( pageIndex :int ) :void {
-		var currentPageItems :Array; // holds the current page of items.
-
-		if ( pageIndex < 0 )
-			pageIndex = 0;
-		if ( pageIndex >= pageCount )
-			pageIndex = pageCount - 1;
-
-		currentPageIndex = pageIndex;
-		currentPageItems = getPageOfItems( pageIndex );
-
-		// I did it this way so as to use only one actual menu setting function.
-		// I figured it was safer until the menu functions stabilize.
-
-		// insert page functions.
-		// First pad out the items so it's always in a predictable state.
-		while( currentPageItems.length < 8 ) {
-			currentPageItems.push( [ "", 0 ] );
-		}
-
-		// Insert next button.
-		currentPageItems.splice( 4, 0, [
-			"See page " +
-				String( ((currentPageIndex + 1) % pageCount) + 1 ) + // A compelling argument for 1-indexing?
-				'/' +
-				String( pageCount ),
-			pageCount > 1 ? showNextPage : 0
-			// "Next Page", pageCount > 1 ? showNextPage : 0
-			]);
-
-		// Cancel/Back button always appears in bottom right, like in the inventory.
-		currentPageItems.push([
-			"Back", cancelFunction || 0
-			]);
-
-		choices.apply( null, flatten( currentPageItems ) );
-	}
-
-	pageCount = Math.ceil( menuItems.length / itemsPerPage );
-
-	if ( typeof cancelFunction != 'function' )
-		cancelFunction = 0;
-
-	showPage( 0 );
-}
-
-// simpleChoices and doYesNo are convenience functions. They shouldn't re-implement code from choices()
-/**
- * Adds five button that can be chosen. 
- * 
- * I highly recommend you <b>DO NOT</b> use this for new content. Use addButton() instead.
- */
-public function simpleChoices(text1:String, butt1:Function, 
-						text2:String, butt2:Function, 
-						text3:String, butt3:Function, 
-						text4:String, butt4:Function, 
-						text5:String, butt5:Function):void { //New typesafe version
-
-	//trace("SimpleChoices");
-/*	choices(text1,butt1,
-			text2,butt2,
-			text3,butt3,
-			text4,butt4,
-			text5,butt5,
-			"",0,
-			"",0,
-			"",0,
-			"",0,
-			"",0);*/
-	menu();
-	addButton(0, text1, butt1);
-	addButton(1, text2, butt2);
-	addButton(2, text3, butt3);
-	addButton(3, text4, butt4);
-	addButton(4, text5, butt5);
 }
 
 /**
@@ -859,23 +544,6 @@ public function doYesNo(eventYes:Function, eventNo:Function):void { //New typesa
 	menu();
 	addButton(0, "Yes", eventYes);
 	addButton(1, "No", eventNo);
-/*
-	//Make buttons 1-2 visible and hide the rest.
-
-	//trace("doYesNo");
-	choices("Yes",eventYes,
-			"No",eventNo,
-			"",0,
-			"",0,
-			"",0,
-			"",0,
-			"",0,
-			"",0,
-			"",0,
-			"",0);
-
-}
-*/
 }
 
 /**
@@ -888,22 +556,9 @@ public function doNext(event:Function):void { //Now typesafe
 		trace("Do next setup cancelled by game over");
 		return;
 	}
-	
-	//trace("DoNext have item:", eventNo);
-	//choices("Next", event, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0); 
 	menu();
 	addButton(0, "Next", event);
 }
-
-/* Was never called
-public function doNextClear(eventNo:*):void 
-{
-	outputText("", true, true);
-	//trace("DoNext Clearing display");
-	//trace("DoNext have item:", eventNo);
-	choices("Next", eventNo, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0);
-}
-*/
 
 public function invertGo():void{ 
 	mainView.invert();
@@ -1004,7 +659,8 @@ public function applyOperator(old:Number, op:String, val:Number):Number {
 }
 
 public function testDynStatsEvent():void {
-	outputText("Old: "+player.str+" "+player.tou+" "+player.spe+" "+player.inte+" "+player.lib+" "+player.sens+" "+player.lust+"\n",true);
+	clearOutput();
+	outputText("Old: "+player.str+" "+player.tou+" "+player.spe+" "+player.inte+" "+player.lib+" "+player.sens+" "+player.lust+"\n");
 	dynStats("tou", 1, "spe+", 2, "int-", 3, "lib*", 2, "sen=", 25,"lust/",2);
 	outputText("Mod: 0 1 +2 -3 *2 =25 /2\n");
 	outputText("New: "+player.str+" "+player.tou+" "+player.spe+" "+player.inte+" "+player.lib+" "+player.sens+" "+player.lust+"\n");
@@ -1021,10 +677,12 @@ public function testDynStatsEvent():void {
  */
 public function dynStats(... args):void
 {
+	Begin("engineCore","dynStats");
 	// Check num of args, we should have a multiple of 2
 	if ((args.length % 2) != 0)
 	{
 		trace("dynStats aborted. Keys->Arguments could not be matched");
+		Profiling.End("engineCore","dynStats");
 		return;
 	}
 	
@@ -1079,6 +737,7 @@ public function dynStats(... args):void
 		else
 		{
 			trace("dynStats aborted. Expected a key and got SHIT");
+			Profiling.End("engineCore","dynStats");
 			return;
 		}
 	}
@@ -1102,7 +761,7 @@ public function dynStats(... args):void
 		  newLust - player.lust,
 		  newCor - player.cor,
 		  argVals[8],argVals[9]);
-	
+	End("engineCore","dynStats");
 }
 
 public function stats(stre:Number, toug:Number, spee:Number, intel:Number, libi:Number, sens:Number, lust2:Number, corr:Number, resisted:Boolean = true, noBimbo:Boolean = false):void
@@ -1182,22 +841,6 @@ public function stats(stre:Number, toug:Number, spee:Number, intel:Number, libi:
 	if (player.findPerk(PerkLib.Smart) >= 0 && intel >= 0) player.inte+=intel*player.perk(player.findPerk(PerkLib.Smart)).value1;
 	if (player.findPerk(PerkLib.Lusty) >= 0 && libi >= 0) player.lib+=libi*player.perk(player.findPerk(PerkLib.Lusty)).value1;
 	if (player.findPerk(PerkLib.Sensitive) >= 0 && sens >= 0) player.sens += sens * player.perk(player.findPerk(PerkLib.Sensitive)).value1;
-
-	// Uma's Str Cap from Perks (Moved to max stats)
-	/*if (player.findPerk(PerkLib.ChiReflowSpeed) >= 0)
-	{
-		if (player.str > UmasShop.NEEDLEWORK_SPEED_STRENGTH_CAP)
-		{
-			player.str = UmasShop.NEEDLEWORK_SPEED_STRENGTH_CAP;
-		}
-	}
-	if (player.findPerk(PerkLib.ChiReflowDefense) >= 0)
-	{
-		if (player.spe > UmasShop.NEEDLEWORK_DEFENSE_SPEED_CAP)
-		{
-			player.spe = UmasShop.NEEDLEWORK_DEFENSE_SPEED_CAP;
-		}
-	}*/
 	
 	//Keep stats in bounds
 	if (player.cor < 0) player.cor = 0;
@@ -1295,58 +938,6 @@ public function showUpDown():void { //Moved from StatsView.
 	}
 }
 
-public function cuntChangeOld(cIndex:Number, vIndex:Number, display:Boolean):void {
-	//Virginity check
-	if (player.vaginas[vIndex].virgin) {
-		if (display) outputText("\nYour " + player.vaginaDescript(vIndex) + " loses its virginity!", false);
-		player.vaginas[vIndex].virgin = false;
-	}        
-	//If cock is bigger than unmodified vagina can hold - 100% stretch!
-	if (player.vaginas[vIndex].capacity() <= monster.cocks[cIndex].cArea()) {
-		if (player.vaginas[vIndex] < 5) {
-			trace("CUNT STRETCHED: By cock larger than it's total capacity.");
-			if (display) {
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_GAPING_WIDE) outputText("<b>Your " + player.vaginaDescript(0) + " is stretched even further, capable of taking even the largest of demons and beasts.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_GAPING) outputText("<b>Your " + player.vaginaDescript(0) + " painfully stretches, gaping wide-open.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_LOOSE) outputText("<b>Your " + player.vaginaDescript(0) + " is now very loose.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_NORMAL) outputText("<b>Your " + player.vaginaDescript(0) + " is now loose.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_TIGHT) outputText("<b>Your " + player.vaginaDescript(0) + " loses its virgin-like tightness.</b>  ", false);
-			}
-			player.vaginas[vIndex].vaginalLooseness++;
-		}
-	}
-	//If cock is within 75% of max, streeeeetch 33% of the time
-	if (player.vaginas[vIndex].capacity() * .75 <= monster.cocks[cIndex].cArea()) {
-		if (player.vaginas[vIndex] < 5) {
-			trace("CUNT STRETCHED: By cock @ 75% of capacity.");
-			if (display) {
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_GAPING_WIDE) outputText("<b>Your " + player.vaginaDescript(0) + " is stretched even further, capable of taking even the largest of demons and beasts.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_GAPING) outputText("<b>Your " + player.vaginaDescript(0) + " painfully stretches, gaping wide-open.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_LOOSE) outputText("<b>Your " + player.vaginaDescript(0) + " is now very loose.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_NORMAL) outputText("<b>Your " + player.vaginaDescript(0) + " is now loose.</b>  ", false);
-				if (player.vaginas[vIndex].vaginalLooseness == VAGINA_LOOSENESS_TIGHT) outputText("<b>Your " + player.vaginaDescript(0) + " loses its virgin-like tightness.</b>  ", false);
-			}
-			player.vaginas[vIndex].vaginalLooseness++;
-		}
-	}
-}
-
-//Updates the player's gender
-public function genderCheck():void {
-	if (player.cocks.length > 0) {
-		if (player.vaginas.length > 0)
-			player.gender = 3;
-		else
-			player.gender = 1;
-	}
-	else if (player.vaginas.length > 0)
-		player.gender = 2;
-	else
-		player.gender = 0;
-	//Fertility fixing
-	if (player.hasVagina() && player.fertility < 0) player.fertility = 0;
-}
-
 /**
  * Returns true if you're on SFW mode.
  */
@@ -1362,22 +953,10 @@ public function doSFWloss():Boolean {
 	else return false;
 }
 
-public function doNothing():void {
-	//This literally does nothing.
+public function isPeaceful():Boolean {
+	return flags[kFLAGS.EASY_MODE_ENABLE_FLAG] <= -2;
 }
 
-public function spriteSelect(choice:Number = 0):void {
-	var type:int = flags[kFLAGS.SPRITE_STYLE]; //0 for new, 1 for old.
-	if (flags[kFLAGS.SHOW_SPRITES_FLAG] == 0)
-	{
-		mainView.selectSprite(choice, type);
-	}
-	else
-	{
-		if (choice >= 0)
-		{
-			trace ("hiding sprite because flags");
-			mainView.selectSprite(-1);
-		}
-	}
+public function doNothing():void {
+	//This literally does nothing.
 }

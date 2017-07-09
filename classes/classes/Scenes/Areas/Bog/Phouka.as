@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Created by K.Quesom 11.06.14
  */
 package classes.Scenes.Areas.Bog
@@ -12,8 +12,8 @@ package classes.Scenes.Areas.Bog
 		{ 
 			var damage:int;
 			//Only the bunny, goat and horse forms make physical attacks
-			if (findStatusEffect(StatusEffects.Blind) >= 0 && rand(3) < 1) {
-				outputText(capitalA + short + " completely misses you due to his blindness!\n", false);
+			if (hasStatusEffect(StatusEffects.Blind) && rand(3) < 1) {
+				outputText(capitalA + short + " completely misses you due to his blindness!\n");
 			}
 			else if (PhoukaScene.phoukaForm == PhoukaScene.PHOUKA_FORM_BUNNY) {
 				damage = Math.round((60 + 30 + 10) - rand(player.tou) - player.armorDef); //60 == Bunny Strength, 30 == Bunny Weapon Attack
@@ -79,7 +79,7 @@ package classes.Scenes.Areas.Bog
 		protected function phoukaFightSilence():void
 		{ //Reuses the statusEffect Web-Silence from the spiders
 			outputText(this.capitalA + this.short + " scoops up some muck from the ground and rams it down over his cock.  After a few strokes he forms the lump of mud and precum into a ball and whips it at your face.  ");
-			if (findStatusEffect(StatusEffects.Blind) >= 0 && rand(3) < 2)
+			if (hasStatusEffect(StatusEffects.Blind) && rand(3) < 2)
 				outputText("Since he's blind the shot goes horribly wide, missing you entirely.");
 			else
 			{
@@ -104,8 +104,8 @@ package classes.Scenes.Areas.Bog
 
 		override protected function performCombatAction():void
 		{
-			var blinded:Boolean = findStatusEffect(StatusEffects.Blind) >= 0;
-			if ((!blinded) && player.findStatusEffect(StatusEffects.WebSilence) < 0 && rand(4) == 0) {
+			var blinded:Boolean = hasStatusEffect(StatusEffects.Blind);
+			if ((!blinded) && !player.hasStatusEffect(StatusEffects.WebSilence) && rand(4) == 0) {
 				phoukaTransformToPhouka(); //Change to faerie form so that it can lob the ball of muck at you
 				phoukaFightSilence();
 			}
@@ -138,7 +138,7 @@ package classes.Scenes.Areas.Bog
 			else if (lustDelta >= 5)
 				outputText("\n\nThe " + this.short + " stops its assault for a moment.  A glob of precum oozes from its cock before it shakes its head and gets ready to attack again.");
 			else if (lustDelta > 0)
-				outputText("\n\nThe " + this.short + " hesitates and slows down.  You see its cock twitch and then it readies for the next attack.", false);
+				outputText("\n\nThe " + this.short + " hesitates and slows down.  You see its cock twitch and then it readies for the next attack.");
 			applyTease(lustDelta);
 		}
         

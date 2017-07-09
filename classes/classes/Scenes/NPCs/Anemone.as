@@ -9,7 +9,7 @@ package classes.Scenes.NPCs
 
 		override public function eAttack():void
 		{
-			outputText("Giggling playfully, the anemone launches several tentacles at you.  Most are aimed for your crotch, but a few attempt to caress your chest and face.\n", false);
+			outputText("Giggling playfully, the anemone launches several tentacles at you.  Most are aimed for your crotch, but a few attempt to caress your chest and face.\n");
 			super.eAttack();
 		}
 
@@ -23,7 +23,7 @@ package classes.Scenes.NPCs
 		public function applyVenom(str:Number = 1):void
 		{
 			//First application
-			if (player.findStatusEffect(StatusEffects.AnemoneVenom) < 0) player.createStatusEffect(StatusEffects.AnemoneVenom, 0, 0, 0, 0);
+			if (!player.hasStatusEffect(StatusEffects.AnemoneVenom)) player.createStatusEffect(StatusEffects.AnemoneVenom, 0, 0, 0, 0);
 			//Gain some lust
 			game.dynStats("lus", (2 * str));
 
@@ -72,7 +72,7 @@ package classes.Scenes.NPCs
 
 		override public function outputAttack(damage:int):void
 		{
-			outputText("You jink and dodge valiantly but the tentacles are too numerous and coming from too many directions.  A few get past your guard and caress your skin, leaving a tingling, warm sensation that arouses you further.", false);
+			outputText("You jink and dodge valiantly but the tentacles are too numerous and coming from too many directions.  A few get past your guard and caress your skin, leaving a tingling, warm sensation that arouses you further.");
 		}
 
 		public function Anemone()

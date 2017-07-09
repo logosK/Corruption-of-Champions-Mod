@@ -126,7 +126,7 @@ package classes.Items
 				          +" and the dry breeze on your exposed nerves."
 				          +"  Reflexively, your legs cling together to protect as much of their now-sensitive surface as possible."
 				          +"  When you try to part them, you find you cannot."
-				          +"  Several minutes pass uncomforably until you can again bend your legs,"
+				          +"  Several minutes pass uncomfortably until you can again bend your legs,"
 				          +" and when you do, you find that all the legs of a side bend together.");
 				outputText("  <b>You have human legs again.</b>");
 				doRestore = true;
@@ -152,9 +152,9 @@ package classes.Items
 		{
 			if (changes < changeLimit && player.hairType == HAIR_FEATHER && rand(4) == 0) {
 				//(long):
-				if (player.hairLength >= 6) outputText("\n\nA lock of your downy-soft feather-hair droops over your eye.  Before you can blow the offending down away, you realize the feather is collapsing in on itself.  It continues to curl inward until all that remains is a normal strand of hair.  <b>Your hair is no longer feathery!</b>", false);
+				if (player.hairLength >= 6) outputText("\n\nA lock of your downy-soft feather-hair droops over your eye.  Before you can blow the offending down away, you realize the feather is collapsing in on itself.  It continues to curl inward until all that remains is a normal strand of hair.  <b>Your hair is no longer feathery!</b>");
 				//(short)
-				else outputText("\n\nYou run your fingers through your downy-soft feather-hair while you await the effects of the item you just ingested.  While your hand is up there, it detects a change in the texture of your feathers.  They're completely disappearing, merging down into strands of regular hair.  <b>Your hair is no longer feathery!</b>", false);
+				else outputText("\n\nYou run your fingers through your downy-soft feather-hair while you await the effects of the item you just ingested.  While your hand is up there, it detects a change in the texture of your feathers.  They're completely disappearing, merging down into strands of regular hair.  <b>Your hair is no longer feathery!</b>");
 				player.hairType = HAIR_NORMAL;
 				changes++;
 				return true;
@@ -163,23 +163,112 @@ package classes.Items
 			return false;
 		}
 
-		public function newLizardSkinTone():String
+		/**
+		 * Removes antennae and display different loss texts depending on the type, if any.
+		 * @param	inline  If true, display a short inline text (No bold part, no line breaks)
+		 * @return	true:   lost them, false: no change
+		 * @author	Stadler76
+		 */
+		public function removeAntennae(inline:Boolean = false):Boolean
+		{
+			if (player.antennae == ANTENNAE_NONE)
+				return false;
+
+			if (inline) {
+				switch (player.antennae) {
+					case ANTENNAE_COCKATRICE:
+					case ANTENNAE_BEE:
+					default:
+						outputText(" Antennae pop free, and float lightly down towards the floor. ");
+				}
+			} else {
+				switch (player.antennae) {
+					case ANTENNAE_COCKATRICE:
+						outputText("\n\nYou feel your antennae like feathers shrivel at the root, the pair of soft quills falling softly to the"
+						          +" ground as your pores close.");
+						outputText("\n<b>You’ve lost your antennae like feathers!</b>");
+						break;
+
+					case ANTENNAE_BEE:
+						outputText("\n\nYour [hair] itches so you give it a scratch, only to have your antennae fall to the ground. What a relief.");
+						outputText("\n<b>You've lost your antennae!</b>");
+						break;
+
+					default: // should not happen, but just in case ... (Stadler76)
+						outputText("\n\nThe muscles in your brow clench tightly, and you feel a tremendous pressure on your upper forehead."
+						          +" When it passes, you touch yourself and discover <b>your antennae have vanished</b>!");
+				}
+			}
+
+			player.antennae = ANTENNAE_NONE;
+			changes++;
+			return true;
+		}
+
+		public function removeBassyHair():Boolean
+		{
+			// Failsafe, duh
+			if ([HAIR_BASILISK_PLUME, HAIR_BASILISK_SPINES].indexOf(player.hairType) == -1) return false;
+
+			if (player.hairType == HAIR_BASILISK_PLUME) {
+				// TF blurb derived from losing feathery hair
+				//(long):
+				if (player.hairLength >= 5)
+					outputText("\n\nA lock of your feathery plume droops over your eye.  Before you can blow the offending down away,"
+					          +" you realize the feather is collapsing in on itself."
+					          +" It continues to curl inward until all that remains is a normal strand of hair.");
+				//(short)
+				else
+					outputText("\n\nYou run your fingers through your feathery plume while you await the effects of the item you just ingested."
+					          +" While your hand is up there, it detects a change in the texture of your feathers.  They're completely disappearing,"
+					          +" merging down into strands of regular hair.");
+
+					outputText("\n\n<b>Your hair is no longer feathery!</b>");
+			} else {
+				outputText("\n\nYou feel a tingling on your scalp. You reach up to your basilisk spines to find out what is happening. The moment"
+					          +" your hand touches a spine, it comes loose and falls in front of you. One after another the other spines fall out,"
+					          +" until all the spines that once decorated your head now lay around you, leaving you with a bald head.");
+
+				outputText("\n\n<b>You realize, that you'll grow normal human hair again!</b>");
+				flags[kFLAGS.HAIR_GROWTH_STOPPED_BECAUSE_LIZARD] = 0;
+				player.hairLength = 0;
+			}
+			player.hairType = HAIR_NORMAL;
+			changes++;
+			return true;
+		}
+
+		public function newLizardSkinTone():Array
 		{
 			if (rand(10) == 0) {
 				//rare skinTone
-				return rand(2) == 0 ? "purple" : "silver";
+				return rand(2) == 0 ? ["purple", "deep pink"] : ["silver", "light gray"];
 			}
 
 			//non rare skinTone
 			switch (rand(5)) {
-				case 0: return "red";
-				case 1: return "green";
-				case 2: return "white";
-				case 3: return "blue";
-				case 4: return "black";
+				case 0: return ["red", "orange"];
+				case 1: return ["green", "yellow green"];
+				case 2: return ["white", "light gray"];
+				case 3: return ["blue", "ocean blue"];
+				case 4: return ["black", "dark gray"];
 			}
 
-			return "invalid"; // Will never happen. Suppresses 'Error: Function does not return a value.'
+			return ["invalid", "invalid"]; // Will never happen. Suppresses 'Error: Function does not return a value.'
+		}
+
+		public function newCockatriceColors():Array
+		{
+			var cockatriceColors:Array = [
+				["blue",   "turquoise", "blue"],
+				["orange", "red",       "orange"],
+				["green",  "yellow",    "green"],
+				["purple", "pink",      "purple"],
+				["black",  "white",     "black"],
+				["blonde", "brown",     "blonde"],
+				["white",  "grey",      "white"],
+			];
+			return randomChoice(cockatriceColors);
 		}
 
 		public function updateClaws(clawType:int = CLAW_TYPE_NORMAL):String
@@ -239,10 +328,10 @@ package classes.Items
 
 				case "PlayerEvents-benoitHairPin":
 				case "reptilum-basilisk":
-				case "reptilum-dracolisk":
-					if (player.hairType == HAIR_BASILISK_PLUME && player.cor < 65) return 0;
+				case "reptilum-dracolisk": //never 4get the basilisk hair discourse of may 2017
+					if (player.hairType == HAIR_BASILISK_PLUME && player.cor < Math.max(20, (65 - player.corruptionTolerance()))) return 0;
 
-					if (player.isFemaleOrHerm() && player.cor < 15 && player.featheryHairPinEquipped() && player.isBasilisk()) {
+					if (player.isFemaleOrHerm() && player.cor < Math.max(80, (15 + player.corruptionTolerance())) && player.featheryHairPinEquipped() && player.isBasilisk()) {
 						var benoitMFText:String = getGame().bazaar.benoit.benoitMF(
 							" your hair has changed into a plume of feathers that, like legend is told, belongs to a female basilisk!",
 							" you have a plume, like a female basilisk!"
@@ -271,7 +360,7 @@ package classes.Items
 						return 1; // --> gained basilisk hair (plume)
 					}
 
-					if (player.cor >= 65 && player.hairType != HAIR_BASILISK_SPINES && player.hasLizardScales() && player.hasReptileFace()) {
+					if (player.cor >= Math.max(80, (65 + player.corruptionTolerance())) && player.hairType != HAIR_BASILISK_SPINES && player.hasLizardScales() && player.hasReptileFace()) {
 						// Corrupted Basilisk
 						if (player.hairLength > 0 && [HAIR_GOO, HAIR_BASILISK_PLUME].indexOf(player.hairType) == -1) {
 							output.text("\n\nYour scalp feels tight and hot, causing you to run a hand through your [hair] to rub at it gingerly.");
@@ -327,7 +416,7 @@ package classes.Items
 						player.hairColor = player.skinTone;                   // hairColor always set to player.skinTone
 						player.hairType = HAIR_BASILISK_SPINES;               // hairType set to basilisk spines
 						player.hairLength = 2;                                // hairLength set to 2 (inches, displayed as ‘short’)
-						flags[kFLAGS.HAIR_GROWTH_STOPPED_BECAUSE_LIZARD] = 0; // Hair growth stops
+						flags[kFLAGS.HAIR_GROWTH_STOPPED_BECAUSE_LIZARD] = 1; // Hair growth stops
 						changes++;
 						output.text("\n\n<b>Where your hair would be, you now have a crown of dull reptilian spines!</b>");
 
@@ -393,6 +482,7 @@ package classes.Items
 
 				case "reptilum":
 				case "echidnaTFs":
+				case "TonOTrice":
 					if (player.findPerk(PerkLib.Oviposition) >= 0) return 0;
 					outputText("\n\nDeep inside yourself there is a change.  It makes you feel a little woozy, but passes quickly."
 					          +"  Beyond that, you aren't sure exactly what just happened, but you are sure it originated from your womb.\n");
@@ -444,7 +534,7 @@ package classes.Items
 						output.text("\n\nYou feel your gills tighten, the slits seeming to close all at once. As you let out a choked gasp your"
 						           +" gills shrink into nothingness, leaving only smooth skin behind. When you think it's over you feel something"
 						           +" emerge from under your neck, flowing down over your chest and brushing your nipples. You look in surprise as"
-						           +" your new feathery gills finish growing out, a film of mucus forming over them shoftly after.");
+						           +" your new feathery gills finish growing out, a film of mucus forming over them shortly after.");
 					} else { // if no gills
 						output.text("\n\nYou feel a pressure in your lower esophageal region and pull your garments down to check the area."
 						           +" Before your eyes a pair of feathery gills start to push out of the center of your chest,"
@@ -457,14 +547,14 @@ package classes.Items
 
 				case GILLS_FISH:
 					if (oldgillType == GILLS_ANEMONE) {
-						output.text("\n\nYou feel your gills tingle, a vague numbness registering across thier feathery exterior. You watch in awe as"
+						output.text("\n\nYou feel your gills tingle, a vague numbness registering across their feathery exterior. You watch in awe as"
 						           +" your gill's feathery folds dry out and fall off like crisp autumn leaves. The slits of your gills then"
 						           +" rearrange themselves, becoming thinner and shorter, as they shift to the sides of your neck. They now close in"
 						           +" a way that makes them almost invisible. As you run a finger over your neck you feel little more than several"
 						           +" small raised lines where they meet your skin.");
 					} else { // if no gills
 						output.text("\n\nYou feel a sudden tingle on your neck. You reach up to it to feel, whats the source of it. When you touch"
-						           +" your neck, you feel that it begins to grow serveral narrow slits which slowly grow longer. After the changes"
+						           +" your neck, you feel that it begins to grow several narrow slits which slowly grow longer. After the changes"
 						           +" have stopped you quickly head to a nearby puddle to take a closer look at your neck. You realize,"
 						           +" that your neck has grown gills allowing you to breathe under water as if you were standing on land.");
 					}
@@ -499,6 +589,56 @@ package classes.Items
 				dynStats("sen", 5);
 				changes++;
 				return true;
+			}
+
+			return false;
+		}
+
+		public function gainLizardTongue():Boolean
+		{
+			if (player.tongueType != TONGUE_LIZARD) {
+				outputText("\n\nYour tongue goes numb, making your surprised noise little more than a gurgle as your tongue flops comically. ");
+				switch (player.tongueType) {
+					case TONGUE_SNAKE:
+						outputText("\nSlowly your tongue swells, thickening up until it's about as thick as your thumb, while staying quite "
+					              +" flexible. You drool, your tongue lolling out of your mouth as you slowly begin to regain control of your forked"
+					              +" organ. When you retract your tongue however, you are shocked to find it is much longer than it used to be,"
+					              +" now a foot long. As you cram your newly shifted appendage back in your mouth, you feel a sudden SNAP,"
+					              +" and on inspection, find you've snapped off your fangs! Well, you suppose you needed the room anyway.");
+						break;
+
+					case TONGUE_DEMONIC:
+						outputText("\nYour tongue gently shrinks down, the thick appendage remaining flexible but getting much smaller. There's"
+					              +" little you can do but endure the weird pinching feeling as your tongue eventually settles at being a foot long."
+					              +" The pinching sensation continues as the tip of your tongue morphs, becoming a distinctly forked shape."
+					              +" As you inspect your tongue you slowly regain control, retracting it into your mouth, the forked tips picking up"
+					              +" on things you couldn't taste before.");
+						break;
+
+					case TONGUE_DRACONIC:
+						outputText("\nYour tongue rapidly shrinks down, the thick appendage remaining flexible but getting much smaller. There's"
+					              +" little you can do but endure the weird pinching feeling as your tongue eventually settles at being a foot long."
+					              +" The pinching sensation continues as the tip of your tongue morphs, becoming a distinctly forked shape."
+					              +" As you inspect your tongue you slowly regain control, retracting it into your mouth, the forked tips picking up"
+					              +" on things you couldn't taste before.");
+						break;
+
+					case TONGUE_ECHIDNA:
+						outputText("\nSlowly your tongue swells, thickening up until it’s about as thick as your thumb, while staying long."
+					              +" The tip pinches making you wince, morphing into a distinctly forked shape. As you inspect your tongue you slowly"
+					              +" regain control, retracting it into your mouth, the forked tips picking up on things you couldn't taste before.");
+						break;
+
+					default:
+						outputText("\nSlowly your tongue swells, thickening up until it’s about as thick as your thumb, filling your mouth as you"
+					              +" splutter. It begins lengthening afterwards, continuing until it hangs out your mouth, settling at 1 foot long."
+					              +" The tip pinches making you wince, morphing into a distinctly forked shape. As you inspect your tongue you slowly"
+					              +" regain control, retracting it into your mouth, the forked tips picking up on things you couldn't taste before.");
+				}
+				outputText("\n\n<b>You now have a lizard tongue!</b>");
+				player.tongueType = TONGUE_LIZARD;
+				dynStats("sen", 5); // Sensitivy gain since its forked
+				changes++;
 			}
 
 			return false;

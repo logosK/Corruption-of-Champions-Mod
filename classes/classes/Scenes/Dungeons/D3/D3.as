@@ -12,13 +12,17 @@ package classes.Scenes.Dungeons.D3
 	import classes.PerkLib;
 	import classes.CockTypesEnum;
 	import classes.PregnancyStore;
+	import classes.internals.LoggerFactory;
+	import mx.logging.ILogger;
 	
 	/**
 	 * ...
 	 * @author Gedan
 	 */
 	public class D3 extends BaseContent
-	{		
+	{
+		private static const LOGGER:ILogger = LoggerFactory.getLogger(D3);
+		
 		public var jeanClaude:JeanClaudeScenes = new JeanClaudeScenes();
 		public var doppleganger:DopplegangerScenes = new DopplegangerScenes();
 		public var incubusMechanic:IncubusMechanicScenes = new IncubusMechanicScenes();
@@ -35,15 +39,13 @@ package classes.Scenes.Dungeons.D3
 		
 		public function configureRooms():void {
 			var tRoom:room;
+			LOGGER.info("Setting up D3 rooms...");
+			LOGGER.debug("Dungeons are {0}", kGAMECLASS.dungeons);
+			
 			if (kGAMECLASS.dungeons != null) {
-				trace("OK");
+				LOGGER.debug("Rooms are {0}", kGAMECLASS.dungeons.rooms);
 			}
-			if (kGAMECLASS.dungeons.rooms) {
-				trace("Debugging... ")
-			}
-			else {
-				trace("Nope");
-			}
+		
 			// Entrance
 			tRoom = new room();
 			tRoom.RoomName = "entrance";
@@ -249,6 +251,7 @@ package classes.Scenes.Dungeons.D3
 				flags[kFLAGS.D3_DISCOVERED] = 1;
 				
 				clearOutput();
+				outputText(images.showImage("dungeon-entrance-stronghold"));
 				outputText("During your exploration, you come across a familiar looking patch of ground. In fact... you pull out Zetaz’s map, your eyes widening as they realize what you’ve just found: Lethice’s Keep. You follow a concealed trail past several harpy nests directly to an almost invisible cave entrance. You never would’ve found it without the map.");
 				outputText("\n\n<b>You’ve discovered a hidden entrance to Lethice’s lair. It can be accessed from the Dungeons submenu in the future.</b>");
 				outputText("\n\nDo you step inside, or wait until you’re better prepared?");
@@ -355,7 +358,12 @@ package classes.Scenes.Dungeons.D3
 					if (player.hasKeyItem("Laybans") < 0) outputText("  Are you going to try this?");
 					else outputText("  You take the Laybans out of your pocket, turning them around in your hands as you consider. Are you going to try this?");
 				}
-				
+
+				if (flags[kFLAGS.CODEX_ENTRY_BASILISKS] <= 0) {
+					flags[kFLAGS.CODEX_ENTRY_BASILISKS] = 1;
+					outputText("\n\n<b>New codex entry unlocked: Basilisks!</b>")
+				}
+
 				menu();
 				addButton(0, "Go!", jeanClaude.gogoFuckTheseBasilisks);
 				addButton(1, "Fall Back", fallbackFromMagpieHallS);
@@ -564,7 +572,7 @@ package classes.Scenes.Dungeons.D3
 		public function northwestcourtyardRoomFunc():Boolean
 		{
 			outputText("<b><u>Northwest Courtyard</u></b>\n");
-			outputText("The courtyard comes to an abrupt end here, hemmed in by a impressively high stone wall to the north, high enough to shame the walls in the other cardinal directions. The path is also bounded in by stonework to the west, forcing it to curve to the east and south around a bush that has been tastelessly shaped to resemble a turgid prick. The demons even went so far as to trim ivory flowers into a contiguous path along one side, very much looking like a stream of arboreal spunk.");
+			outputText("The courtyard comes to an abrupt end here, hemmed in by an impressively high stone wall to the north, high enough to shame the walls in the other cardinal directions. The path is also bounded in by stonework to the west, forcing it to curve to the east and south around a bush that has been tastelessly shaped to resemble a turgid prick. The demons even went so far as to trim ivory flowers into a contiguous path along one side, very much looking like a stream of arboreal spunk.");
 			return false;
 		}
 		

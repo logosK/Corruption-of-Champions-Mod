@@ -21,90 +21,63 @@ package classes.Scenes.Areas.Forest
 		public function tamaniHypnoTease():void {
 			var selector:Number = rand(3);
 			//Choose 1 of 3 variations
-			if (selector == 0) outputText("Tamani smiles and shifts her leather straps, pulling one into the puffy gash that is her vagina.  She groans out loud, sliding the studded leather band into her outer lips and sawing it along her clit.  Her whole body blushes as she pulls it free, running a fingertip up the now wet strip of leather, \"<i>Mmm, can't you see how much my pussy needs a man inside it?  Be a good husband and fuck Tamani full!  You know you want to.</i>\"\n\n", false);
-			if (selector == 1) outputText("Tamani saunters up to you, sliding her fingers down to each side of her pussy and spreading them.  Your eyes are drawn to her honeyed tunnel, unable to look away she gets closer.  She whispers, \"<i>Your cock knows what it needs.  Just be a good husband and obey your dick, it KNOWS how badly you need mistress's pussy.</i>\"\n\n", false);
-			if (selector == 2) outputText("Tamani turns around and bends down, pressing her hands into the dirt as she kicks her legs apart.  Your stare open-mouthed at her bouncy ass-cheeks and the tantalizingly wet entrance of her slit.  She smirks and offers, \"<i>You've cum so many times inside me, why resist when you can give in and feel that pleasure again today?  Come on husband, don't make Tamani beg...</i>\"\n\n", false);
+			if (selector == 0) outputText("Tamani smiles and shifts her leather straps, pulling one into the puffy gash that is her vagina.  She groans out loud, sliding the studded leather band into her outer lips and sawing it along her clit.  Her whole body blushes as she pulls it free, running a fingertip up the now wet strip of leather, \"<i>Mmm, can't you see how much my pussy needs a man inside it?  Be a good husband and fuck Tamani full!  You know you want to.</i>\"\n\n");
+			if (selector == 1) outputText("Tamani saunters up to you, sliding her fingers down to each side of her pussy and spreading them.  Your eyes are drawn to her honeyed tunnel, unable to look away she gets closer.  She whispers, \"<i>Your cock knows what it needs.  Just be a good husband and obey your dick, it KNOWS how badly you need mistress's pussy.</i>\"\n\n");
+			if (selector == 2) outputText("Tamani turns around and bends down, pressing her hands into the dirt as she kicks her legs apart.  Your stare open-mouthed at her bouncy ass-cheeks and the tantalizingly wet entrance of her slit.  She smirks and offers, \"<i>You've cum so many times inside me, why resist when you can give in and feel that pleasure again today?  Come on husband, don't make Tamani beg...</i>\"\n\n");
 
 			//REACTIONS
 			//LOW HYPNO VALUE:
 			if (flags[kFLAGS.TAMANI_TIMES_HYPNOTISED] < 5) {
 				selector = rand(3);
-				if (selector == 0) outputText("You reluctantly pull your stare away from the heavenly entrance between her legs.  There's an urge to walk over to her and plunge yourself inside her over and over, but you dismiss it.", false);
-				if (selector == 1) outputText("You find it hard to pull your gaze from her inviting twat, but you manage.  You shake your head, clearing away thoughts of fertilizing your wife.  Her rhetoric must be getting to you.", false);
-				if (selector == 2) outputText("No matter the case, her actions shifted a fair bit of your blood-flow to your groin.", false);
+				if (selector == 0) outputText("You reluctantly pull your stare away from the heavenly entrance between her legs.  There's an urge to walk over to her and plunge yourself inside her over and over, but you dismiss it.");
+				if (selector == 1) outputText("You find it hard to pull your gaze from her inviting twat, but you manage.  You shake your head, clearing away thoughts of fertilizing your wife.  Her rhetoric must be getting to you.");
+				if (selector == 2) outputText("No matter the case, her actions shifted a fair bit of your blood-flow to your groin.");
 			}
 			//MEDIUM HYPNO VALUE:
 			else if (flags[kFLAGS.TAMANI_TIMES_HYPNOTISED] < 10) {
 				selector = rand(2);
 				if (selector == 0) {
-					outputText("With effort you manage to wrench your eyes away from the inviting folds of Tamani's vagina.  ", false);
-					if (player.totalCocks() > 1) outputText("Each of y", false);
-					else outputText("Y", false);
-					outputText("our " + player.multiCockDescriptLight(), false);
-					if (player.lust > 80) outputText(" drips pre-cum", false);
-					else if (player.lust > 40) outputText(" grows harder", false);
-					else outputText(" hardens", false);
-					outputText(" from the sexual sight, and you feel a compulsion to rush to your wife and take her on the spot.  Obviously she's not really your wife, but after so many fuckings it kind of makes sense to think of her that way.", false);
-					if (player.lust < 70) outputText("  Still, you don't want to fuck her right now!", false);
+					outputText("With effort you manage to wrench your eyes away from the inviting folds of Tamani's vagina.  ");
+					if (player.totalCocks() > 1) outputText("Each of y");
+					else outputText("Y");
+					outputText("our " + player.multiCockDescriptLight());
+					if (player.lust100 > 80) outputText(" drips pre-cum");
+					else if (player.lust100 > 40) outputText(" grows harder");
+					else outputText(" hardens");
+					outputText(" from the sexual sight, and you feel a compulsion to rush to your wife and take her on the spot.  Obviously she's not really your wife, but after so many fuckings it kind of makes sense to think of her that way.");
+					if (player.lust100 < 70) outputText("  Still, you don't want to fuck her right now!");
 				}
 				else {
-					outputText("Struggling, you pull your eyes back into your head and away from Tamani's gorgeous slit.  You shudder, feeling ", false);
-					if (player.totalCocks () > 1) outputText("each of ", false);
-					outputText("your " + player.multiCockDescriptLight(), false);
-					if (player.lust <= 41) outputText(" thicken perceptibly", false);
-					else if (player.lust <= 81) outputText(" twitch eagerly", false);
-					else outputText("drip pre-cum", false);
-					outputText(", responding to the overly sensual goblin's body.  You start to approach her, but stop yourself, realizing you were about to pick up your wife and fuck her on the spot.  You know she's not really your wife, but you have a hard time thinking of her as anything else, save for maybe your mistress.", false);
-					if (player.lust < 70) outputText("  Regardless, you're resolute in your desire not to fuck her right now!", false);
+					outputText("Struggling, you pull your eyes back into your head and away from Tamani's gorgeous slit.  You shudder, feeling ");
+					if (player.totalCocks () > 1) outputText("each of ");
+					outputText("your " + player.multiCockDescriptLight());
+					if (player.lust100 <= 41) outputText(" thicken perceptibly");
+					else if (player.lust100 <= 81) outputText(" twitch eagerly");
+					else outputText("drip pre-cum");
+					outputText(", responding to the overly sensual goblin's body.  You start to approach her, but stop yourself, realizing you were about to pick up your wife and fuck her on the spot.  You know she's not really your wife, but you have a hard time thinking of her as anything else, save for maybe your mistress.");
+					if (player.lust100 < 70) outputText("  Regardless, you're resolute in your desire not to fuck her right now!");
 				}
 			}
 			//HIGH HYPNO VALUE
 			else {
 				selector = rand(2);
 				if (selector == 0) {
-					outputText("You barely manage to step yourself from lunging forward to bury your mouth between your mistress's legs.  Hard and trembling between your legs, ", false);
-					if (player.totalCocks() > 1) outputText("each of ", false);
-					outputText("your " + player.multiCockDescriptLight() + " aches with need.  You battle with the compulsion to kneel before your short, stacked mistress and perform your duties as her breeder husband.", false);
+					outputText("You barely manage to step yourself from lunging forward to bury your mouth between your mistress's legs.  Hard and trembling between your legs, ");
+					if (player.totalCocks() > 1) outputText("each of ");
+					outputText("your " + player.multiCockDescriptLight() + " aches with need.  You battle with the compulsion to kneel before your short, stacked mistress and perform your duties as her breeder husband.");
 				}
 				else {
-					outputText("You wrench your gaze from the juicy mound before you with great difficulty.  The desire to submit to your wife and fuck her on the spot rages through your body, melting your resistance into liquid lust and pooling it in your groin.  ", false);
-					if (player.totalCocks() > 1) outputText("Each of y", false);
-					else outputText("Y", false);
-					outputText("our " + player.multiCockDescriptLight() + " pulses and dribbles pre-cum, aching to do its duty and fire load after load into Tamani's perfect pussy.", false);
+					outputText("You wrench your gaze from the juicy mound before you with great difficulty.  The desire to submit to your wife and fuck her on the spot rages through your body, melting your resistance into liquid lust and pooling it in your groin.  ");
+					if (player.totalCocks() > 1) outputText("Each of y");
+					else outputText("Y");
+					outputText("our " + player.multiCockDescriptLight() + " pulses and dribbles pre-cum, aching to do its duty and fire load after load into Tamani's perfect pussy.");
 				}
 			}
-			game.dynStats("lus", (rand(player.lib/5) +3+(flags[kFLAGS.TAMANI_TIMES_HYPNOTISED])));
+			var lustDmg:int = rand(player.lib/5) +3+(flags[kFLAGS.TAMANI_TIMES_HYPNOTISED]);
+			player.takeLustDamage(lustDmg, true);
 			combatRoundOver();
 		}
 
-		public function tamaniEjaculate():void {
-			this.lustVuln += .5;
-			this.sens += 15;
-			this.lust -= 75;
-			outputText("Tamani strokes her dick a few times, and cums almost instantly. Her aim is impeccable- or perhaps you did not move as much as you could have- and her cum splatters all over you.");
-			outputText("The alchemical modifications she's made to both her cum and you start reacting with each other, and your cunt starts dripping even harder as it cries for something to fill it.");
-			//if (player.statusEffectv2(StatusEffects.TemporaryHeat) > 0 {
-			//	player.addStatusValue(StatusEffects.TemporaryHeat, 2, 0.5);
-			//} else {player.createStatusEffect(StatusEffects.TemporaryHeat, 0.0.5, 0.0); }
-			//if (player.inHeat) {
-			player.goIntoHeat(true,0.3);
-			game.dynStats("lus+", 8 + (player.lib / 10) + (player.sens / 10));
-			outputText("Tamani's cock seems a bit softer after her ejaculation, but you bet she'll be easier to arouse again now that she's getting into it- and she'll be more sensitive.");
-		}
-		
-		override protected function performCombatAction():void {
-			if (flags[kFLAGS.TAMANI_GENDER] != 2) return super.performCombatAction();
-			
-			if (100 - this.lust < 25 * lustVuln) tamaniEjaculate();
-			if (player.inte > (player.str + player.spe) / 2) {
-				
-			} else {
-				
-			}
-			
-			return super.performCombatAction();
-		}
-		
 		override public function defeated(hpVictory:Boolean):void
 		{
 			clearOutput();
@@ -119,23 +92,24 @@ package classes.Scenes.Areas.Forest
 		override public function won(hpVictory:Boolean, pcCameWorms:Boolean):void
 		{
 			if (flags[kFLAGS.TAMANI_GENDER] == 2) game.forest.tamaniScene.tamaniBreedsThatSluttyCuntYouWhore(); return;
+			clearOutput();
 			if (hpVictory){
 				if (player.totalCocks() > 0) {
 					if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
 					else game.forest.tamaniScene.tamaniSexLetHer();
 				}else {
-					outputText("Tamani sighs as you begin to lose conscious, \"<i>You dummy, why'd you get rid of the fun parts?</i>\"", true);
+					outputText("Tamani sighs as you begin to lose conscious, \"<i>You dummy, why'd you get rid of the fun parts?</i>\"");
 					game.combat.cleanupAfterCombat();
 				}
 			} else {
 				if (player.totalCocks() > 0) {
 				//hypnoslut loss scene
 				if (game.flags[kFLAGS.TAMANI_TIMES_HYPNOTISED] > 19 && rand(2) == 0) {
-						game.forest.tamaniScene.getRapedByTamaniYouHypnoSlut();
-					} else if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
-					else game.forest.tamaniScene.tamaniSexLetHer();
+					game.forest.tamaniScene.getRapedByTamaniYouHypnoSlut();
+				} else if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();
+				else game.forest.tamaniScene.tamaniSexLetHer();
 				} else {
-					outputText("You give into your lusts and masturbate, but Tamani doesn't seem to care.  She kicks and punches you over and over, screaming, \"<i>You dummy, why'd you get rid of the fun parts?</i>\"", true);
+					outputText("You give into your lusts and masturbate, but Tamani doesn't seem to care.  She kicks and punches you over and over, screaming, \"<i>You dummy, why'd you get rid of the fun parts?</i>\"");
 					game.player.takeDamage(9999);
 					game.combat.cleanupAfterCombat();
 				}

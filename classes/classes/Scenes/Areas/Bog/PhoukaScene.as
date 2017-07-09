@@ -106,6 +106,7 @@ package classes.Scenes.Areas.Bog
 
 			menu();
 			if (hasAlcohol) addButton(0, "Offer Drink", phoukaStuckOfferWhiskey);
+			else addDisabledButton(0, "Offer Drink", "You have no whiskey to offer.");
 			addButton(1, "Talk", phoukaTalk);
 			addButton(2, "Fight", phoukaStartFight);
 		}
@@ -153,7 +154,7 @@ package classes.Scenes.Areas.Bog
 				outputText(" if perhaps there's some way he could release you.")
 			else outputText(" if he really wants a taste of what you're going to give him.");
 
-			if (player.cor + rand(125) <= 110) { //Players with 0% corruption have a 12% chance that the Phouka is willing to talk, players with 100% corruption have a 92% chance
+			if (((player.cor + rand(125) + player.corruptionTolerance() + (player.level - 10)) * 4) <= 110) { //Players with 0% corruption have a 12% chance that the Phouka is willing to talk, players with 100% corruption have a 92% chance
 				//The phouka is not in the mood for talk, start the fight gagged as punishment for trying to talk
 				outputText("  You open your mouth to say something more to the ");
 				if (player.cor < 34)
@@ -191,7 +192,7 @@ package classes.Scenes.Areas.Bog
 						break;
 					case 7:
 					case 8: //Decides he doesn't want you
-						outputText(" takes a long look at you.  Finally he grins and tells you <i>“You know what?  You're not quite what I was lookin for.  Us phooka got varied tastes, ya know.”</i>  Then the phouka lazily flies off, whistling some strange tune to himself.\n\nYou wriggle against your bonds and after a few minutes you are free once more.  You decide that's enough excitement for now and head back to camp.");
+						outputText(" takes a long look at you.  Finally he grins and tells you <i>“You know what?  You're not quite what I was lookin for.  Us phouka got varied tastes, ya know.”</i>  Then the phouka lazily flies off, whistling some strange tune to himself.\n\nYou wriggle against your bonds and after a few minutes you are free once more.  You decide that's enough excitement for now and head back to camp.");
 						if (flags[kFLAGS.PHOUKA_LORE] == 0) flags[kFLAGS.PHOUKA_LORE] = 1; //Now you know what to call them
 						doNext(camp.returnToCampUseOneHour);  //Return to camp, 1 hour used
 						break;
@@ -255,7 +256,7 @@ package classes.Scenes.Areas.Bog
 			flags[kFLAGS.PREGNANCY_CORRUPTION]++; //Faerie or phouka babies become more corrupted, no effect if the player is not pregnant or on other types of babies
 			consumables.P_WHSKY.phoukaWhiskeyAddStatus(player);
 			if (player.tou < 30) {
-				outputText("\n\nYou quickly end up drunk and begin a rambling story about your adventures.  The phooka is a good listener, though he asks for lots of detail whenever you bring up sex or potential sex of any kind.  You realize you're in real trouble, turned on and watching the phouka stroking his cock, which is still hard despite the alcohol he's been downing.  He notices your interest and says <i>“Now that you're relaxed, let's go for the main course.  I'll make sure you'll remember it even once you're sober.”</i>");
+				outputText("\n\nYou quickly end up drunk and begin a rambling story about your adventures.  The phouka is a good listener, though he asks for lots of detail whenever you bring up sex or potential sex of any kind.  You realize you're in real trouble, turned on and watching the phouka stroking his cock, which is still hard despite the alcohol he's been downing.  He notices your interest and says <i>“Now that you're relaxed, let's go for the main course.  I'll make sure you'll remember it even once you're sober.”</i>");
 
 				menu();
 				phoukaSexAddStandardMenuChoices();
@@ -281,7 +282,7 @@ package classes.Scenes.Areas.Bog
 			}
 			else { //Less obvious pregnancy or player not pregnant
 				outputText("<i>“You damn prude.  That does it! I don't have to sit around listening to this.  I try to be friendly like some people say ya should instead of just raping ya.  What's it get me, huh?”</i>");
-				if ((player.lust > 66) || ((player.cor > 50) && (player.lust > 33))) {
+				if ((player.lust100 > 66) || ((player.cor > 50) && (player.lust > 33))) {
 					outputText("\n\nYou begin to extract yourself from the bog.  As you do you feel the net of roots and vines rubbing against your body.  A little sex with this shapeshifter to tide you over might just hit the spot.");
 					menu();
 					phoukaSexAddStandardMenuChoices();
@@ -324,7 +325,7 @@ package classes.Scenes.Areas.Bog
 			}
 			else if (flags[kFLAGS.PHOUKA_LORE] == 3) {
 				flags[kFLAGS.PHOUKA_LORE] += 1;
-				outputText("\n\nOnce you're feeling warm and cozy despite the dampness of the bog this phouka starts to tell you more about his faerie cousins.  You already know the phouka like nothing more than to rape forest faeries if they can get them alone, but this one goes into more detail.\n\nHe tells you that faeries are supposed to be born out of special flowers after a 'magicy sparkly fucken ritual'. <i>“When the demons came they didn't like that faeries was so pure an chaste that they didn't even fuck to make babies.”</i> His face breaks into a wide smile as he says <i>“Turns out faeries always had all the right parts for carrying babies, just no men to knock 'em up.”</i>\n\n<i>“Anyways, best thing that ever happened was one of those demons used its brains for more than screwing for a while.  I don't know what perverted recipe it came up with, but they used that to made a few of us better.  We tried to share the joys of cock with those stuck up bitches an all they wanted was to 'cure' us.”</i> The bunny-morph spits that last word out like a curse. <i>“Anyway, we learned how ta get our own back.  When we find 'em alone, we catch those pint size pretties, we put 'em in a cage, an' we get ‘em blind drunk with whiskey.  Then we feed 'em rizza root 'til they're our size.  An' last we pump cum inside 'em until they've got a belly like an apple.  It's a sight to see, I tell ya.”</i>");
+				outputText("\n\nOnce you're feeling warm and cozy despite the dampness of the bog this phouka starts to tell you more about his faerie cousins.  You already know the phouka like nothing more than to rape forest faeries if they can get them alone, but this one goes into more detail.\n\nHe tells you that faeries are supposed to be born out of special flowers after a 'magicy sparkly fucken ritual'. <i>“When the demons came they didn't like that faeries was so pure and chaste that they didn't even fuck to make babies.”</i> His face breaks into a wide smile as he says <i>“Turns out faeries always had all the right parts for carrying babies, just no men to knock 'em up.”</i>\n\n<i>“Anyways, best thing that ever happened was one of those demons used its brains for more than screwing for a while.  I don't know what perverted recipe it came up with, but they used that to made a few of us better.  We tried to share the joys of cock with those stuck up bitches an all they wanted was to 'cure' us.”</i> The bunny-morph spits that last word out like a curse. <i>“Anyway, we learned how ta get our own back.  When we find 'em alone, we catch those pint size pretties, we put 'em in a cage, an' we get ‘em blind drunk with whiskey.  Then we feed 'em rizza root 'til they're our size.  An' last we pump cum inside 'em until they've got a belly like an apple.  It's a sight to see, I tell ya.”</i>");
 			}
 			else if (flags[kFLAGS.PHOUKA_LORE] == 4) {
 				//More can come later, right now we don’t increment here //flags[kFLAGS.PHOUKA_LORE] += 1;
@@ -468,7 +469,6 @@ package classes.Scenes.Areas.Bog
 			if (player.vaginas.length == 0) {
 				outputText("There's a painful pressure in your groin... then you nearly black out and feel your crotch pull apart.  At first you assume it's some kind of hernia, then you realize you have a vagina once more.\n\n");
 				player.createVagina();
-				player.genderCheck();
 			}
 			if (flags[kFLAGS.PREGNANCY_CORRUPTION] > 6) { //You’ve been drinking like a fish, haven’t you?
 				outputText("Your belly begins to deflate and a stream of nearly black sludge oozes from your vagina.  You lay on the ground and wait, wondering how this birth will go.  As your belly gets flatter and flatter you begin to wonder where the baby is.\n\nThen you feel it - something is stuck inside you.  You begin to push and realize it's not stuck - it doesn't want to come out, and it's holding on to your cervix!  Your body, on the other hand, does want it out and keeps going through contraction after contraction to rid you of this little, freeloading bastard.  The black molasses makes your birth canal sticky, helping to hold the baby in place.  You soon lose track of time as the contractions keep coming.  After several minutes you are beginning to wonder if you'll ever be free of this child when you feel a tingling in your clit.\n\nDespite the pain, or perhaps because of it, your body is headed for an orgasm!  At first you try to fight it, but you soon realize there’s no point.  You’re still in enough pain that you can do nothing but lie there and wait.  Finally you cum and you feel a wash of girl-cum drip from your gaping hole.[if (hasCock = true) At the same time [eachCock] fires numerous strands of cum, coating you and the ground around you.]  Luckily all the girl-cum you produced also fills your pussy and starts to dilute the thick black molasses inside you.  After many more contractions, you feel the baby shift inside you and it finally pops free, landing on the ground between your thighs.\n\nThe " + phoukaName() + " seems to be almost full grown at birth.  He spins round and stares at you, as if it's your fault he had to leave the comfort of your womb.  Before you recover enough to do much, he spreads his wings, shakes the sludge away and flies off toward the bog.\n\nYou lay on the ground, utterly exhausted by the ordeal.  You can feel a slight burning sensation inside your pussy and a throbbing from your womb.  You’re sure that carrying that nasty looking black sludge around inside you has affected your ability to produce children.");
@@ -476,7 +476,7 @@ package classes.Scenes.Areas.Bog
 				if (player.fertility < 5) player.fertility = 5;
 				player.changeFatigue(75);
 				flags[kFLAGS.BIRTHS_PHOUKA]++;
-				player.orgasm();
+				player.orgasm('Vaginal');
 			}
 			else if (flags[kFLAGS.PREGNANCY_CORRUPTION] > 0) {
 				outputText("Your belly begins to deflate and a stream of thick grey sugary sludge dribbles from your vagina.  You lay on the ground and wait, wondering how this birth will go.  As your belly gets flatter and flatter you begin to wonder where the baby is.\n\nThen you feel it - something is stuck inside you.  You begin to push and realize it's not stuck - it doesn't want to come out and it's holding on to your cervix!  Your body, on the other hand, does want it out and keeps going through contraction after contraction to rid you of this little freeloading bastard.  After several minutes you are beginning to wonder if you'll ever be free of this child, when it suddenly shifts inside you and pops free, landing on the ground between your thighs.\n\nThe " + phoukaName() + " seems to be almost full grown at birth.  He spins round and stares at you, as if it's your fault he had to leave the comfort of your womb.  Before you recover enough to do much, he spreads his wings, shakes the sludge away and flies off toward the bog.\n\nYou lay on the ground, exhausted by the ordeal and wondering if carrying that nasty looking sludge around inside you has affected your ability to produce children.");
@@ -536,6 +536,8 @@ package classes.Scenes.Areas.Bog
 
 		protected function phoukaSexAddStandardMenuChoices():void
 		{ //This happens several times so it's broken out here in case additional options get added later
+			addDisabledButton(1, "Bunny", "This scene requires you to have vagina.");
+			addDisabledButton(2, "Horse", "This scene requires you to have vagina.");
 			if (player.hasVagina()) {
 				addButton(1, "Bunny", phoukaSexBunnyChoice);
 				addButton(2, "Horse", phoukaSexHorseChoice);
@@ -571,7 +573,7 @@ package classes.Scenes.Areas.Bog
 			}
 			phoukaForm = PHOUKA_FORM_BUNNY;
 			outputText("\n\nThe bunny advances on you and says <i>“I can't wait to blow my load inside that nice pussy of yours.”</i> His paws split apart into fingers in a way you are sure would be excruciating for a real rabbit.  The bunny slides his hands over your belly while his nose sniffs at the back of your neck. [if (isPregnant = true)<i>“They say pregnant girls love ta fuck.  You ready for some meat?”</i>][if (isPregnant = false)His fingers begin to tease your [clit] as he asks you <i>“Ready for some meat?”</i>]");
-			if ((player.lust > 80) || (player.cor > 50))
+			if ((player.lust100 > 80) || (player.cor > 50))
 				outputText(" You can only moan in response.  The thought of this rabbit stuffing you has your [vagina] leaking already.");
 			else
 				outputText(" You are powerless to stop the bunny-morph as he undoes the last few straps holding your [armor] in place.");
@@ -630,7 +632,7 @@ package classes.Scenes.Areas.Bog
 			else
 				outputText("Realizing that you haven't yet cum, the goat morph continues to rock in and out of your ass.  The air fills with the sucking and slurping noises of the goat's seed alternately being sucked deeper or forced out of your ass.  Finally you reach your limit and cum[if (hasCock = true), your own cock turning the mud white beneath you].");
 			dynStats("cor", rand(1) + (postCombat ? 1 : 3)); //Extra two corruption for being enough of a pervert to want to fuck the phouka
-			player.orgasm();				
+			player.orgasm('Anal');				
 			if (postCombat) outputText("  While you're recovering the goat-morph reaches into your gem pouch and takes a handful.");
 			outputText("\n\nThe goat morph begins to dissolve and reform.  Soon you're looking at a tiny faerie that buzzes up in front of your face.  He says <i>“[if (hasVagina = true)Well I enjoyed that, and it looks like you did too.  Next time I catch ya I really want te try yer cunt.  Can’t wait te see yer belly all swollen up with my seed.][if (hasVagina = false)Do us both a favor - eat some eggs or drink some milk before ye come back.  Since you like being my bitch so much ye might as well have the right parts for it.]”</i> With that the " + phoukaName() + " buzzes up into the canopy and out of sight.");
 			if (postCombat) {
@@ -689,7 +691,7 @@ package classes.Scenes.Areas.Bog
 				outputText("Even as the invader thrusts deeper you push back against it. <i>“Good girl, ya love horse cock, don't ya?”</i> whispers the " + phoukaName() + ".  ");
 			player.cuntChange(80, true);
 			outputText("\n\n[if (isPregnant = true)You feel the head smack against your cervix, but with a child already inside your womb, there's no way for it to go any deeper.  The horse morph bears down on you in a futile attempt to force more of his length inside.][if (isPregnant = false)His cock finds your cervix and the horse morph pushes forward with his powerful hind legs.  You black out, you can't tell for how long, but when you awaken you can feel his cockhead and several inches of his thick shaft pulsing inside your womb.  Every time his heart beats you feel it along the veins that are being squeezed by your violated cervix.  He stops moving and sighs <i>“That's what I needed girly.”</i>]\n\n");
-			if ((player.lust > 80) || (player.cor > 50))
+			if ((player.lust100 > 80) || (player.cor > 50))
 				outputText("You pant and moan, waiting for the inevitable flood from his cantaloupe-sized nuts.  You're ready to get off just from the feeling of being so stuffed, so violated.");
 			else {
 				outputText("You whimper in pain, hoping the " + phoukaName() + " will soon be done with you.  ");
@@ -724,7 +726,7 @@ package classes.Scenes.Areas.Bog
 			else {
 				outputText("[butt].");
 				player.buttChange(20, true);
-				outputText("\n\nYou're loving the feeling of this faerie's cock sliding around inside your asshole.  In fact you're loving it so much that you're surprised when he thrusts upward and you feel his prick jerking and twitching.  Your colon starts to stretch as the " + phoukaName() + " pumps gallon after gallon into your accomodating asshole.  Your gut expands slightly, making you look slightly pregnant.  ");
+				outputText("\n\nYou're loving the feeling of this faerie's cock sliding around inside your asshole.  In fact you're loving it so much that you're surprised when he thrusts upward and you feel his prick jerking and twitching.  Your colon starts to stretch as the " + phoukaName() + " pumps gallon after gallon into your accommodating asshole.  Your gut expands slightly, making you look slightly pregnant.  ");
 				if (player.isTaur())
 					outputText("You sigh in frustration as the " + phoukaName() + " pulls free from your ass, obviously about to leave.  He notices your condition and thinks better of it. <i>“Just gimme a sec.  I’ll get ye off,”</i> he says. <i>“After all, I do want ye to come back fer more.”</i>\n\nHe starts jacking himself off, whispering something to himself under his breath.  When his cock looks nice and hard he grabs your flanks and drives the full length back inside you.  As he pistons into your rectum, you feel that denied orgasm building and at last you cum.");
 				else
@@ -864,7 +866,7 @@ package classes.Scenes.Areas.Bog
 		
 		protected function phoukaSexPregnateEnd(postCombat:Boolean):void
 		{ //Everything after the sex. Handles awards, gem loss and text for player leaving the bog
-			player.orgasm();
+			player.orgasm('Generic');
 			dynStats("cor", rand(1) + (postCombat && (phoukaForm != PHOUKA_FORM_FAERIE) ? 1 : 3)); //Extra two corruption for being enough of a pervert to want to fuck the phouka
 			if (phoukaForm == PHOUKA_FORM_FAERIE) { //In this case postCombat means you need an award because you must have won to get faerie sex
 					outputText("\n\nSatisfied for now you begin to put your clothes back on.  Maybe that " + phoukaName() + " will learn, maybe not.");

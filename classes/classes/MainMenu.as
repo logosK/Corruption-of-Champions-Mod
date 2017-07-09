@@ -56,7 +56,7 @@ package classes
 			kGAMECLASS.gameStateDirectSet(3);
 			clearOutput();
 			//outputText("<img src=\"logo\" id=\"coc-logo\" height=\"300\" width=\"400\" />\n");
-			outputText("<b>Corruption of Champions (" + kGAMECLASS.version + ")</b>", false);
+			outputText("<b>Corruption of Champions (" + kGAMECLASS.version + ")</b>");
 			
 			if (CoC_Settings.debugBuild)
 				outputText(" Debug Build");
@@ -76,7 +76,7 @@ package classes
 			addButton(1, "Settings", kGAMECLASS.gameSettings.settingsScreenMain, null, null, null, "Configure game settings and enable cheats.");
 			addButton(2, "Instructions", howToPlay, null, null, null, "How to play.  Starting tips.  And hotkeys for easy left-handed play...");
 			addButton(3, "Achievements", kGAMECLASS.achievementList.achievementsScreen, null, null, null, "View all achievements you have unlocked so far.");
-			addButton(4, "Mod Thread", openURL, "https://forum.fenoxo.com/threads/coc-revamp-mod-v1-3-25-for-coc-1-0-2.3/", null, null, "Check the official mod thread on Fenoxo's forum.");
+			addButton(4, "Mod Thread", openURL, "https://forum.fenoxo.com/threads/coc-revamp-mod.3/", null, null, "Check the official mod thread on Fenoxo's forum.");
 				
 			addButton(5, "Credits", creditsScreen, null, null, null, "See a list of all the cool people who have contributed to content for this game!");
 			addButton(6, "Image Credits", imageCreditsScreen, null, null, null, "Check out who contributed to the image pack.");
@@ -123,6 +123,8 @@ package classes
 				outputText("\n\n<b>Easy Mode On: Bad-ends can be ignored.</b>");
 			if (flags[kFLAGS.SILLY_MODE_ENABLE_FLAG])
 				outputText("\n\n<b>SILLY MODE ENGAGED: Crazy, nonsensical, and possibly hilarious things may occur.</b>");
+			if (flags[kFLAGS.PRISON_ENABLED])
+				outputText("\n\n<b>PRISON ENABLED: The prison can be accessed. WARNING: The prison is very buggy and may break your game. Enter it at your own risk!</b>");
 			if (flags[kFLAGS.ITS_EVERY_DAY])
 				outputText("\n\n<b>Eternal holiday enabled.</b>");
 			if (kGAMECLASS.plains.bunnyGirl.isItEaster())
@@ -140,11 +142,11 @@ package classes
 		public function howToPlay():void {
 			clearOutput();
 			displayHeader("Instructions");
-			outputText("<b><u>How To Play:</u></b>\nClick the buttons corresponding to the actions you want to take.  Your 'goal' is to obviously put an end to the demonic corruption around you, but do whatever the hell you want.  There is a story but sometimes it's fun to ignore it.\n\n", false);
-			outputText("<b>Exploration:</b>\nThe lake is a safe zone when you start the game.  It's a good place to explore, and Whitney's farm can offer some nice stat boosts to help get you on your feet. Once you feel comfortable, the forest is probably the next safest area, but beware of tentacle monsters.  The desert is the next toughest area, and the mountains offer further challenges.  There are more areas beyond that, but that's a good way to get started.  You'll uncover plenty of new 'places' exploring, which can be accessed from the <b>Places</b> menu.  You'll also find some interesting characters when you try to discover new explorable locations by choosing <b>Explore</b> twice.\n\n", false);
-			outputText("<b>Combat:</b>\nCombat is won by raising an opponent's lust to 100 or taking their HP to 0.  You lose if your enemy does the same to you.  Loss isn't game over, but some losses will make it harder in the future by lowering your stats.  Beware.  Don't be afraid to spam the <b>Run</b> option when you're in over your head.\n\n", false);
-			outputText("<b>Controls:</b>\nThe game features numerous hot-keys to make playing quicker and easier.\nP key - Perks Menu\nD key - Data Menu\nA key - Appearance Screen\n1 Through 5 - The top row of 'choice' buttons.\n6 Through 0 - The bottom row of 'choice' buttons.\nQ through T - Alternative bottom 'choice' hotkeys.\nSpace Bar - Next/Back/Leave\nHome Key - Toggle text field background.\nS key - Stats Screen\n(Save Hotkeys - May not work in all players)\nF1-F5 - Quicksave to slot 1 through 5.  Only works when Data is visible.\nF6-F0 - Quick Load from slots 1-5.\n\n", false);
-			outputText("<b>Save often using the Data Menu</b> - you never know when your journey will come to an end!", false);
+			outputText("<b><u>How To Play:</u></b>\nClick the buttons corresponding to the actions you want to take.  Your 'goal' is to obviously put an end to the demonic corruption around you, but do whatever the hell you want.  There is a story but sometimes it's fun to ignore it.\n\n");
+			outputText("<b>Exploration:</b>\nThe lake is a safe zone when you start the game.  It's a good place to explore, and Whitney's farm can offer some nice stat boosts to help get you on your feet. Once you feel comfortable, the forest is probably the next safest area, but beware of tentacle monsters.  The desert is the next toughest area, and the mountains offer further challenges.  There are more areas beyond that, but that's a good way to get started.  You'll uncover plenty of new 'places' exploring, which can be accessed from the <b>Places</b> menu.  You'll also find some interesting characters when you try to discover new explorable locations by choosing <b>Explore</b> twice.\n\n");
+			outputText("<b>Combat:</b>\nCombat is won by raising an opponent's lust to 100 or taking their HP to 0.  You lose if your enemy does the same to you.  Loss isn't game over, but some losses will make it harder in the future by lowering your stats.  Beware.  Don't be afraid to spam the <b>Run</b> option when you're in over your head.\n\n");
+			outputText("<b>Controls:</b>\nThe game features numerous hot-keys to make playing quicker and easier.\nP key - Perks Menu\nD key - Data Menu\nA key - Appearance Screen\n1 Through 5 - The top row of 'choice' buttons.\n6 Through 0 - The bottom row of 'choice' buttons.\nQ through T - Alternative bottom 'choice' hotkeys.\nSpace Bar - Next/Back/Leave\nHome Key - Toggle text field background.\nS key - Stats Screen\n(Save Hotkeys - May not work in all players)\nF1-F5 - Quicksave to slot 1 through 5.  Only works when Data is visible.\nF6-F0 - Quick Load from slots 1-5.\n\n");
+			outputText("<b>Save often using the Data Menu</b> - you never know when your journey will come to an end!");
 			doNext(mainMenu);
 		}
 
@@ -172,13 +174,15 @@ package classes
 			outputText("</ul>");
 			outputText("<b>Game Mod Supplementary Events:</b>\n");
 			outputText("<ul>");
-			outputText("<li> worldofdrakan (Pigtail Truffles & Pig/Boar TFs)</li>");
+			outputText("<li> worldofdrakan (Pablo the Pseudo-Imp, Pigtail Truffles & Pig/Boar TFs)</li>");
 			outputText("<li> FeiFongWong (Prisoner Mod)</li>");
 			outputText("<li> Foxxling (Lizan Rogue, Skin Oils & Body Lotions, Black Cock)</li>");
 			outputText("<li> LukaDoc (Bimbo Jojo)</li>");
 			outputText("<li> Kitteh6660 (Behemoth, Cabin, Ingnam, Pure Jojo sex scenes. Feel free to help me with quality control.)</li>");
 			outputText("<li> Ormael (Salamander TFs)</li>");
 			outputText("<li> Coalsack (Anzu the Avian Deity)</li>");
+			outputText("<li> Nonesuch (Izmael)</li>");
+			outputText("<li> IxFa (Naga Tail Masturbation)</li>");
 			outputText("</ul>");
 			outputText("<b>Game Mod Bug Reporting:</b>\n");
 			outputText("<ul>");
@@ -343,7 +347,7 @@ package classes
 			}
 			else
 			{
-				outputText("<b>No Image-Pack Found!</b>\n", false);
+				outputText("<b>No Image-Pack Found!</b>\n");
 			}
 			doNext(mainMenu);
 		}

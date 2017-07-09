@@ -46,7 +46,7 @@ private function calledShot():void {
 	else {
 		outputText("\nOne of her arrows smacks right into your [leg], nearly bowling you over.  God DAMN that hurt! You're going to be limping for a while! ");
 		var affect:int = 20 + rand(5);
-		if (player.findStatusEffect(StatusEffects.CalledShot) >= 0) {
+		if (player.hasStatusEffect(StatusEffects.CalledShot)) {
 			while(affect > 0 && player.spe >= 2) {
 				affect--;
 				player.addStatusValue(StatusEffects.CalledShot,1,1);
@@ -90,7 +90,7 @@ private function calledShot():void {
 			else {
 				outputText("\nHer shield catches you right in the face, sending you tumbling to the ground and leaving you open to attack! ");
 				damage = player.takeDamage(damage, true);
-				if (rand(2) == 0 && player.findStatusEffect(StatusEffects.Stunned) < 0) {
+				if (rand(2) == 0 && !player.hasStatusEffect(StatusEffects.Stunned)) {
 					player.createStatusEffect(StatusEffects.Stunned,0,0,0,0);
 					outputText(" <b>The hit stuns you.</b>");
 				}
@@ -124,7 +124,7 @@ private function calledShot():void {
 				// lustDown.visible = false;
 				// lustUp.visible = true;
 				lustDelta = Math.round(lustDelta * 10)/10;
-				outputText(" (" + lustDelta + ")", false);
+				outputText(" (" + lustDelta + ")");
 			}
 		}
 
@@ -134,7 +134,7 @@ private function calledShot():void {
 			outputText("Seeing a momentary lull in the melee, " + flags[kFLAGS.HELSPAWN_NAME] + " slips out of reach, stumbling back and clutching at the bruises forming all over her body.  \"<i>Come on, " + flags[kFLAGS.HELSPAWN_NAME] + ", you can do this. Focus, focus,</i>\" she mutters, trying to catch her breath.  A moment later and she seems to have taken a second wind as she readies her weapon with a renewed vigor.");
 			lust -= 30;
 			if (lust < 0) lust = 0;
-			addHP(eMaxHP() / 3.0);
+			addHP(maxHP() / 3.0);
 		}
 
 		override public function defeated(hpVictory:Boolean):void

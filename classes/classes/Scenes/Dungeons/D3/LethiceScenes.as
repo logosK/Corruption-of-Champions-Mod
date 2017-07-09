@@ -46,6 +46,7 @@ package classes.Scenes.Dungeons.D3
 			if (player.cor < 90)
 				goFight();
 			else {
+				outputText("Do you fight Lethice and attempt to overthrow her or join her in ruling over Mareth, spreading even more corruption?");
 				menu();
 				addButton(0,"Fight",goFight);
 				addButton(1,"Consort",joinHer);
@@ -92,10 +93,14 @@ package classes.Scenes.Dungeons.D3
 			if(player.hasCock())
 			{
 				addButton(0,"Plow Her",plowHer);
+			} else {
+				addDisabledButton(0, "Plow Her", "This scene requires you to have cock.");
 			}
 			if(player.hasVagina())
 			{
 				addButton(1,"Queen Her",queenHer);
+			} else {
+				addDisabledButton(1, "Queen Her", "This scene requires you to have vagina.");
 			}
 			addButton(2,"Boob Play",boobPlay,hpVictory);
 			var hasLethicite:Boolean = player.hasKeyItem("Sheila's Lethicite") > 0 || player.hasKeyItem("Stone Statue Lethicite") > 0;
@@ -503,13 +508,14 @@ package classes.Scenes.Dungeons.D3
 		{
 			clearOutput();
 			outputText("What name do you give the new woman you and Marae have made?");
+			menu();
+			addButton(0,"Next",redemptionIIIGoName);
 			mainView.nameBox.text = "";
 			mainView.nameBox.visible = true;
 			mainView.nameBox.width = 165;
 			mainView.nameBox.x = mainView.mainText.x + 5;
 			mainView.nameBox.y = mainView.mainText.y + 3 + mainView.mainText.textHeight;
-			menu();
-			addButton(0,"Next",redemptionIIIGoName);
+
 		}
 		
 		private function redemptionIIIGoName():void
@@ -517,7 +523,7 @@ package classes.Scenes.Dungeons.D3
 			if(mainView.nameBox.text == "")
 			{
 				clearOutput();
-				outputText("<b>You must select a name.</b>",false);
+				outputText("<b>You must select a name.</b>");
 				mainView.nameBox.x = mainView.mainText.x + 5;
 				mainView.nameBox.y = mainView.mainText.y + 3 + mainView.mainText.textHeight;
 				menu();
@@ -688,8 +694,7 @@ package classes.Scenes.Dungeons.D3
 			outputText("\n\n<i>“Ah, now <b>that</b> is what I like to see,”</i> she purrs, lifting her arms triumphantly to the gibbering host of demons still crowding around the throne room. <i>“Another would-be savior on " + player.mf("his", "her") + " knees before me! Once again,”</i> she sneers, turning her gaze down to you, her demonic heels clacking one after the other on the cold floor, <i>“we see that nothing... no one... can stand against me.”</i>");
 			outputText("\n\nLethice reaches down, cupping your chin with her long-nailed fingers and tilting your head up. She’s not forceful, more like a mother disappointed in her child, forcing you to confront your misdeeds. In her churchy outfit, you could easily mistake her for one of the priestesses that would teach you and the other children back in Ingnam, save for the tremendous wings and curling horns. She must recognize the look you give her, and she smiles almost beatifically. Beautifully.");
 			outputText("\n\n<i>“So powerful, so self-righteous... and here you are, kneeling before me like so many before you. Still, I have to give you credit, Champion. You got so much further than most: I almost broke a sweat breaking you.");
-			if(monster.lust < 50 && monster.HP > monster.eMaxHP() * 0.5)
-			{
+			if (monster.lust100 < 50 && monster.HP > monster.maxHP() * 0.5) {
 				outputText(" Almost.");
 			}
 			outputText("”</i> She licks her lips, and gives your chin a sharp release. <i>“I think you deserve a special... reward... for your efforts, Champion. Oh, except that’s not what you are anymore, is it? A Champion doesn’t bow down, hoping a pretty little demon doesn’t rip " + player.mf("his", "her") + " soul out, does " + player.mf("he", "she") + "? No, that’s something I’d expect my dog to do. Is that what you are: a dog?”</i>");
@@ -790,7 +795,7 @@ package classes.Scenes.Dungeons.D3
 			outputText("\n\n<i>“As for you,”</i> Mistress adds, tugging your leash as she reclines back in her throne, <i>“I expect you to make me cum even harder. Right now.”</i>");
 			outputText("\n\nYou bark eagerly and lunge up into her lap, burying your face between your loving Mistress’s thighs as the doors slam closed behind you, sealing the Champion of Ingnam’s fate...");
 			dynStats("cor", 70);
-			player.orgasm();
+			player.orgasm('Generic');
 			getGame().gameOver();
 			removeButton(1);
 		}
@@ -873,7 +878,13 @@ package classes.Scenes.Dungeons.D3
 		{
 			clearOutput();
 			outputText("<b>Weeks later...</b>\nThey had it. The damned bastards had it. Syrena, the head researcher had figured out how to open a stable portal months ago, but for whatever reason, she kept it from Lethice. There’s a shortage of evidence about what she was actually scheming, but you’d guess she was planning to take a cadre of loyal demons to an untainted plane and set herself up as a queen.");
-			outputText("\n\nNo room for loyalty among demons, you suppose. Still, with the information in these books, you can go home. Taking them back to your camp, you work the rituals on the portal to Ingnam{, assisted by your follower{s}}, and before you know it, the portal’s hazy mists resolve into a perfectly circle opening, one that leads to a familiar cave.");
+			outputText("\n\nNo room for loyalty among demons, you suppose. Still, with the information in these books, you can go home. Taking them back to your camp, you work the rituals on the portal to Ingnam");
+			if (camp.companionsCount() > 0) {
+				outputText(", assisted by your follower");
+				if (camp.companionsCount() > 1)
+					outputText("s");
+			}
+			outputText(", and before you know it, the portal’s hazy mists resolve into a perfectly circle opening, one that leads to a familiar cave.");
 			outputText("\n\nWill you seek vengeance or justice or with your return?");
 			menu();
 			addButton(0,"Vengeance",goHomeVeng);
@@ -922,10 +933,12 @@ package classes.Scenes.Dungeons.D3
 				outputText(" The townsfolk lynched their traitorous leaders right there and then under the watchful eyes of the Champion. " + player.mf("He","She") + " nodded approvingly when they gave their last twitches, seemingly happy to let small-town justice run its course.");
 			}
 			outputText("\n\nLife continued on. A new council was chosen, but it was Champion [name] that most people followed. " + player.mf("He","She") + " had left on the cusp of adulthood and returned a grizzled");
-			outputText(" warrior. With a seemingly infallable champion there to defend it");
+			outputText(" warrior. With a seemingly infallible champion there to defend it");
 			if(getGame().camp.companionsCount() > 0)
 			{
-				outputText(" to say nothing of " + player.mf("his","her") + " bizarre friends");
+				outputText(" to say nothing of " + player.mf("his","her") + " bizarre friend");
+				if (camp.companionsCount() > 1)
+					outputText("s");
 			}
 			outputText(", Ingnam prospered. The tiny village soon grew into a bustling town, and later a city.");
 			outputText("\n\nWhen age finally claimed the unexpected " + player.mf("hero","heroine") + ", a stone statue of immense proportions was erected so that future generations could forever live under the protection of their greatest hero.");
@@ -967,7 +980,7 @@ package classes.Scenes.Dungeons.D3
 				levelOfFuckedness += 25;
 			if(getGame().camp.campCorruptJojo())
 				levelOfFuckedness += 10;
-			if(player.findStatusEffect(StatusEffects.WandererDemon) >= 0)
+			if(player.hasStatusEffect(StatusEffects.WandererDemon))
 				levelOfFuckedness += 10;
 			if(flags[kFLAGS.AMILY_FOLLOWER] == 2)
 				levelOfFuckedness += 10;
@@ -1002,11 +1015,11 @@ package classes.Scenes.Dungeons.D3
 				levelOfFuckedness -= 20;
 			if(getGame().camp.followerKiha())
 				levelOfFuckedness -= 15;
-			if(player.findStatusEffect(StatusEffects.PureCampJojo) >= 0)
+			if(player.hasStatusEffect(StatusEffects.PureCampJojo))
 				levelOfFuckedness -= 5;
 			if(flags[kFLAGS.KATHERINE_UNLOCKED] == 4)
 				levelOfFuckedness -= 5;
-			if(player.findStatusEffect(StatusEffects.CampRathazul) >= 0)
+			if(player.hasStatusEffect(StatusEffects.CampRathazul))
 				levelOfFuckedness -= 5;
 			if (flags[kFLAGS.CORRUPTED_MARAE_KILLED] > 0)
 				levelOfFuckedness -= 20;

@@ -35,7 +35,7 @@ package classes
 		public static const ClaraFoughtInCamp:StatusEffectType = mk("Clara Fought In Camp");
 		public static const CockPumped:StatusEffectType = mk("Cock Pumped");
 		public static const Contraceptives:StatusEffectType = mk("Contraceptives");
-		public static const CuntStretched:StatusEffectType = mk("CuntStretched");
+		public static const CuntStretched:StatusEffectType = mk("CuntStretched"); //Used only for compatibility with old save files, replaced with attribute on vagina class
 		public static const DefenseCanopy:StatusEffectType = mk("Defense: Canopy");
 		public static const DeluxeOnaholeUsed:StatusEffectType = mk("deluxe onahole used");
 		public static const DogWarning:StatusEffectType = mk("dog warning");
@@ -87,6 +87,7 @@ package classes
 		public static const KnowsHeal:StatusEffectType = mk("Knows Heal");
 		public static const KnowsMight:StatusEffectType = mk("Knows Might");
 		public static const KnowsWhitefire:StatusEffectType = mk("Knows Whitefire");
+		public static const KnowsBlackfire:StatusEffectType = mk("Knows Blackfire");
 		public static const LactationEndurance:StatusEffectType = mk("Lactation Endurance");
 		public static const LactationReduction:StatusEffectType = mk("Lactation Reduction");
 		public static const LactationReduc0:StatusEffectType = mk("Lactation Reduc0");
