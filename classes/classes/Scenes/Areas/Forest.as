@@ -18,6 +18,7 @@ package classes.Scenes.Areas
 	public class Forest extends BaseContent
 	{
 		public var akbalScene:AkbalScene = new AkbalScene();
+		public var akbalHermScene:AkbalHermScene = new AkbalHermScene();
 		public var beeGirlScene:BeeGirlScene = new BeeGirlScene();
 		public var corruptedGlade:CorruptedGlade = new CorruptedGlade();
 		public var essrayle:Essrayle = new Essrayle();
@@ -49,7 +50,7 @@ package classes.Scenes.Areas
 			if (flags[kFLAGS.CAMP_CABIN_PROGRESS] >= 4 && flags[kFLAGS.CAMP_CABIN_WOOD_RESOURCES] < 100 && rand(2) == 0) choice[choice.length] = 6; //Gather woods
 			
 			//Every tenth exploration finds a pumpkin if eligible!
-			if (player.statusEffectv1(StatusEffects.ExploredDeepwoods) % 10 == 0 && isHalloween()) {
+			if (player.statusEffectv1(StatusEffects.ExploredDeepwoods) % 10 == 0 || isHalloween()) {
 				//If Fera isn't free yet...
 				if (player.findPerk(PerkLib.FerasBoonBreedingBitch) < 0 && player.findPerk(PerkLib.FerasBoonAlpha) < 0) {
 					if (date.fullYear > flags[kFLAGS.PUMPKIN_FUCK_YEAR_DONE]) {
@@ -118,7 +119,8 @@ package classes.Scenes.Areas
 					corruptedGlade.intro();
 					break;
 				case 3: //Akbal
-					akbalScene.supahAkabalEdition();
+					if (flags[kFLAGS.TAMANI_GENDER] == 2) {akbalHermScene.supahAkabalEdition();}
+					else {akbalScene.supahAkabalEdition();}
 					break;
 				case 4: //Kitsunes
 					if (rand(3) == 0) kitsuneScene.kitsuneShrine();
@@ -165,6 +167,7 @@ package classes.Scenes.Areas
 			if (rand(2) == 0) choice[choice.length] = 6; //Pigtail Truffle or Healing Pill
 			if (flags[kFLAGS.CAMP_CABIN_PROGRESS] >= 4 && flags[kFLAGS.CAMP_CABIN_WOOD_RESOURCES] < 100 && rand(2) == 0) choice[choice.length] = 7; //Gather woods
 			if (player.level >= 3 || model.time.days >= 20) choice[choice.length] = 8; //Mimic or Succubus (UTG)
+			if (flags[kFLAGS.TAMANI_GENDER] == 2) choice[choice.length] = 10; choice[choice.length] = 10;
 			choice[choice.length] = 9; //Peaceful walk in woods
 			//Helia monogamy fucks
 			if (flags[kFLAGS.PC_PROMISED_HEL_MONOGAMY_FUCKS] == 1 && flags[kFLAGS.HEL_RAPED_TODAY] == 0 && rand(10) == 0 && player.gender > 0 && !kGAMECLASS.helScene.followerHel()) {
@@ -208,17 +211,18 @@ package classes.Scenes.Areas
 			//==============================
 			switch(select) {
 				case 0: //Tamani 25% of all goblin encounters encounter rate
-					if (rand(4) <= 0 && flags[kFLAGS.TAMANI_TIME_OUT] == 0 && player.gender > 0 && flags[kFLAGS.TAMANI_BAD_ENDED] == 0 && (player.totalCocks() > 0 || player.hasKeyItem("Deluxe Dildo") < 0)) {
+					if (!(rand(4) <= 0 && flags[kFLAGS.TAMANI_TIME_OUT] == 0 && player.gender > 0 && flags[kFLAGS.TAMANI_BAD_ENDED] == 0 && (player.totalCocks() > 0 || player.hasKeyItem("Deluxe Dildo") < 0))) {
+					//Determines likelyhood of imp/goblins
+					kGAMECLASS.exploration.genericGobImpEncounters();
+					break;
+					}
+				case 10:
 						if (player.totalCocks() > 0 && flags[kFLAGS.TAMANI_DAUGHTER_PREGGO_COUNTDOWN] == 0 && flags[kFLAGS.TAMANI_NUMBER_OF_DAUGHTERS] >= 24) {
 							tamaniDaughtersScene.encounterTamanisDaughters();
 						}
 						else
 							tamaniScene.encounterTamani();
 						return;
-					}
-					//Determines likelyhood of imp/goblins
-					kGAMECLASS.exploration.genericGobImpEncounters();
-					break;
 				case 1: //Jojo
 					clearOutput();
 					if (flags[kFLAGS.JOJO_STATUS] == 0 && player.findStatusEffect(StatusEffects.PureCampJojo) < 0) {

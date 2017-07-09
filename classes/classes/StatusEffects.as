@@ -53,6 +53,7 @@ package classes
 		public static const ExploredDeepwoods:StatusEffectType = mk("exploredDeepwoods");
 		public static const FaerieFemFuck:StatusEffectType = mk("Faerie Fem Fuck");
 		public static const FaerieFucked:StatusEffectType = mk("Faerie Fucked");
+		public static const FaerieFemRaped:StatusEffectType = mk("Faerie Raped");
 		public static const FappedGenderless:StatusEffectType = mk("fapped genderless");
 		public static const Feeder:StatusEffectType = mk("Feeder");
 		public static const Fertilized:StatusEffectType = mk("Fertilized");

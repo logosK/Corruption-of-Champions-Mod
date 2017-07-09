@@ -222,14 +222,24 @@
 					outputText("\n", false);
 				}
 				else if (daydream == 7) {
-					outputText("grinding your rear into his thick cock, your hand reaching behind you to caress Akbal's cheek.  Having his prick between your ass is almost too distracting, but you know you have a duty to perform.  You raise your hands and address the acolytes before you, kneeling and observing.\n\n", false);
+					if(flags[kFLAGS.TAMANI_GENDER] == 2) {
+						outputText("grinding your rear into her thick cock, your hand reaching behind you to caress Akbal's cheek.  Having her prick between your ass is almost too distracting, but you know you have a duty to perform.  You raise your hands and address the acolytes before you, kneeling and observing.\n\n", false);
 
-					outputText("\"<i>It is glorious to obey our lord,</i>\" you moan out, shivering as you rub against his muscled chest.  \"<i>Our god.</i>\"  Simply being in his presence makes you shiver.  His erect cock has not diminished in the slightest as you work it with your cheeks.  \"<i>Give exaltations unto him,</i>\" you gasp out, \"<i>give his desires unto him.  Fear his wrath!</i>\"  You moan, nearly cumming as you work yourself up.  Focusing carefully, you whisper the next words into the minds of the acolytes.  But love his gifts.\n\n", false);
+						outputText("\"<i>It is glorious to obey our lady,</i>\" you moan out, shivering as you rub against her muscled chest.  \"<i>Our god.</i>\"  Simply being in her presence makes you shiver.  Her erect cock has not diminished in the slightest as you work it with your cheeks.  \"<i>Give exaltations unto her,</i>\" you gasp out, \"<i>give her desires unto her.  Fear her wrath!</i>\"  You moan, nearly cumming as you work yourself up.  Focusing carefully, you whisper the next words into the minds of the acolytes.  But love her gifts.\n\n", false);
 
-					outputText("Akbal's strong hand rests on your shoulder.  You nearly leap in excitement, but allow yourself to be bent forward over the altar.  \"<i>You please me, Buttslut,</i>\" the Lord of Terrestrial Fire whispers in your mind.  It is both title and name, the most important office in the one true religion.  He honors you with his cock, spreading your asshole around him and entering you deep.\n\n", false);
+						outputText("Akbal's strong hand rests on your shoulder.  You nearly leap in excitement, but allow yourself to be bent forward over the altar.  \"<i>You please me, Buttslut,</i>\" the Lady of Terrestrial Fire whispers in your mind.  It is both title and name, the most important office in the one true religion.  She honors you with her cock, spreading your asshole around her and entering you deep.\n\n", false);
 
-					outputText("You cum.  You scream in glorious and divine pleasure, granted by your immaculate god.  The acolytes watching masturbate themselves, in awe of the raptured orgasm Akbal has granted you.  Your tongue lolls out as he pounds into you, the haze of delight briefly devouring your thoughts in all-consuming green fire.\n\n", false);
+						outputText("You cum.  You scream in glorious and divine pleasure, granted by your immaculate god.  The acolytes watching masturbate themselves, in awe of the raptured orgasm Akbal has granted you.  Your tongue lolls out as she pounds into you, the haze of delight briefly devouring your thoughts in all-consuming green fire.\n\n", false);
 
+					} else {
+						outputText("grinding your rear into his thick cock, your hand reaching behind you to caress Akbal's cheek.  Having his prick between your ass is almost too distracting, but you know you have a duty to perform.  You raise your hands and address the acolytes before you, kneeling and observing.\n\n", false);
+
+						outputText("\"<i>It is glorious to obey our lord,</i>\" you moan out, shivering as you rub against his muscled chest.  \"<i>Our god.</i>\"  Simply being in his presence makes you shiver.  His erect cock has not diminished in the slightest as you work it with your cheeks.  \"<i>Give exaltations unto him,</i>\" you gasp out, \"<i>give his desires unto him.  Fear his wrath!</i>\"  You moan, nearly cumming as you work yourself up.  Focusing carefully, you whisper the next words into the minds of the acolytes.  But love his gifts.\n\n", false);
+
+						outputText("Akbal's strong hand rests on your shoulder.  You nearly leap in excitement, but allow yourself to be bent forward over the altar.  \"<i>You please me, Buttslut,</i>\" the Lord of Terrestrial Fire whispers in your mind.  It is both title and name, the most important office in the one true religion.  He honors you with his cock, spreading your asshole around him and entering you deep.\n\n", false);
+
+						outputText("You cum.  You scream in glorious and divine pleasure, granted by your immaculate god.  The acolytes watching masturbate themselves, in awe of the raptured orgasm Akbal has granted you.  Your tongue lolls out as he pounds into you, the haze of delight briefly devouring your thoughts in all-consuming green fire.\n\n", false);
+					}
 					outputText("\"<i>Glory unto Akbal,</i>\" Buttslut whispers.\n\n", false);
 
 					outputText("You awake with a start, grumbling slightly before turning over and trying to get back to sleep.  Your asshole twitches.", false);

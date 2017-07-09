@@ -480,6 +480,11 @@ internal function tentacleLossRape():void {
 		player.boostLactation(.5);
 		monster.HP = 0;
 		if (player.HP == 0) player.HP++;
+		if (player.findStatusEffect(StatusEffects.Feeder) >= 0) {
+			player.addStatusValue(StatusEffects.Feeder,1,1);
+			player.changeStatusValue(StatusEffects.Feeder,2,0);
+			player.boostLactation(0.1);
+		}
 		if (getGame().inCombat) combat.cleanupAfterCombat();
 		else doNext(camp.returnToCampUseOneHour);
 		return;

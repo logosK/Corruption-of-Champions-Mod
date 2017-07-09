@@ -1,4 +1,4 @@
-﻿package classes.Scenes.Areas.Forest{
+package classes.Scenes.Areas.Forest{
 	import classes.*;
 	import classes.GlobalFlags.kFLAGS;
 
@@ -166,13 +166,15 @@ private function tamaniHermBimboAttack():void {
 }
 
 public function tamaniBreedsThatSluttyCuntYouWhore():void {
+	spriteSelect(56);
+	clearOutput();
 	outputText("Tamani doesn't seem interested in foreplay at this point- she rams her massive cock into your slutty hole, and starts up a fast rhythm of slamming in and out. It only takes perhaps ten seconds for her to cum the first time, and she immediately sprays her femgoblin spunk into your womb.", false);
 	outputText("Her lust doesn't seem at all diminished by the orgasm, and once her dick has stopped pumping cum into you she starts moving again, at least as fast as before. This time though, there's something different- when she rams her dick in and out of you, it doesn't move very far, locked in place by the massive ", false);
 	outputText("swelling at the base that is her knot. Before long, she cums again, this time not even slowing down for it. As more and more cum fills your womb, you feel yourself grow more and more horny, and you find yourself rolling your hips into Tamami's cock, panting and moaning happily as she breeds you.", false);
 	outputText("You're not sure what kind of drugs are now included in her cum, but they're extremely effective at turning you into a submissive bitch begging to be bred.\n\nTamani cums into you well over a dozen times before finally collapsing on your swolen stomach, panting.\"<i>Ahhh, that was amazing,</i>\" she signs happily. ", false);
 	//GOBLIN PREGNANCY UNIMPLEMENTED (should make futa goblin daughters, giving birth should cause orgasm and start heat)
 	outputText("She pulls out, and you can see that her balls have deflated from their previous size to something that might fit in on a normal human. She pats your stomach a few times, and it jiggles, the cum filling your womb to bursting sloshing around. \"Once you've given me a few daughters, I'll have to come back and breed you again. Look forward to it!\".", false);
-	outputText("\n\nIn your drugged and horny state, you honestly are. After she grabs her things and leaves, you lay there for close to another hour unable and unwanting to move, before struggling to your feet, collecting your things, and heading back to camp.", false);
+	outputText("\n\nIn your drugged and horny state, you honestly do. After she grabs her things and leaves, you lay there for close to another hour unable and unwanting to move, before struggling to your feet, collecting your things, and heading back to camp.", false);
 	player.orgasm();
 
 	
@@ -184,8 +186,10 @@ public function tamaniBreedsThatSluttyCuntYouWhore():void {
 		player.addPerkValue(PerkLib.AlchemicalFertility,2,15);
 		player.addPerkValue(PerkLib.AlchemicalFertility,3,0.15);
 	}
-	player.goIntoHeat(true,1);
-	
+	player.goIntoHeat(true, 1);
+	if (getGame().inCombat) {
+		combat.cleanupAfterCombat();
+	}
 	doNext(camp.returnToCampUseTwoHours);
 }
 
@@ -197,6 +201,10 @@ private function tamaniHermEncounter():void {
 
 private function tamaniFucksYouYouSluttyWhore():void {
 	//this really needs at least a short intro scene
+
+
+
+	
 	tamaniBreedsThatSluttyCuntYouWhore();
 }
 

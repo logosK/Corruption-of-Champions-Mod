@@ -701,7 +701,7 @@ package classes
 			player.earType = EARS_DRAGON;
 			player.eyeType = EYES_DRAGON;
 			player.wingType = WING_TYPE_DRACONIC_LARGE;
-			player.skinType = SKIN_TYPE_SCALES;
+			player.skinType = SKIN_TYPE_DRAGON_SCALES;
 			player.skinTone = "yellow";
 			player.faceType = FACE_HUMAN;
 			player.hornType = HORNS_DRACONIC_X4_12_INCH_LONG;

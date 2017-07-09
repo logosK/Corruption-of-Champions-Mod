@@ -78,9 +78,9 @@ package classes.Scenes.Areas.Forest
 		}
 
 		public function tamaniEjaculate():void {
-			this.lustVuln += 1;
+			this.lustVuln += .5;
 			this.sens += 15;
-			this.lust = 30;
+			this.lust -= 75;
 			outputText("Tamani strokes her dick a few times, and cums almost instantly. Her aim is impeccable- or perhaps you did not move as much as you could have- and her cum splatters all over you.");
 			outputText("The alchemical modifications she's made to both her cum and you start reacting with each other, and your cunt starts dripping even harder as it cries for something to fill it.");
 			//if (player.statusEffectv2(StatusEffects.TemporaryHeat) > 0 {
@@ -95,7 +95,7 @@ package classes.Scenes.Areas.Forest
 		override protected function performCombatAction():void {
 			if (flags[kFLAGS.TAMANI_GENDER] != 2) return super.performCombatAction();
 			
-			if (100 - this.lust < 20 * lustVuln) tamaniEjaculate();
+			if (100 - this.lust < 25 * lustVuln) tamaniEjaculate();
 			if (player.inte > (player.str + player.spe) / 2) {
 				
 			} else {
@@ -118,7 +118,7 @@ package classes.Scenes.Areas.Forest
 
 		override public function won(hpVictory:Boolean, pcCameWorms:Boolean):void
 		{
-			if (flags[kFLAGS.TAMANI_GENDER] == 2) return game.forest.tamaniScene.tamaniBreedsThatSluttyCuntYouWhore();
+			if (flags[kFLAGS.TAMANI_GENDER] == 2) game.forest.tamaniScene.tamaniBreedsThatSluttyCuntYouWhore(); return;
 			if (hpVictory){
 				if (player.totalCocks() > 0) {
 					if (rand(2) == 0) game.forest.tamaniScene.tamaniSexLost();

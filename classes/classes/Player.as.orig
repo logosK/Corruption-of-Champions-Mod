@@ -979,6 +979,7 @@ use namespace kGAMECLASS;
 				demonCounter++;
 			if (wingType == WING_TYPE_BAT_LIKE_TINY || wingType == WING_TYPE_BAT_LIKE_LARGE)
 				demonCounter++;
+<<<<<<< HEAD
 			if (skinType == SKIN_TYPE_PLAIN && cor > 50)
 				demonCounter+=0.5;
 			if (faceType == FACE_HUMAN && cor > 50)
@@ -986,6 +987,9 @@ use namespace kGAMECLASS;
 			if (armType == ARM_TYPE_HUMAN && cor > 50)
 				demonCounter+=0.5;
 			if (clawType == CLAW_TYPE_DEMON)
+=======
+			if (hasPlainSkin() && cor > 50)
+>>>>>>> upstream/master
 				demonCounter++;
 			if (lowerBody == LOWER_BODY_TYPE_DEMONIC_HIGH_HEELS || lowerBody == LOWER_BODY_TYPE_DEMONIC_CLAWS)
 				demonCounter++;
@@ -1334,8 +1338,17 @@ use namespace kGAMECLASS;
 				score += 3;
 			if (tailType == TAIL_TYPE_SPIDER_ADBOMEN)
 				score += 2;
+<<<<<<< HEAD
 			if (skinType == SKIN_TYPE_PLAIN)
 				score++;
+=======
+			else if (score > 0)
+				score--;
+			if (tailType == 5)
+				score += 2;
+			if (!hasPlainSkin() && score > 0)
+				score--;
+>>>>>>> upstream/master
 			return score;
 		}
 
@@ -1356,7 +1369,11 @@ use namespace kGAMECLASS;
 			if (lowerBody == LOWER_BODY_TYPE_HOOFED || lowerBody == LOWER_BODY_TYPE_CENTAUR)
 				horseCounter++;
 			//Fur only counts if some equine features are present
+<<<<<<< HEAD
+			if (skinType == SKIN_TYPE_FUR && horseCounter > 0)
+=======
 			if (hasFur() && horseCounter > 0)
+>>>>>>> upstream/master
 				horseCounter++;
 			return horseCounter;
 		}
@@ -1608,7 +1625,11 @@ use namespace kGAMECLASS;
 			if (gillType == GILLS_FISH)
 				sharkCounter ++;
 			//skin counting only if PC got any other shark traits
+<<<<<<< HEAD
+			if (skinType == SKIN_TYPE_PLAIN && sharkCounter > 0)
+=======
 			if (hasPlainSkin() && sharkCounter > 0)
+>>>>>>> upstream/master
 				sharkCounter++;
 			return sharkCounter;
 		}
@@ -1804,7 +1825,7 @@ use namespace kGAMECLASS;
 		//Manticore
 		public function manticoreScore():Number
 		{
-			var catCounter:Number = -2;
+			var catCounter:Number = 0;
 			if (faceType == FACE_CAT)
 				catCounter++;
 			if (earType == EARS_CAT)
@@ -1897,24 +1918,6 @@ use namespace kGAMECLASS;
 			if (medusaCounter > 0 && eyeType == EYES_BASILISK)
 				medusaCounter++;
 			return medusaCounter
-		}
-
-		public function quetzalCoatlScore():Number
-		{
-			var quetzalCoatlCounter:Number = 0;
-			if (isNaga() && armType==ARM_TYPE_HARPY && hairType==HAIR_FEATHER) {
-				if(hairColor=="rainbow")
-					quetzalCoatlCounter++;
-				if(faceType==FACE_HUMAN)
-					quetzalCoatlCounter+=0.5;
-				if(faceType==FACE_SNAKE_FANGS)
-					quetzalCoatlCounter++;
-				//ears, horns, 
-				if(eyeType==EYES_BASILISK || eyeType==EYES_LIZARD || eyeType==EYES_DRAGON)
-					quetzalCoatlCounter++;
-				return quetzalCoatlCounter;
-			}
-			return 0
 		}
 
 		public function arachneScore():Number
@@ -2850,18 +2853,11 @@ use namespace kGAMECLASS;
 				maxSpe += 20;	//now compatible with shark, if gills present
 				maxTou -= 5;
 			}
-			//bird series
+			//Misc tier 0
 			if (harpyScore() >= 4) {
 				maxSpe += 15;
 				maxTou -= 10;
-			}	//griffin? couatl/quetzlcoatl? cockatrice?
-			if (quetzalCoatlScore() >= 4) {
-				maxSpe += 15;
-				maxTou -= 10;
-			}	//griffin? couatl/quetzlcoatl? cockatrice?
-
-
-
+			}
 			//Misc Tier 1
 			if (bunnyScore() >= 4) {
 				maxSpe += 10;
@@ -3436,10 +3432,6 @@ use namespace kGAMECLASS;
 				return false;
 			}
 			
-			if (findPerk(PerkLib.AlchemicalFertility)) {
-				intensity *= (1 + perkv3(PerkLib.AlchemicalFertility));
-			}
-			
 			//Already in heat, intensify further.
 			if (inHeat) {
 				if (output) {
@@ -3454,7 +3446,7 @@ use namespace kGAMECLASS;
 			//Go into heat.  Heats v1 is bonus fertility, v2 is bonus libido, v3 is hours till it's gone
 			else {
 				if (output) {
-					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a cock overwhelm you as <b>you realize you have gone into heat!</b>", false);
+					outputText("\n\nYour mind clouds as your " + vaginaDescript(0) + " moistens.  Your hands begin stroking your body from top to bottom, your sensitive skin burning with desire.  Fantasies about bending over and presenting your needy pussy to a male overwhelm you as <b>you realize you have gone into heat!</b>", false);
 				}
 				createStatusEffect(StatusEffects.Heat, 10 * intensity, 15 * intensity, 48 * intensity, 0);
 				game.dynStats("lib", 15 * intensity, "resisted", false, "noBimbo", true);
